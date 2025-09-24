@@ -51,6 +51,18 @@ export default function Topnav() {
             <Link href="/about" className={styles.navLink}>
               About
             </Link>
+            <Link href="/programs" className={styles.navLink}>
+              Programs
+            </Link>
+            <Link href="/get-involved" className={styles.navLink}>
+              Get Involved
+            </Link>
+            <Link href="/support" className={styles.navLink}>
+              Support PLAYNE
+            </Link>
+            <Link href="/contact" className={styles.navLink}>
+              Contact
+            </Link>
             <Link href="/studio" className={styles.studioLink}>
               Studio
             </Link>

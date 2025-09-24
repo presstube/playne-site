@@ -41,7 +41,25 @@
 .navigation {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
+}
+
+@media (max-width: 1023px) {
+  .navigation {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .navigation {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  
+  .navLink, .studioLink {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.5rem;
+  }
 }
 
 .navLink {
