@@ -1,0 +1,50 @@
+.aboutPage {
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 2rem;
+}
+
+.setupContainer {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.setupTitle {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+}
+
+.setupDescription {
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
+}
+
+.setupList {
+  text-align: left;
+  max-width: 28rem;
+  margin: 0 auto;
+  list-style: none;
+  padding: 0;
+}
+
+.setupList li {
+  margin-bottom: 0.5rem;
+  color: var(--color-text-secondary);
+}
+
+.setupLink {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.setupLink:hover {
+  color: var(--color-primary-dark);
+}

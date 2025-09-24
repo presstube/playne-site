@@ -1,0 +1,16 @@
+---
+alwaysApply: true
+---
+
+
+If there is a "checklist.md": 
+- Always begin by reading "checklist.md" and orienting around it
+- Always finalize by reading "checklist.md" marking complete items, and adding notes about hiccups and learnings
+
+If there is no "checklist.md" don't worry about it, it just means there is no active structured mission underway.
+
+Always read "architecture/pages-components-css.md" before tackling a new feature or embarking on a new initiative. Go with the grain of the current architecture. Don't introduce new and conflicting architectural decisions and patterns. Don't shoot from the hip. Measure twice, cut once.
+
+Don't git commit for me. I'll handle that.
+
+Don't run the dev server. I'll handle that.

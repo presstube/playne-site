@@ -21,7 +21,7 @@ const eslintConfig = [
     ],
   },
   {
-    files: ["src/components/PortableText.tsx", "src/sanity/lib/image.ts"],
+    files: ["src/components/PortableText/PortableText.tsx", "src/sanity/lib/image.ts"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
     },

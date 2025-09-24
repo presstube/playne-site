@@ -1,0 +1,46 @@
+.imageContainer {
+  margin: 2rem 0;
+}
+
+.image {
+  border-radius: 0.5rem;
+  width: 100%;
+  height: auto;
+}
+
+.h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--color-text-primary);
+}
+
+.h2 {
+  font-size: 1.875rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--color-text-primary);
+}
+
+.h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-primary);
+}
+
+.paragraph {
+  margin-bottom: 1rem;
+  color: var(--color-text-secondary);
+  line-height: 1.75;
+}
+
+.link {
+  color: var(--color-primary);
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: var(--color-primary-dark);
+}

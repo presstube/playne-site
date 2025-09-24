@@ -1,9 +1,7 @@
+import HomePage from './HomePage/HomePage'
 import { client } from '@/sanity/lib/client'
 import { pageQuery } from '@/sanity/lib/queries'
-import Layout from '@/components/Layout'
-import PortableText from '@/components/PortableText'
 import { Metadata } from 'next'
-import Link from 'next/link'
 import { PortableTextBlock } from 'sanity'
 
 interface Page {
@@ -34,33 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function Home() {
+export default async function Page() {
   const page = await getPage()
-
-  if (!page) {
-    return (
-      <Layout>
-        <div className="text-center py-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Welcome</h1>
-          <p className="text-gray-600 mb-8">
-            This is the home page. To add content, please:
-          </p>
-          <ol className="text-left max-w-md mx-auto space-y-2 text-gray-700">
-            <li>1. Set up your Sanity project credentials</li>
-            <li>2. Go to <Link href="/studio" className="text-blue-600 hover:underline">/studio</Link></li>
-            <li>3. Create a new page with slug &quot;home&quot;</li>
-          </ol>
-        </div>
-      </Layout>
-    )
-  }
-
-  return (
-    <Layout>
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">{page.title}</h1>
-        {page.content && <PortableText content={page.content} />}
-      </div>
-    </Layout>
-  )
+  return <HomePage page={page} />
 }
