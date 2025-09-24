@@ -18,3 +18,30 @@ export const pagesQuery = groq`
     seo
   }
 `
+
+export const aboutPageQuery = groq`
+  *[_type == "aboutPage"][0] {
+    _id,
+    title,
+    subtitle,
+    mission {
+      title,
+      content
+    },
+    story {
+      title,
+      content
+    },
+    team {
+      title,
+      content,
+      members[] {
+        name,
+        role,
+        bio,
+        image
+      }
+    },
+    seo
+  }
+`

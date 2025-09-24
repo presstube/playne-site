@@ -63,9 +63,6 @@ export default function Topnav() {
             <Link href="/contact" className={styles.navLink}>
               Contact
             </Link>
-            <Link href="/studio" className={styles.studioLink}>
-              Studio
-            </Link>
           </div>
         </div>
       </div>

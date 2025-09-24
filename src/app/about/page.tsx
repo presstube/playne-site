@@ -1,22 +1,40 @@
 import AboutPage from '../AboutPage/AboutPage'
 import { client } from '@/sanity/lib/client'
-import { pageQuery } from '@/sanity/lib/queries'
+import { aboutPageQuery } from '@/sanity/lib/queries'
 import { Metadata } from 'next'
 import { PortableTextBlock } from 'sanity'
 
-interface Page {
+interface AboutPageData {
   _id: string
   title: string
-  content: PortableTextBlock[]
+  subtitle: string
+  mission: {
+    title: string
+    content: PortableTextBlock[]
+  }
+  story: {
+    title: string
+    content: PortableTextBlock[]
+  }
+  team: {
+    title: string
+    content: PortableTextBlock[]
+    members: Array<{
+      name: string
+      role: string
+      bio: string
+      image?: any
+    }>
+  }
   seo?: {
     metaTitle?: string
     metaDescription?: string
   }
 }
 
-async function getPage(): Promise<Page | null> {
+async function getAboutPage(): Promise<AboutPageData | null> {
   try {
-    return await client.fetch(pageQuery, { slug: 'about' })
+    return await client.fetch(aboutPageQuery)
   } catch (error) {
     console.error('Error fetching about page:', error)
     return null
@@ -24,15 +42,15 @@ async function getPage(): Promise<Page | null> {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPage()
+  const aboutPage = await getAboutPage()
   
   return {
-    title: page?.seo?.metaTitle || page?.title || 'About',
-    description: page?.seo?.metaDescription || 'Learn more about us',
+    title: aboutPage?.seo?.metaTitle || aboutPage?.title || 'About - PLAYNE',
+    description: aboutPage?.seo?.metaDescription || 'Learn about PLAYNE\'s mission to empower young minds through practical life education',
   }
 }
 
 export default async function Page() {
-  const page = await getPage()
-  return <AboutPage page={page} />
+  const aboutPage = await getAboutPage()
+  return <AboutPage data={aboutPage} />
 }
