@@ -22,14 +22,20 @@
 }
 
 .brandLink {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
   text-decoration: none;
 }
 
-.brandLink:hover {
-  color: var(--color-primary);
+.logo {
+  height: 2rem;
+  width: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
 }
 
 .navigation {

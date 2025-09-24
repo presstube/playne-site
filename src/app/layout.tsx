@@ -3,8 +3,8 @@ import RootLayout from './RootLayout/RootLayout'
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Next Sanity Spike",
-  description: "A Next.js project with Sanity CMS integration",
+  title: "PLAYNE",
+  description: "Empowering young minds through practical life education",
 };
 
 export default function Layout({
@@ -14,6 +14,14 @@ export default function Layout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link 
+          href="https://fonts.googleapis.com/css2?family=Parkinsans:wght@400;500;600;700&display=swap" 
+          rel="stylesheet" 
+        />
+      </head>
       <body>
         <RootLayout>{children}</RootLayout>
       </body>
