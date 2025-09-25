@@ -44,26 +44,29 @@ export default function Topnav() {
               </svg>
             </Link>
           </div>
-          <div className={styles.navigation}>
-            <Link href="/" className={styles.navLink}>
-              Home
-            </Link>
-            <Link href="/about" className={styles.navLink}>
-              About
-            </Link>
-            <Link href="/programs" className={styles.navLink}>
-              Programs
-            </Link>
-            <Link href="/get-involved" className={styles.navLink}>
-              Get Involved
-            </Link>
-            <Link href="/support" className={styles.navLink}>
-              Support PLAYNE
-            </Link>
-            <Link href="/contact" className={styles.navLink}>
-              Contact
-            </Link>
-          </div>
+                  <div className={styles.navigation}>
+                    <Link href="/" className={styles.navLink}>
+                      Home
+                    </Link>
+                    <Link href="/about" className={styles.navLink}>
+                      About
+                    </Link>
+                    <Link href="/programs" className={styles.navLink}>
+                      Programs
+                    </Link>
+                    <Link href="/events" className={styles.navLink}>
+                      Events
+                    </Link>
+                    <Link href="/get-involved" className={styles.navLink}>
+                      Get Involved
+                    </Link>
+                    <Link href="/support" className={styles.navLink}>
+                      Support PLAYNE
+                    </Link>
+                    <Link href="/contact" className={styles.navLink}>
+                      Contact
+                    </Link>
+                  </div>
         </div>
       </div>
     </nav>

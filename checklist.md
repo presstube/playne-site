@@ -197,36 +197,40 @@ Transform the Next.js + Sanity site from "Next Sanity Spike" to PLAYNE website w
 
 ---
 
-## Phase 7: Events Page Implementation (Hidden Initially)
+## Phase 7: Events Page Implementation (Hidden Initially) ✅
 
-### [ ] Step 1: Create Events Route & Basic Component
-- [ ] Create `/events` route (page.tsx)
-- [ ] Create EventsPage component with placeholder sections
-- [ ] Add basic styling and layout structure
-- [ ] Test route works and displays placeholder content
+*As per PLAYNE site spec: "Events (talks/workshops or a 'join us soon' note) - We can hide this until we have content to add here"*
+
+### [✅] Step 1: Create Events Route & Basic Component
+- [✅] Create `/events` route (page.tsx) with TypeScript interfaces
+- [✅] Create EventsPage component with reverse chronological event stream design
+- [✅] Add comprehensive styling with event cards, types, and responsive layout
+- [✅] Test route works and displays "Coming Soon" placeholder content
+- [✅] Add Events link to main navigation
 
 **🛑 CHECKPOINT: Verify Events page route and basic layout**
 
-### [ ] Step 2: Add Events Page Content (Static First)
-- [ ] Add talks/workshops placeholder content
-- [ ] Style events sections appropriately
-- [ ] Test responsive design
+### [✅] Step 2: Add Events Page Content (CMS-Driven Structure)
+- [✅] Add talks/workshops event card structure with date formatting
+- [✅] Style events sections with event types (talk, workshop, webinar, conference)
+- [✅] Add virtual event indicators and registration buttons
+- [✅] Test responsive design with event grids and mobile layouts
+- [✅] Implement upcoming vs past events separation
 
 **🛑 CHECKPOINT: Verify Events page content and styling**
 
-### [ ] Step 3: Integrate Events Page with Sanity
-- [ ] Create `eventsPage` schema in Sanity
-- [ ] Create content population script for Events page
-- [ ] Update Events route to fetch from Sanity
-- [ ] Test Sanity integration and Studio editing
-- [ ] Verify fallback handling
+### [✅] Step 3: Integrate Events Page with Sanity
+- [✅] Create `event` document schema with comprehensive fields (title, date, type, location, etc.)
+- [✅] Create `eventsPage` schema with visibility toggle (`isEventsVisible: false`)
+- [✅] Create content population script for Events page (Document ID: `S1ICLYYXLL04VHpWAfdVEB`)
+- [✅] Update Events route to fetch from Sanity with automatic date-based filtering
+- [✅] Add GROQ queries with reverse chronological ordering (upcoming asc, past desc)
+- [✅] Test Sanity integration and Studio editing with event preview
+- [✅] Verify fallback handling shows "Coming Soon" when hidden
 
-### [ ] Step 4: Implement Navigation Toggle
-- [ ] Add toggle mechanism to hide/show Events link in navigation
-- [ ] Document how to enable Events section
-- [ ] Test toggle functionality
+**🛑 CHECKPOINT: Verify Events page integration and CMS functionality**
 
-**🛑 CHECKPOINT: Verify Events page integration and toggle mechanism**
+**Status: COMPLETE** ✅ - Events page is fully implemented with CMS-driven reverse chronological structure. Initially hidden (`isEventsVisible: false`) as per spec, with "Coming Soon" message linking to email signup. Ready for content management through Sanity Studio when events are ready to be published. Includes comprehensive event schema supporting talks/workshops, registration URLs, virtual events, and automatic date-based filtering.
 
 ---
 

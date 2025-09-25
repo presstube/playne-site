@@ -195,3 +195,44 @@ export const contactPageQuery = groq`
     seo
   }
 `
+
+export const eventsPageQuery = groq`
+  *[_type == "eventsPage"][0] {
+    _id,
+    title,
+    subtitle,
+    description,
+    isEventsVisible,
+    seo,
+    "upcomingEvents": *[_type == "event" && date >= now()] | order(date asc) {
+      _id,
+      title,
+      slug,
+      date,
+      time,
+      location,
+      description,
+      eventType,
+      isVirtual,
+      registrationUrl,
+      capacity,
+      image,
+      tags
+    },
+    "pastEvents": *[_type == "event" && date < now()] | order(date desc) {
+      _id,
+      title,
+      slug,
+      date,
+      time,
+      location,
+      description,
+      eventType,
+      isVirtual,
+      registrationUrl,
+      capacity,
+      image,
+      tags
+    }
+  }
+`
