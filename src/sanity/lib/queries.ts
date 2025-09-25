@@ -117,3 +117,44 @@ export const getInvolvedPageQuery = groq`
     seo
   }
 `
+
+export const supportPageQuery = groq`
+  *[_type == "supportPage"][0] {
+    _id,
+    title,
+    subtitle,
+    donationSection {
+      title,
+      description,
+      content,
+      donationTiers[] {
+        amount,
+        title,
+        description,
+        benefits
+      }
+    },
+    sponsorshipSection {
+      title,
+      description,
+      content,
+      sponsorshipLevels[] {
+        level,
+        title,
+        description,
+        minAmount,
+        benefits
+      }
+    },
+    impactSection {
+      title,
+      description,
+      impactStats[] {
+        number,
+        label,
+        description
+      }
+    },
+    seo
+  }
+`
