@@ -158,3 +158,40 @@ export const supportPageQuery = groq`
     seo
   }
 `
+
+export const contactPageQuery = groq`
+  *[_type == "contactPage"][0] {
+    _id,
+    title,
+    subtitle,
+    generalContactSection {
+      title,
+      description,
+      content,
+      contactMethods[] {
+        type,
+        label,
+        value,
+        description
+      }
+    },
+    pressSection {
+      title,
+      description,
+      content,
+      pressContacts[] {
+        name,
+        role,
+        email,
+        phone
+      }
+    },
+    locationSection {
+      title,
+      description,
+      address,
+      hours
+    },
+    seo
+  }
+`
