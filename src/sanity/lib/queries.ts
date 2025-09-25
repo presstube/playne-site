@@ -45,3 +45,33 @@ export const aboutPageQuery = groq`
     seo
   }
 `
+
+export const programsPageQuery = groq`
+  *[_type == "programsPage"][0] {
+    _id,
+    title,
+    subtitle,
+    curriculumPillars {
+      title,
+      description,
+      pillars[] {
+        title,
+        description,
+        icon
+      }
+    },
+    learningModules {
+      title,
+      content,
+      isComingSoon,
+      modules[] {
+        title,
+        description,
+        pillar,
+        duration,
+        ageGroup
+      }
+    },
+    seo
+  }
+`
