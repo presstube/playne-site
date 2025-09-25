@@ -75,3 +75,45 @@ export const programsPageQuery = groq`
     seo
   }
 `
+
+export const getInvolvedPageQuery = groq`
+  *[_type == "getInvolvedPage"][0] {
+    _id,
+    title,
+    subtitle,
+    partnersSection {
+      title,
+      description,
+      partnerTypes[] {
+        title,
+        description
+      },
+      currentPartners[] {
+        name,
+        description,
+        logo,
+        website
+      }
+    },
+    interestFormSection {
+      title,
+      description,
+      formFields {
+        nameLabel,
+        emailLabel,
+        organizationLabel,
+        roleLabel,
+        interestLabel,
+        submitButtonText
+      }
+    },
+    emailSignupSection {
+      title,
+      description,
+      placeholder,
+      buttonText,
+      disclaimer
+    },
+    seo
+  }
+`
