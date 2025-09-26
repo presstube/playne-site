@@ -73,48 +73,6 @@
   margin: 0 auto;
 }
 
-.formRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.formGroup {
-  margin-bottom: 1.5rem;
-}
-
-.label {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--color-text-primary);
-  margin-bottom: 0.5rem;
-}
-
-.input,
-.textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.375rem;
-  font-size: 1rem;
-  background: var(--color-background-primary);
-  color: var(--color-text-primary);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.input:focus,
-.textarea:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
-}
-
-.textarea {
-  resize: vertical;
-  min-height: 120px;
-}
 
 .submitButton {
   width: 100%;
@@ -129,9 +87,35 @@
   transition: all 0.2s ease;
 }
 
-.submitButton:hover {
+.submitButton:hover:not(:disabled) {
   background: var(--color-primary-dark);
   transform: translateY(-1px);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.submitMessage {
+  padding: 1rem;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.submitSuccess {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.submitError {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
 }
 
 .submitButton:active {
@@ -221,10 +205,6 @@
     padding: 1.5rem;
   }
 
-  .formRow {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
 
   .pressContacts {
     grid-template-columns: 1fr;

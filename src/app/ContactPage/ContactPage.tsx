@@ -1,7 +1,13 @@
+'use client'
+
+import { FormEvent, useState } from 'react'
 import styles from './ContactPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
 import PageHero from '@/components/PageHero/PageHero'
 import PageSection from '@/components/PageSection/PageSection'
+import TextInput from '@/components/TextInput/TextInput'
+import TextArea from '@/components/TextArea/TextArea'
+import FormRow from '@/components/FormRow/FormRow'
 import { PortableTextBlock } from 'sanity'
 
 interface ContactPageData {
@@ -47,6 +53,34 @@ interface ContactPageProps {
 }
 
 export default function ContactPage({ data }: ContactPageProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState<string | null>(null)
+
+  const handleContactFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitMessage(null)
+
+    try {
+      const formData = new FormData(e.currentTarget)
+      const formValues = Object.fromEntries(formData.entries())
+      
+      // TODO: Replace with actual form submission endpoint
+      console.log('Contact form submitted:', formValues)
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      setSubmitMessage('Thank you for your message! We\'ll get back to you soon.')
+      e.currentTarget.reset()
+    } catch (error) {
+      console.error('Form submission error:', error)
+      setSubmitMessage('Sorry, there was an error sending your message. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   // Fallback content if no Sanity data
   if (!data) {
     return (
@@ -86,66 +120,54 @@ export default function ContactPage({ data }: ContactPageProps) {
 
             <div className={styles.contactForm}>
               <h3 className={styles.formTitle}>Send us a message</h3>
-              <form className={styles.form}>
-                <div className={styles.formRow}>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="firstName" className={styles.label}>First Name *</label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      name="firstName"
-                      required
-                      className={styles.input}
-                    />
+              <form className={styles.form} onSubmit={handleContactFormSubmit}>
+                <FormRow>
+                  <TextInput
+                    label="First Name"
+                    name="firstName"
+                    required
+                    disabled={isSubmitting}
+                  />
+                  <TextInput
+                    label="Last Name"
+                    name="lastName"
+                    required
+                    disabled={isSubmitting}
+                  />
+                </FormRow>
+
+                <TextInput
+                  label="Email"
+                  type="email"
+                  name="email"
+                  required
+                  disabled={isSubmitting}
+                />
+
+                <TextInput
+                  label="Subject"
+                  name="subject"
+                  required
+                  disabled={isSubmitting}
+                />
+
+                <TextArea
+                  label="Message"
+                  name="message"
+                  required
+                  rows={5}
+                  placeholder="Tell us how we can help..."
+                  disabled={isSubmitting}
+                />
+
+                {submitMessage && (
+                  <div className={`${styles.submitMessage} ${submitMessage.includes('error') ? styles.submitError : styles.submitSuccess}`}>
+                    {submitMessage}
                   </div>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="lastName" className={styles.label}>Last Name *</label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      required
-                      className={styles.input}
-                    />
-                  </div>
-                </div>
+                )}
 
-                <div className={styles.formGroup}>
-                  <label htmlFor="email" className={styles.label}>Email *</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    className={styles.input}
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="subject" className={styles.label}>Subject *</label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    required
-                    className={styles.input}
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="message" className={styles.label}>Message *</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    required
-                    rows={5}
-                    className={styles.textarea}
-                    placeholder="Tell us how we can help..."
-                  />
-                </div>
-
-                <button type="submit" className={styles.submitButton}>
-                  Send Message
+                <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
             </div>
@@ -221,66 +243,54 @@ export default function ContactPage({ data }: ContactPageProps) {
 
           <div className={styles.contactForm}>
             <h3 className={styles.formTitle}>Send us a message</h3>
-            <form className={styles.form}>
-              <div className={styles.formRow}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="firstName" className={styles.label}>First Name *</label>
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    required
-                    className={styles.input}
-                  />
+            <form className={styles.form} onSubmit={handleContactFormSubmit}>
+              <FormRow>
+                <TextInput
+                  label="First Name"
+                  name="firstName"
+                  required
+                  disabled={isSubmitting}
+                />
+                <TextInput
+                  label="Last Name"
+                  name="lastName"
+                  required
+                  disabled={isSubmitting}
+                />
+              </FormRow>
+
+              <TextInput
+                label="Email"
+                type="email"
+                name="email"
+                required
+                disabled={isSubmitting}
+              />
+
+              <TextInput
+                label="Subject"
+                name="subject"
+                required
+                disabled={isSubmitting}
+              />
+
+              <TextArea
+                label="Message"
+                name="message"
+                required
+                rows={5}
+                placeholder="Tell us how we can help..."
+                disabled={isSubmitting}
+              />
+
+              {submitMessage && (
+                <div className={`${styles.submitMessage} ${submitMessage.includes('error') ? styles.submitError : styles.submitSuccess}`}>
+                  {submitMessage}
                 </div>
-                <div className={styles.formGroup}>
-                  <label htmlFor="lastName" className={styles.label}>Last Name *</label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    required
-                    className={styles.input}
-                  />
-                </div>
-              </div>
+              )}
 
-              <div className={styles.formGroup}>
-                <label htmlFor="email" className={styles.label}>Email *</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  className={styles.input}
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label htmlFor="subject" className={styles.label}>Subject *</label>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  required
-                  className={styles.input}
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label htmlFor="message" className={styles.label}>Message *</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  required
-                  rows={5}
-                  className={styles.textarea}
-                  placeholder="Tell us how we can help..."
-                />
-              </div>
-
-              <button type="submit" className={styles.submitButton}>
-                Send Message
+              <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
+                {isSubmitting ? 'Sending...' : 'Send Message'}
               </button>
             </form>
           </div>

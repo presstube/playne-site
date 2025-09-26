@@ -1,6 +1,12 @@
+'use client'
+
+import { FormEvent, useState } from 'react'
 import styles from './GetInvolvedPage.module.css'
 import PageHero from '@/components/PageHero/PageHero'
 import PageSection from '@/components/PageSection/PageSection'
+import TextInput from '@/components/TextInput/TextInput'
+import TextArea from '@/components/TextArea/TextArea'
+import Select from '@/components/Select/Select'
 
 interface GetInvolvedPageData {
   _id: string
@@ -50,6 +56,58 @@ interface GetInvolvedPageProps {
 }
 
 export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState<string | null>(null)
+
+  const handleInterestFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitMessage(null)
+
+    try {
+      const formData = new FormData(e.currentTarget)
+      const formValues = Object.fromEntries(formData.entries())
+      
+      // TODO: Replace with actual form submission endpoint
+      console.log('Form submitted:', formValues)
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      setSubmitMessage('Thank you for your interest! We\'ll be in touch soon.')
+      e.currentTarget.reset()
+    } catch (error) {
+      console.error('Form submission error:', error)
+      setSubmitMessage('Sorry, there was an error submitting your form. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleEmailSignupSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      const formData = new FormData(e.currentTarget)
+      const email = formData.get('email')
+      
+      // TODO: Replace with actual email signup endpoint
+      console.log('Email signup:', email)
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      setSubmitMessage('Thank you for signing up! You\'ll receive updates soon.')
+      e.currentTarget.reset()
+    } catch (error) {
+      console.error('Email signup error:', error)
+      setSubmitMessage('Sorry, there was an error signing you up. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   // Fallback content if no Sanity data
   if (!data) {
     return (
@@ -95,66 +153,60 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
           description="Interested in bringing PLAYNE programs to your community? Let us know how you'd like to get involved."
         >
             
-            <form className={styles.interestForm}>
-              <div className={styles.formGroup}>
-                <label htmlFor="name" className={styles.label}>Name *</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  className={styles.input}
-                />
-              </div>
+            <form className={styles.interestForm} onSubmit={handleInterestFormSubmit}>
+              <TextInput
+                label="Name"
+                name="name"
+                required
+                disabled={isSubmitting}
+              />
 
-              <div className={styles.formGroup}>
-                <label htmlFor="email" className={styles.label}>Email *</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  className={styles.input}
-                />
-              </div>
+              <TextInput
+                label="Email"
+                type="email"
+                name="email"
+                required
+                disabled={isSubmitting}
+              />
 
-              <div className={styles.formGroup}>
-                <label htmlFor="organization" className={styles.label}>Organization</label>
-                <input
-                  type="text"
-                  id="organization"
-                  name="organization"
-                  className={styles.input}
-                />
-              </div>
+              <TextInput
+                label="Organization"
+                name="organization"
+                disabled={isSubmitting}
+              />
 
-              <div className={styles.formGroup}>
-                <label htmlFor="role" className={styles.label}>Your Role</label>
-                <select id="role" name="role" className={styles.select}>
-                  <option value="">Select your role</option>
-                  <option value="educator">Educator</option>
-                  <option value="administrator">Administrator</option>
-                  <option value="community-leader">Community Leader</option>
-                  <option value="parent">Parent</option>
-                  <option value="student">Student</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
+              <Select
+                label="Your Role"
+                name="role"
+                placeholder="Select your role"
+                disabled={isSubmitting}
+                options={[
+                  { value: 'educator', label: 'Educator' },
+                  { value: 'administrator', label: 'Administrator' },
+                  { value: 'community-leader', label: 'Community Leader' },
+                  { value: 'parent', label: 'Parent' },
+                  { value: 'student', label: 'Student' },
+                  { value: 'other', label: 'Other' }
+                ]}
+              />
 
-              <div className={styles.formGroup}>
-                <label htmlFor="interest" className={styles.label}>How would you like to get involved? *</label>
-                <textarea
-                  id="interest"
-                  name="interest"
-                  required
-                  rows={4}
-                  className={styles.textarea}
-                  placeholder="Tell us about your interest in PLAYNE programs..."
-                />
-              </div>
+              <TextArea
+                label="How would you like to get involved?"
+                name="interest"
+                required
+                rows={4}
+                placeholder="Tell us about your interest in PLAYNE programs..."
+                disabled={isSubmitting}
+              />
 
-              <button type="submit" className={styles.submitButton}>
-                Submit Interest
+              {submitMessage && (
+                <div className={`${styles.submitMessage} ${submitMessage.includes('error') ? styles.submitError : styles.submitSuccess}`}>
+                  {submitMessage}
+                </div>
+              )}
+
+              <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
+                {isSubmitting ? 'Submitting...' : 'Submit Interest'}
               </button>
             </form>
         </PageSection>
@@ -165,16 +217,18 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
           description="Sign up for our email list to receive updates about new programs, resources, and opportunities to get involved."
         >
             
-            <form className={styles.emailForm}>
+            <form className={styles.emailForm} onSubmit={handleEmailSignupSubmit}>
               <div className={styles.emailFormGroup}>
                 <input
                   type="email"
+                  name="email"
                   placeholder="Enter your email address"
                   className={styles.emailInput}
                   required
+                  disabled={isSubmitting}
                 />
-                <button type="submit" className={styles.emailButton}>
-                  Sign Up
+                <button type="submit" className={styles.emailButton} disabled={isSubmitting}>
+                  {isSubmitting ? 'Signing Up...' : 'Sign Up'}
                 </button>
               </div>
               <p className={styles.emailDisclaimer}>
@@ -234,66 +288,60 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
         description={data.interestFormSection.description}
       >
           
-          <form className={styles.interestForm}>
-            <div className={styles.formGroup}>
-              <label htmlFor="name" className={styles.label}>{data.interestFormSection.formFields.nameLabel} *</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                required
-                className={styles.input}
-              />
-            </div>
+          <form className={styles.interestForm} onSubmit={handleInterestFormSubmit}>
+            <TextInput
+              label={data.interestFormSection.formFields.nameLabel}
+              name="name"
+              required
+              disabled={isSubmitting}
+            />
 
-            <div className={styles.formGroup}>
-              <label htmlFor="email" className={styles.label}>{data.interestFormSection.formFields.emailLabel} *</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                className={styles.input}
-              />
-            </div>
+            <TextInput
+              label={data.interestFormSection.formFields.emailLabel}
+              type="email"
+              name="email"
+              required
+              disabled={isSubmitting}
+            />
 
-            <div className={styles.formGroup}>
-              <label htmlFor="organization" className={styles.label}>{data.interestFormSection.formFields.organizationLabel}</label>
-              <input
-                type="text"
-                id="organization"
-                name="organization"
-                className={styles.input}
-              />
-            </div>
+            <TextInput
+              label={data.interestFormSection.formFields.organizationLabel}
+              name="organization"
+              disabled={isSubmitting}
+            />
 
-            <div className={styles.formGroup}>
-              <label htmlFor="role" className={styles.label}>{data.interestFormSection.formFields.roleLabel}</label>
-              <select id="role" name="role" className={styles.select}>
-                <option value="">Select your role</option>
-                <option value="educator">Educator</option>
-                <option value="administrator">Administrator</option>
-                <option value="community-leader">Community Leader</option>
-                <option value="parent">Parent</option>
-                <option value="student">Student</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
+            <Select
+              label={data.interestFormSection.formFields.roleLabel}
+              name="role"
+              placeholder="Select your role"
+              disabled={isSubmitting}
+              options={[
+                { value: 'educator', label: 'Educator' },
+                { value: 'administrator', label: 'Administrator' },
+                { value: 'community-leader', label: 'Community Leader' },
+                { value: 'parent', label: 'Parent' },
+                { value: 'student', label: 'Student' },
+                { value: 'other', label: 'Other' }
+              ]}
+            />
 
-            <div className={styles.formGroup}>
-              <label htmlFor="interest" className={styles.label}>{data.interestFormSection.formFields.interestLabel} *</label>
-              <textarea
-                id="interest"
-                name="interest"
-                required
-                rows={4}
-                className={styles.textarea}
-                placeholder="Tell us about your interest in PLAYNE programs..."
-              />
-            </div>
+            <TextArea
+              label={data.interestFormSection.formFields.interestLabel}
+              name="interest"
+              required
+              rows={4}
+              placeholder="Tell us about your interest in PLAYNE programs..."
+              disabled={isSubmitting}
+            />
 
-            <button type="submit" className={styles.submitButton}>
-              {data.interestFormSection.formFields.submitButtonText}
+            {submitMessage && (
+              <div className={`${styles.submitMessage} ${submitMessage.includes('error') ? styles.submitError : styles.submitSuccess}`}>
+                {submitMessage}
+              </div>
+            )}
+
+            <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
+              {isSubmitting ? 'Submitting...' : data.interestFormSection.formFields.submitButtonText}
             </button>
           </form>
       </PageSection>
@@ -304,16 +352,18 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
         description={data.emailSignupSection.description}
       >
           
-          <form className={styles.emailForm}>
+          <form className={styles.emailForm} onSubmit={handleEmailSignupSubmit}>
             <div className={styles.emailFormGroup}>
               <input
                 type="email"
+                name="email"
                 placeholder={data.emailSignupSection.placeholder}
                 className={styles.emailInput}
                 required
+                disabled={isSubmitting}
               />
-              <button type="submit" className={styles.emailButton}>
-                {data.emailSignupSection.buttonText}
+              <button type="submit" className={styles.emailButton} disabled={isSubmitting}>
+                {isSubmitting ? 'Signing Up...' : data.emailSignupSection.buttonText}
               </button>
             </div>
             <p className={styles.emailDisclaimer}>
