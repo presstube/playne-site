@@ -54,7 +54,8 @@ const structure = (S: any) =>
           'getInvolvedPage',
           'supportPage',
           'contactPage',
-          'eventsPage'
+          'eventsPage',
+          'event'
         ].includes(listItem.getId())
       ),
     ])
