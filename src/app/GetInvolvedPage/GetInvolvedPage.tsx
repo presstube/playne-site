@@ -1,5 +1,6 @@
 import styles from './GetInvolvedPage.module.css'
 import PageHero from '@/components/PageHero/PageHero'
+import PageSection from '@/components/PageSection/PageSection'
 
 interface GetInvolvedPageData {
   _id: string
@@ -58,12 +59,11 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
           subtitle="Join us in empowering young minds through practical life education" 
         />
 
-        <section id="partners" className={styles.section}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Partners & Collaborators</h2>
-            <p className={styles.sectionDescription}>
-              We believe in the power of collaboration. PLAYNE works with schools, community organizations, educators, and advocates who share our vision of holistic youth education.
-            </p>
+        <PageSection 
+          id="partners" 
+          title="Partners & Collaborators"
+          description="We believe in the power of collaboration. PLAYNE works with schools, community organizations, educators, and advocates who share our vision of holistic youth education."
+        >
             
             <div className={styles.partnerTypes}>
               <div className={styles.partnerType}>
@@ -87,15 +87,13 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
                 </p>
               </div>
             </div>
-          </div>
-        </section>
+        </PageSection>
 
-        <section id="interest-form" className={styles.section}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Express Your Interest</h2>
-            <p className={styles.sectionDescription}>
-              Interested in bringing PLAYNE programs to your community? Let us know how you'd like to get involved.
-            </p>
+        <PageSection 
+          id="interest-form" 
+          title="Express Your Interest"
+          description="Interested in bringing PLAYNE programs to your community? Let us know how you'd like to get involved."
+        >
             
             <form className={styles.interestForm}>
               <div className={styles.formGroup}>
@@ -159,15 +157,13 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
                 Submit Interest
               </button>
             </form>
-          </div>
-        </section>
+        </PageSection>
 
-        <section id="email-signup" className={styles.section}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Stay Updated</h2>
-            <p className={styles.sectionDescription}>
-              Sign up for our email list to receive updates about new programs, resources, and opportunities to get involved.
-            </p>
+        <PageSection 
+          id="email-signup" 
+          title="Stay Updated"
+          description="Sign up for our email list to receive updates about new programs, resources, and opportunities to get involved."
+        >
             
             <form className={styles.emailForm}>
               <div className={styles.emailFormGroup}>
@@ -185,8 +181,7 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
                 We respect your privacy and will never share your information. Unsubscribe at any time.
               </p>
             </form>
-          </div>
-        </section>
+        </PageSection>
       </div>
     )
   }
@@ -196,12 +191,11 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
     <div className={styles.getInvolvedPage}>
       <PageHero title={data.title} subtitle={data.subtitle} />
 
-      <section id="partners" className={styles.section}>
-        <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>{data.partnersSection.title}</h2>
-          <p className={styles.sectionDescription}>
-            {data.partnersSection.description}
-          </p>
+      <PageSection 
+        id="partners" 
+        title={data.partnersSection.title}
+        description={data.partnersSection.description}
+      >
           
           <div className={styles.partnerTypes}>
             {data.partnersSection.partnerTypes.map((partnerType, index) => (
@@ -232,15 +226,13 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
               </div>
             </div>
           )}
-        </div>
-      </section>
+      </PageSection>
 
-      <section id="interest-form" className={styles.section}>
-        <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>{data.interestFormSection.title}</h2>
-          <p className={styles.sectionDescription}>
-            {data.interestFormSection.description}
-          </p>
+      <PageSection 
+        id="interest-form" 
+        title={data.interestFormSection.title}
+        description={data.interestFormSection.description}
+      >
           
           <form className={styles.interestForm}>
             <div className={styles.formGroup}>
@@ -304,15 +296,13 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
               {data.interestFormSection.formFields.submitButtonText}
             </button>
           </form>
-        </div>
-      </section>
+      </PageSection>
 
-      <section id="email-signup" className={styles.section}>
-        <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>{data.emailSignupSection.title}</h2>
-          <p className={styles.sectionDescription}>
-            {data.emailSignupSection.description}
-          </p>
+      <PageSection 
+        id="email-signup" 
+        title={data.emailSignupSection.title}
+        description={data.emailSignupSection.description}
+      >
           
           <form className={styles.emailForm}>
             <div className={styles.emailFormGroup}>
@@ -330,8 +320,7 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
               {data.emailSignupSection.disclaimer}
             </p>
           </form>
-        </div>
-      </section>
+      </PageSection>
     </div>
   )
 }

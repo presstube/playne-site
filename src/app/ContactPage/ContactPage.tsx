@@ -1,6 +1,7 @@
 import styles from './ContactPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
 import PageHero from '@/components/PageHero/PageHero'
+import PageSection from '@/components/PageSection/PageSection'
 import { PortableTextBlock } from 'sanity'
 
 interface ContactPageData {
@@ -55,12 +56,11 @@ export default function ContactPage({ data }: ContactPageProps) {
           subtitle="Get in touch with PLAYNE to learn more about our programs" 
         />
 
-        <section id="general-contact" className={styles.section}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>General Contact</h2>
-            <p className={styles.sectionDescription}>
-              Have questions about PLAYNE programs, partnerships, or how to get involved? We'd love to hear from you.
-            </p>
+        <PageSection 
+          id="general-contact" 
+          title="General Contact"
+          description="Have questions about PLAYNE programs, partnerships, or how to get involved? We'd love to hear from you."
+        >
             
             <div className={styles.contactMethods}>
               <div className={styles.contactMethod}>
@@ -149,15 +149,13 @@ export default function ContactPage({ data }: ContactPageProps) {
                 </button>
               </form>
             </div>
-          </div>
-        </section>
+        </PageSection>
 
-        <section id="press" className={styles.section}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Press & Media</h2>
-            <p className={styles.sectionDescription}>
-              For media inquiries, interviews, and press information about PLAYNE.
-            </p>
+        <PageSection 
+          id="press" 
+          title="Press & Media"
+          description="For media inquiries, interviews, and press information about PLAYNE."
+        >
             
             <div className={styles.pressContacts}>
               <div className={styles.pressContact}>
@@ -168,15 +166,13 @@ export default function ContactPage({ data }: ContactPageProps) {
                 </a>
               </div>
             </div>
-          </div>
-        </section>
+        </PageSection>
 
-        <section id="location" className={styles.section}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Location</h2>
-            <p className={styles.sectionDescription}>
-              PLAYNE operates programs in schools and communities. Contact us to learn about programs in your area.
-            </p>
+        <PageSection 
+          id="location" 
+          title="Location"
+          description="PLAYNE operates programs in schools and communities. Contact us to learn about programs in your area."
+        >
             
             <div className={styles.locationInfo}>
               <div className={styles.locationDetail}>
@@ -186,8 +182,7 @@ export default function ContactPage({ data }: ContactPageProps) {
                 </p>
               </div>
             </div>
-          </div>
-        </section>
+        </PageSection>
       </div>
     )
   }
@@ -197,12 +192,11 @@ export default function ContactPage({ data }: ContactPageProps) {
     <div className={styles.contactPage}>
       <PageHero title={data.title} subtitle={data.subtitle} />
 
-      <section id="general-contact" className={styles.section}>
-        <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>{data.generalContactSection.title}</h2>
-          <p className={styles.sectionDescription}>
-            {data.generalContactSection.description}
-          </p>
+      <PageSection 
+        id="general-contact" 
+        title={data.generalContactSection.title}
+        description={data.generalContactSection.description}
+      >
           
           <div className={styles.generalContent}>
             <PortableText content={data.generalContactSection.content} />
@@ -290,15 +284,13 @@ export default function ContactPage({ data }: ContactPageProps) {
               </button>
             </form>
           </div>
-        </div>
-      </section>
+      </PageSection>
 
-      <section id="press" className={styles.section}>
-        <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>{data.pressSection.title}</h2>
-          <p className={styles.sectionDescription}>
-            {data.pressSection.description}
-          </p>
+      <PageSection 
+        id="press" 
+        title={data.pressSection.title}
+        description={data.pressSection.description}
+      >
           
           <div className={styles.pressContent}>
             <PortableText content={data.pressSection.content} />
@@ -320,15 +312,13 @@ export default function ContactPage({ data }: ContactPageProps) {
               </div>
             ))}
           </div>
-        </div>
-      </section>
+      </PageSection>
 
-      <section id="location" className={styles.section}>
-        <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>{data.locationSection.title}</h2>
-          <p className={styles.sectionDescription}>
-            {data.locationSection.description}
-          </p>
+      <PageSection 
+        id="location" 
+        title={data.locationSection.title}
+        description={data.locationSection.description}
+      >
           
           <div className={styles.locationInfo}>
             {data.locationSection.address && (
@@ -344,8 +334,7 @@ export default function ContactPage({ data }: ContactPageProps) {
               </div>
             )}
           </div>
-        </div>
-      </section>
+      </PageSection>
     </div>
   )
 }

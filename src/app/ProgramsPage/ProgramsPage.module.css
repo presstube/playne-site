@@ -5,33 +5,6 @@
 }
 
 
-.section {
-  margin-bottom: 4rem;
-  scroll-margin-top: 2rem;
-}
-
-.sectionContent {
-  padding: 2rem;
-  background: var(--color-background-primary);
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-}
-
-.sectionTitle {
-  font-size: 2rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin-bottom: 1rem;
-  border-bottom: 2px solid var(--color-primary);
-  padding-bottom: 0.5rem;
-}
-
-.sectionDescription {
-  font-size: 1.125rem;
-  color: var(--color-text-secondary);
-  margin-bottom: 2rem;
-  line-height: 1.6;
-}
 
 .pillarsGrid {
   display: grid;
@@ -135,17 +108,6 @@
 }
 
 @media (max-width: 768px) {
-  .sectionContent {
-    padding: 1.5rem;
-  }
-  
-  .sectionTitle {
-    font-size: 1.75rem;
-  }
-  
-  .section {
-    margin-bottom: 2.5rem;
-  }
 
   .pillarsGrid {
     grid-template-columns: 1fr;

@@ -1,6 +1,7 @@
 import styles from './SupportPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
 import PageHero from '@/components/PageHero/PageHero'
+import PageSection from '@/components/PageSection/PageSection'
 import { PortableTextBlock } from 'sanity'
 
 interface SupportPageData {
@@ -59,12 +60,11 @@ export default function SupportPage({ data }: SupportPageProps) {
           subtitle="Help us empower young minds through practical life education" 
         />
 
-        <section id="donations" className={styles.section}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Make a Donation</h2>
-            <p className={styles.sectionDescription}>
-              Your donation directly supports our mission to provide practical life education to young people. Every contribution helps us reach more students and create more impactful programs.
-            </p>
+        <PageSection 
+          id="donations" 
+          title="Make a Donation"
+          description="Your donation directly supports our mission to provide practical life education to young people. Every contribution helps us reach more students and create more impactful programs."
+        >
             
             <div className={styles.donationTiers}>
               <div className={styles.donationTier}>
@@ -103,15 +103,13 @@ export default function SupportPage({ data }: SupportPageProps) {
                 <button className={styles.donateButton}>Donate $250</button>
               </div>
             </div>
-          </div>
-        </section>
+        </PageSection>
 
-        <section id="sponsorship" className={styles.section}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Sponsorship Opportunities</h2>
-            <p className={styles.sectionDescription}>
-              Partner with PLAYNE to make a lasting impact on youth education. Our sponsorship opportunities offer meaningful ways to support our mission while gaining visibility for your organization.
-            </p>
+        <PageSection 
+          id="sponsorship" 
+          title="Sponsorship Opportunities"
+          description="Partner with PLAYNE to make a lasting impact on youth education. Our sponsorship opportunities offer meaningful ways to support our mission while gaining visibility for your organization."
+        >
             
             <div className={styles.sponsorshipLevels}>
               <div className={styles.sponsorshipLevel}>
@@ -152,15 +150,13 @@ export default function SupportPage({ data }: SupportPageProps) {
                 </ul>
               </div>
             </div>
-          </div>
-        </section>
+        </PageSection>
 
-        <section id="impact" className={styles.section}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Your Impact</h2>
-            <p className={styles.sectionDescription}>
-              See how your support translates into real change in young people's lives.
-            </p>
+        <PageSection 
+          id="impact" 
+          title="Your Impact"
+          description="See how your support translates into real change in young people's lives."
+        >
             
             <div className={styles.impactStats}>
               <div className={styles.impactStat}>
@@ -187,8 +183,7 @@ export default function SupportPage({ data }: SupportPageProps) {
                 </p>
               </div>
             </div>
-          </div>
-        </section>
+        </PageSection>
       </div>
     )
   }
@@ -198,12 +193,11 @@ export default function SupportPage({ data }: SupportPageProps) {
     <div className={styles.supportPage}>
       <PageHero title={data.title} subtitle={data.subtitle} />
 
-      <section id="donations" className={styles.section}>
-        <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>{data.donationSection.title}</h2>
-          <p className={styles.sectionDescription}>
-            {data.donationSection.description}
-          </p>
+      <PageSection 
+        id="donations" 
+        title={data.donationSection.title}
+        description={data.donationSection.description}
+      >
           
           <div className={styles.donationContent}>
             <PortableText content={data.donationSection.content} />
@@ -226,15 +220,13 @@ export default function SupportPage({ data }: SupportPageProps) {
               </div>
             ))}
           </div>
-        </div>
-      </section>
+      </PageSection>
 
-      <section id="sponsorship" className={styles.section}>
-        <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>{data.sponsorshipSection.title}</h2>
-          <p className={styles.sectionDescription}>
-            {data.sponsorshipSection.description}
-          </p>
+      <PageSection 
+        id="sponsorship" 
+        title={data.sponsorshipSection.title}
+        description={data.sponsorshipSection.description}
+      >
           
           <div className={styles.sponsorshipContent}>
             <PortableText content={data.sponsorshipSection.content} />
@@ -258,15 +250,13 @@ export default function SupportPage({ data }: SupportPageProps) {
               </div>
             ))}
           </div>
-        </div>
-      </section>
+      </PageSection>
 
-      <section id="impact" className={styles.section}>
-        <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>{data.impactSection.title}</h2>
-          <p className={styles.sectionDescription}>
-            {data.impactSection.description}
-          </p>
+      <PageSection 
+        id="impact" 
+        title={data.impactSection.title}
+        description={data.impactSection.description}
+      >
           
           <div className={styles.impactStats}>
             {data.impactSection.impactStats.map((stat, index) => (
@@ -277,8 +267,7 @@ export default function SupportPage({ data }: SupportPageProps) {
               </div>
             ))}
           </div>
-        </div>
-      </section>
+      </PageSection>
     </div>
   )
 }

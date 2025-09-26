@@ -1,6 +1,7 @@
 import styles from './EventsPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
 import PageHero from '@/components/PageHero/PageHero'
+import PageSection from '@/components/PageSection/PageSection'
 import { PortableTextBlock } from 'sanity'
 
 interface Event {
@@ -113,9 +114,8 @@ export default function EventsPage({ data }: EventsPageProps) {
           subtitle="Join us for talks, workshops, and educational experiences" 
         />
 
-        <section className={styles.section}>
-          <div className={styles.sectionContent}>
-            <div className={styles.comingSoon}>
+        <PageSection>
+          <div className={styles.comingSoon}>
               <h2 className={styles.comingSoonTitle}>Events Coming Soon</h2>
               <p className={styles.comingSoonDescription}>
                 We're planning exciting talks and workshops about practical life education. 
@@ -130,9 +130,8 @@ export default function EventsPage({ data }: EventsPageProps) {
                   </a>
                 </p>
               </div>
-            </div>
           </div>
-        </section>
+        </PageSection>
       </div>
     )
   }
@@ -142,9 +141,8 @@ export default function EventsPage({ data }: EventsPageProps) {
     <div className={styles.eventsPage}>
       <PageHero title={data.title} subtitle={data.subtitle} />
 
-      <section className={styles.section}>
-        <div className={styles.sectionContent}>
-          <p className={styles.pageDescription}>{data.description}</p>
+      <PageSection>
+        <p className={styles.pageDescription}>{data.description}</p>
           
           {data.upcomingEvents && data.upcomingEvents.length > 0 && (
             <div className={styles.eventsSection}>
@@ -180,8 +178,7 @@ export default function EventsPage({ data }: EventsPageProps) {
               </a>
             </div>
           )}
-        </div>
-      </section>
+      </PageSection>
     </div>
   )
 }

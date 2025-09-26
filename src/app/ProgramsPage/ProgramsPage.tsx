@@ -1,6 +1,7 @@
 import styles from './ProgramsPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
 import PageHero from '@/components/PageHero/PageHero'
+import PageSection from '@/components/PageSection/PageSection'
 import { PortableTextBlock } from 'sanity'
 
 interface ProgramsPageData {
@@ -48,12 +49,11 @@ export default function ProgramsPage({ data }: ProgramsPageProps) {
           subtitle="Practical life education through creativity and hands-on learning" 
         />
 
-        <section id="curriculum-pillars" className={styles.section}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Curriculum Pillars</h2>
-            <p className={styles.sectionDescription}>
-              PLAYNE's education framework is built on four essential pillars that prepare young people for real life.
-            </p>
+        <PageSection 
+          id="curriculum-pillars" 
+          title="Curriculum Pillars"
+          description="PLAYNE's education framework is built on four essential pillars that prepare young people for real life."
+        >
             
             <div className={styles.pillarsGrid}>
               <div className={styles.pillar}>
@@ -84,12 +84,9 @@ export default function ProgramsPage({ data }: ProgramsPageProps) {
                 </p>
               </div>
             </div>
-          </div>
-        </section>
+        </PageSection>
 
-        <section id="learning-modules" className={styles.section}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Learning Modules</h2>
+        <PageSection id="learning-modules" title="Learning Modules">
             <div className={styles.comingSoon}>
               <p className={styles.comingSoonText}>
                 Interactive learning modules are currently in development. These hands-on experiences will bring our curriculum pillars to life through art, movement, storytelling, and group discussion.
@@ -98,8 +95,7 @@ export default function ProgramsPage({ data }: ProgramsPageProps) {
                 <em>Coming soon...</em>
               </p>
             </div>
-          </div>
-        </section>
+        </PageSection>
       </div>
     )
   }
@@ -109,12 +105,11 @@ export default function ProgramsPage({ data }: ProgramsPageProps) {
     <div className={styles.programsPage}>
       <PageHero title={data.title} subtitle={data.subtitle} />
 
-      <section id="curriculum-pillars" className={styles.section}>
-        <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>{data.curriculumPillars.title}</h2>
-          <p className={styles.sectionDescription}>
-            {data.curriculumPillars.description}
-          </p>
+      <PageSection 
+        id="curriculum-pillars" 
+        title={data.curriculumPillars.title}
+        description={data.curriculumPillars.description}
+      >
           
           <div className={styles.pillarsGrid}>
             {data.curriculumPillars.pillars.map((pillar, index) => (
@@ -126,12 +121,9 @@ export default function ProgramsPage({ data }: ProgramsPageProps) {
               </div>
             ))}
           </div>
-        </div>
-      </section>
+      </PageSection>
 
-      <section id="learning-modules" className={styles.section}>
-        <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>{data.learningModules.title}</h2>
+      <PageSection id="learning-modules" title={data.learningModules.title}>
           
           {data.learningModules.isComingSoon ? (
             <div className={styles.comingSoon}>
@@ -157,8 +149,7 @@ export default function ProgramsPage({ data }: ProgramsPageProps) {
               )}
             </div>
           )}
-        </div>
-      </section>
+      </PageSection>
     </div>
   )
 }

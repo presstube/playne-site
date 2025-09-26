@@ -1,6 +1,7 @@
 import styles from './AboutPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
 import PageHero from '@/components/PageHero/PageHero'
+import PageSection from '@/components/PageSection/PageSection'
 import { PortableTextBlock } from 'sanity'
 
 interface AboutPageData {
@@ -45,44 +46,35 @@ export default function AboutPage({ data }: AboutPageProps) {
           subtitle="Empowering young minds through practical life education" 
         />
 
-        <section id="mission" className={styles.section}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Our Mission</h2>
-            <div className={styles.missionContent}>
-              <p className={styles.missionText}>
-                PLAYNE uses creativity to teach the things we wish we learned in school — how to care for our bodies, understand our emotions, manage money, and find our voice. Through playful, practical lessons rooted in art, we give young people the space to explore <em>who they are</em> before being told who to be.
-              </p>
-            </div>
+        <PageSection id="mission" title="Our Mission">
+          <div className={styles.missionContent}>
+            <p className={styles.missionText}>
+              PLAYNE uses creativity to teach the things we wish we learned in school — how to care for our bodies, understand our emotions, manage money, and find our voice. Through playful, practical lessons rooted in art, we give young people the space to explore <em>who they are</em> before being told who to be.
+            </p>
           </div>
-        </section>
+        </PageSection>
 
-        <section id="story" className={styles.section}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Our Story</h2>
-            <div className={styles.storyContent}>
-              <p className={styles.storyText}>
-                We believe every young person deserves the tools to thrive, not just in school, but in life. PLAYNE reimagines learning by putting curiosity, wellness, and self-discovery at the center. Through hands-on experiences in classrooms and communities, we help students gain a deeper understanding of themselves and the world around them.
-              </p>
-              <p className={styles.storyText}>
-                <em>More of our story coming soon...</em>
-              </p>
-            </div>
+        <PageSection id="story" title="Our Story">
+          <div className={styles.storyContent}>
+            <p className={styles.storyText}>
+              We believe every young person deserves the tools to thrive, not just in school, but in life. PLAYNE reimagines learning by putting curiosity, wellness, and self-discovery at the center. Through hands-on experiences in classrooms and communities, we help students gain a deeper understanding of themselves and the world around them.
+            </p>
+            <p className={styles.storyText}>
+              <em>More of our story coming soon...</em>
+            </p>
           </div>
-        </section>
+        </PageSection>
 
-        <section id="team" className={styles.section}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Our Team</h2>
-            <div className={styles.teamContent}>
-              <p className={styles.teamText}>
-                Meet the passionate educators and creators behind PLAYNE.
-              </p>
-              <div className={styles.teamPlaceholder}>
-                <p><em>Team member profiles coming soon...</em></p>
-              </div>
+        <PageSection id="team" title="Our Team">
+          <div className={styles.teamContent}>
+            <p className={styles.teamText}>
+              Meet the passionate educators and creators behind PLAYNE.
+            </p>
+            <div className={styles.teamPlaceholder}>
+              <p><em>Team member profiles coming soon...</em></p>
             </div>
           </div>
-        </section>
+        </PageSection>
       </div>
     )
   }
@@ -92,43 +84,34 @@ export default function AboutPage({ data }: AboutPageProps) {
     <div className={styles.aboutPage}>
       <PageHero title={data.title} subtitle={data.subtitle} />
 
-      <section id="mission" className={styles.section}>
-        <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>{data.mission.title}</h2>
-          <div className={styles.missionContent}>
-            <PortableText content={data.mission.content} />
-          </div>
+      <PageSection id="mission" title={data.mission.title}>
+        <div className={styles.missionContent}>
+          <PortableText content={data.mission.content} />
         </div>
-      </section>
+      </PageSection>
 
-      <section id="story" className={styles.section}>
-        <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>{data.story.title}</h2>
-          <div className={styles.storyContent}>
-            <PortableText content={data.story.content} />
-          </div>
+      <PageSection id="story" title={data.story.title}>
+        <div className={styles.storyContent}>
+          <PortableText content={data.story.content} />
         </div>
-      </section>
+      </PageSection>
 
-      <section id="team" className={styles.section}>
-        <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>{data.team.title}</h2>
-          <div className={styles.teamContent}>
-            <PortableText content={data.team.content} />
-            {data.team.members && data.team.members.length > 0 && (
-              <div className={styles.teamMembers}>
-                {data.team.members.map((member, index) => (
-                  <div key={index} className={styles.teamMember}>
-                    <h3 className={styles.memberName}>{member.name}</h3>
-                    <p className={styles.memberRole}>{member.role}</p>
-                    <p className={styles.memberBio}>{member.bio}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+      <PageSection id="team" title={data.team.title}>
+        <div className={styles.teamContent}>
+          <PortableText content={data.team.content} />
+          {data.team.members && data.team.members.length > 0 && (
+            <div className={styles.teamMembers}>
+              {data.team.members.map((member, index) => (
+                <div key={index} className={styles.teamMember}>
+                  <h3 className={styles.memberName}>{member.name}</h3>
+                  <p className={styles.memberRole}>{member.role}</p>
+                  <p className={styles.memberBio}>{member.bio}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      </section>
+      </PageSection>
     </div>
   )
 }
