@@ -1,20 +1,45 @@
 import { groq } from 'next-sanity'
 
-export const pageQuery = groq`
-  *[_type == "page" && slug.current == $slug][0] {
+export const homePageQuery = groq`
+  *[_type == "homePage"][0] {
     _id,
     title,
-    slug,
-    content,
-    seo
-  }
-`
-
-export const pagesQuery = groq`
-  *[_type == "page"] {
-    _id,
-    title,
-    slug,
+    subtitle,
+    heroSection {
+      headline,
+      description,
+      ctaButton {
+        text,
+        link
+      },
+      heroImage
+    },
+    introSection {
+      title,
+      content
+    },
+    featuredPrograms {
+      title,
+      description,
+      programs[] {
+        title,
+        description,
+        icon,
+        link
+      }
+    },
+    callToActionSection {
+      title,
+      description,
+      primaryButton {
+        text,
+        link
+      },
+      secondaryButton {
+        text,
+        link
+      }
+    },
     seo
   }
 `

@@ -23,6 +23,7 @@ const client = createClient({
 })
 
 const supportPageContent = {
+  _id: 'supportPage',
   _type: 'supportPage',
   title: 'Support PLAYNE',
   subtitle: 'Help us empower young minds through practical life education',
@@ -207,7 +208,7 @@ async function populateSupportContent() {
       console.log('Document ID:', result._id)
     } else {
       console.log('📝 Creating new Support page...')
-      const result = await client.create(supportPageContent)
+      const result = await client.createOrReplace(supportPageContent)
       console.log('✅ Support page created successfully!')
       console.log('Document ID:', result._id)
     }

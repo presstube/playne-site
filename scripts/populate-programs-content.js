@@ -23,6 +23,7 @@ const client = createClient({
 })
 
 const programsPageContent = {
+  _id: 'programsPage',
   _type: 'programsPage',
   title: 'Programs',
   subtitle: 'Practical life education through creativity and hands-on learning',
@@ -126,7 +127,7 @@ async function populateProgramsContent() {
       console.log('Document ID:', result._id)
     } else {
       console.log('📝 Creating new Programs page...')
-      const result = await client.create(programsPageContent)
+      const result = await client.createOrReplace(programsPageContent)
       console.log('✅ Programs page created successfully!')
       console.log('Document ID:', result._id)
     }

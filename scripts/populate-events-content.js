@@ -23,6 +23,7 @@ const client = createClient({
 })
 
 const eventsPageContent = {
+  _id: 'eventsPage',
   _type: 'eventsPage',
   title: 'Events',
   subtitle: 'Join us for talks, workshops, and educational experiences',
@@ -111,7 +112,7 @@ async function populateEventsContent() {
       console.log('Document ID:', result._id)
     } else {
       console.log('📝 Creating new Events page...')
-      const result = await client.create(eventsPageContent)
+      const result = await client.createOrReplace(eventsPageContent)
       console.log('✅ Events page created successfully!')
       console.log('Document ID:', result._id)
     }

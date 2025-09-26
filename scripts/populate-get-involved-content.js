@@ -23,6 +23,7 @@ const client = createClient({
 })
 
 const getInvolvedPageContent = {
+  _id: 'getInvolvedPage',
   _type: 'getInvolvedPage',
   title: 'Get Involved',
   subtitle: 'Join us in empowering young minds through practical life education',
@@ -98,7 +99,7 @@ async function populateGetInvolvedContent() {
       console.log('Document ID:', result._id)
     } else {
       console.log('📝 Creating new Get Involved page...')
-      const result = await client.create(getInvolvedPageContent)
+      const result = await client.createOrReplace(getInvolvedPageContent)
       console.log('✅ Get Involved page created successfully!')
       console.log('Document ID:', result._id)
     }

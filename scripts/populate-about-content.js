@@ -23,6 +23,7 @@ const client = createClient({
 })
 
 const aboutPageContent = {
+  _id: 'aboutPage',
   _type: 'aboutPage',
   title: 'About PLAYNE',
   subtitle: 'Empowering young minds through practical life education',
@@ -143,7 +144,7 @@ async function populateAboutContent() {
       console.log('Document ID:', result._id)
     } else {
       console.log('📝 Creating new About page...')
-      const result = await client.create(aboutPageContent)
+      const result = await client.createOrReplace(aboutPageContent)
       console.log('✅ About page created successfully!')
       console.log('Document ID:', result._id)
     }

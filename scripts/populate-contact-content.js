@@ -23,6 +23,7 @@ const client = createClient({
 })
 
 const contactPageContent = {
+  _id: 'contactPage',
   _type: 'contactPage',
   title: 'Contact Us',
   subtitle: 'Get in touch with PLAYNE to learn more about our programs',
@@ -123,7 +124,7 @@ async function populateContactContent() {
       console.log('Document ID:', result._id)
     } else {
       console.log('📝 Creating new Contact page...')
-      const result = await client.create(contactPageContent)
+      const result = await client.createOrReplace(contactPageContent)
       console.log('✅ Contact page created successfully!')
       console.log('Document ID:', result._id)
     }
