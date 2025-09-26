@@ -1,5 +1,6 @@
 import styles from './SupportPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
+import PageHero from '@/components/PageHero/PageHero'
 import { PortableTextBlock } from 'sanity'
 
 interface SupportPageData {
@@ -53,12 +54,10 @@ export default function SupportPage({ data }: SupportPageProps) {
   if (!data) {
     return (
       <div className={styles.supportPage}>
-        <div className={styles.hero}>
-          <h1 className={styles.title}>Support PLAYNE</h1>
-          <p className={styles.subtitle}>
-            Help us empower young minds through practical life education
-          </p>
-        </div>
+        <PageHero 
+          title="Support PLAYNE" 
+          subtitle="Help us empower young minds through practical life education" 
+        />
 
         <section id="donations" className={styles.section}>
           <div className={styles.sectionContent}>
@@ -197,10 +196,7 @@ export default function SupportPage({ data }: SupportPageProps) {
   // Render with Sanity data
   return (
     <div className={styles.supportPage}>
-      <div className={styles.hero}>
-        <h1 className={styles.title}>{data.title}</h1>
-        <p className={styles.subtitle}>{data.subtitle}</p>
-      </div>
+      <PageHero title={data.title} subtitle={data.subtitle} />
 
       <section id="donations" className={styles.section}>
         <div className={styles.sectionContent}>

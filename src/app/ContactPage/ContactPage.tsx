@@ -1,5 +1,6 @@
 import styles from './ContactPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
+import PageHero from '@/components/PageHero/PageHero'
 import { PortableTextBlock } from 'sanity'
 
 interface ContactPageData {
@@ -49,12 +50,10 @@ export default function ContactPage({ data }: ContactPageProps) {
   if (!data) {
     return (
       <div className={styles.contactPage}>
-        <div className={styles.hero}>
-          <h1 className={styles.title}>Contact Us</h1>
-          <p className={styles.subtitle}>
-            Get in touch with PLAYNE to learn more about our programs
-          </p>
-        </div>
+        <PageHero 
+          title="Contact Us" 
+          subtitle="Get in touch with PLAYNE to learn more about our programs" 
+        />
 
         <section id="general-contact" className={styles.section}>
           <div className={styles.sectionContent}>
@@ -196,10 +195,7 @@ export default function ContactPage({ data }: ContactPageProps) {
   // Render with Sanity data
   return (
     <div className={styles.contactPage}>
-      <div className={styles.hero}>
-        <h1 className={styles.title}>{data.title}</h1>
-        <p className={styles.subtitle}>{data.subtitle}</p>
-      </div>
+      <PageHero title={data.title} subtitle={data.subtitle} />
 
       <section id="general-contact" className={styles.section}>
         <div className={styles.sectionContent}>

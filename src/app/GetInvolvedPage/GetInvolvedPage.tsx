@@ -1,4 +1,5 @@
 import styles from './GetInvolvedPage.module.css'
+import PageHero from '@/components/PageHero/PageHero'
 
 interface GetInvolvedPageData {
   _id: string
@@ -52,12 +53,10 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
   if (!data) {
     return (
       <div className={styles.getInvolvedPage}>
-        <div className={styles.hero}>
-          <h1 className={styles.title}>Get Involved</h1>
-          <p className={styles.subtitle}>
-            Join us in empowering young minds through practical life education
-          </p>
-        </div>
+        <PageHero 
+          title="Get Involved" 
+          subtitle="Join us in empowering young minds through practical life education" 
+        />
 
         <section id="partners" className={styles.section}>
           <div className={styles.sectionContent}>
@@ -195,10 +194,7 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
   // Render with Sanity data
   return (
     <div className={styles.getInvolvedPage}>
-      <div className={styles.hero}>
-        <h1 className={styles.title}>{data.title}</h1>
-        <p className={styles.subtitle}>{data.subtitle}</p>
-      </div>
+      <PageHero title={data.title} subtitle={data.subtitle} />
 
       <section id="partners" className={styles.section}>
         <div className={styles.sectionContent}>

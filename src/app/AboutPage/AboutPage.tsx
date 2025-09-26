@@ -1,5 +1,6 @@
 import styles from './AboutPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
+import PageHero from '@/components/PageHero/PageHero'
 import { PortableTextBlock } from 'sanity'
 
 interface AboutPageData {
@@ -39,12 +40,10 @@ export default function AboutPage({ data }: AboutPageProps) {
   if (!data) {
     return (
       <div className={styles.aboutPage}>
-        <div className={styles.hero}>
-          <h1 className={styles.title}>About PLAYNE</h1>
-          <p className={styles.subtitle}>
-            Empowering young minds through practical life education
-          </p>
-        </div>
+        <PageHero 
+          title="About PLAYNE" 
+          subtitle="Empowering young minds through practical life education" 
+        />
 
         <section id="mission" className={styles.section}>
           <div className={styles.sectionContent}>
@@ -91,10 +90,7 @@ export default function AboutPage({ data }: AboutPageProps) {
   // Render with Sanity data
   return (
     <div className={styles.aboutPage}>
-      <div className={styles.hero}>
-        <h1 className={styles.title}>{data.title}</h1>
-        <p className={styles.subtitle}>{data.subtitle}</p>
-      </div>
+      <PageHero title={data.title} subtitle={data.subtitle} />
 
       <section id="mission" className={styles.section}>
         <div className={styles.sectionContent}>
