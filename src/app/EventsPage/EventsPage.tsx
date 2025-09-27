@@ -3,6 +3,7 @@ import PortableText from '@/components/PortableText/PortableText'
 import PageHero from '@/components/PageHero/PageHero'
 import PageSection from '@/components/PageSection/PageSection'
 import EventCard from '@/components/EventCard/EventCard'
+import LinkButton from '@/components/LinkButton/LinkButton'
 import { PortableTextBlock } from 'sanity'
 
 interface Event {
@@ -77,14 +78,14 @@ function EventCardWrapper({ event }: { event: Event }) {
           </div>
         )}
         {event.registrationUrl && (
-          <a 
+          <LinkButton 
             href={event.registrationUrl} 
-            className={styles.registerButton}
-            target="_blank" 
-            rel="noopener noreferrer"
+            variant="primary"
+            size="medium"
+            external
           >
             Register
-          </a>
+          </LinkButton>
         )}
       </div>
     </EventCard>
@@ -160,9 +161,9 @@ export default function EventsPage({ data }: EventsPageProps) {
               <p className={styles.noEventsDescription}>
                 We're planning our first events. Check back soon or sign up for updates!
               </p>
-              <a href="/get-involved" className={styles.notifyButton}>
+              <LinkButton href="/get-involved" variant="primary" size="medium">
                 Get Notified
-              </a>
+              </LinkButton>
             </div>
           )}
       </PageSection>

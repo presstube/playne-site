@@ -1,6 +1,7 @@
 import styles from './HomePage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
 import ActionCard from '@/components/ActionCard/ActionCard'
+import LinkButton from '@/components/LinkButton/LinkButton'
 import Link from 'next/link'
 import { PortableTextBlock } from 'sanity'
 
@@ -84,12 +85,13 @@ export default function HomePage({ data }: HomePageProps) {
             </div>
           )}
           {data.heroSection.ctaButton && data.heroSection.ctaButton.text && (
-            <Link 
+            <LinkButton 
               href={data.heroSection.ctaButton.link || '#'} 
-              className={styles.heroButton}
+              variant="hero"
+              size="large"
             >
               {data.heroSection.ctaButton.text}
-            </Link>
+            </LinkButton>
           )}
         </section>
       )}
@@ -147,20 +149,22 @@ export default function HomePage({ data }: HomePageProps) {
           )}
           <div className={styles.ctaButtons}>
             {data.callToActionSection.primaryButton && data.callToActionSection.primaryButton.text && (
-              <Link 
+              <LinkButton 
                 href={data.callToActionSection.primaryButton.link || '#'} 
-                className={styles.ctaPrimaryButton}
+                variant="primary"
+                size="large"
               >
                 {data.callToActionSection.primaryButton.text}
-              </Link>
+              </LinkButton>
             )}
             {data.callToActionSection.secondaryButton && data.callToActionSection.secondaryButton.text && (
-              <Link 
+              <LinkButton 
                 href={data.callToActionSection.secondaryButton.link || '#'} 
-                className={styles.ctaSecondaryButton}
+                variant="secondary"
+                size="large"
               >
                 {data.callToActionSection.secondaryButton.text}
-              </Link>
+              </LinkButton>
             )}
           </div>
         </section>

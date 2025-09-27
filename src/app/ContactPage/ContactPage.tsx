@@ -8,6 +8,7 @@ import PageSection from '@/components/PageSection/PageSection'
 import TextInput from '@/components/TextInput/TextInput'
 import TextArea from '@/components/TextArea/TextArea'
 import FormRow from '@/components/FormRow/FormRow'
+import Button from '@/components/Button/Button'
 import { PortableTextBlock } from 'sanity'
 
 interface ContactPageData {
@@ -166,9 +167,16 @@ export default function ContactPage({ data }: ContactPageProps) {
                   </div>
                 )}
 
-                <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
-                </button>
+                <Button 
+                  type="submit" 
+                  variant="submit" 
+                  size="large" 
+                  fullWidth 
+                  loading={isSubmitting}
+                  disabled={isSubmitting}
+                >
+                  Send Message
+                </Button>
               </form>
             </div>
         </PageSection>
@@ -289,9 +297,16 @@ export default function ContactPage({ data }: ContactPageProps) {
                 </div>
               )}
 
-              <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-                {isSubmitting ? 'Sending...' : 'Send Message'}
-              </button>
+              <Button 
+                type="submit" 
+                variant="submit" 
+                size="large" 
+                fullWidth 
+                loading={isSubmitting}
+                disabled={isSubmitting}
+              >
+                Send Message
+              </Button>
             </form>
           </div>
       </PageSection>

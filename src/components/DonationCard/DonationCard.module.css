@@ -55,23 +55,7 @@
   margin-right: 0.5rem;
 }
 
-.donateButton {
-  padding: 1rem 2rem;
-  background: var(--color-primary);
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: auto;
-}
-
-.donateButton:hover {
-  background: var(--color-primary-dark, var(--color-primary));
-  transform: translateY(-1px);
-}
+/* Donate button styles now handled by Button component */
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -81,10 +65,5 @@
   
   .title {
     font-size: 1.125rem;
-  }
-  
-  .donateButton {
-    padding: 0.875rem 1.5rem;
-    font-size: 0.875rem;
   }
 }

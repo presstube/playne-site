@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
-import Link from 'next/link'
 import ContentCard from '../ContentCard/ContentCard'
-import styles from './ActionCard.module.css'
+import Button from '../Button/Button'
+import LinkButton from '../LinkButton/LinkButton'
 
 interface ActionCardProps {
   title: string
@@ -41,21 +41,22 @@ export default function ActionCard({
 
     if (actionType === 'link' && actionHref) {
       return (
-        <Link href={actionHref} className={styles.actionLink}>
+        <LinkButton href={actionHref} variant="primary" size="medium">
           {actionText}
-        </Link>
+        </LinkButton>
       )
     }
 
     if (actionType === 'button') {
       return (
-        <button 
-          className={styles.actionButton}
+        <Button 
+          variant="primary"
+          size="medium"
           onClick={actionOnClick}
           disabled={actionDisabled}
         >
           {actionText}
-        </button>
+        </Button>
       )
     }
 

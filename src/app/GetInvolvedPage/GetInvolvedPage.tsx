@@ -7,6 +7,7 @@ import PageSection from '@/components/PageSection/PageSection'
 import TextInput from '@/components/TextInput/TextInput'
 import TextArea from '@/components/TextArea/TextArea'
 import Select from '@/components/Select/Select'
+import Button from '@/components/Button/Button'
 
 interface GetInvolvedPageData {
   _id: string
@@ -205,9 +206,16 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
                 </div>
               )}
 
-              <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-                {isSubmitting ? 'Submitting...' : 'Submit Interest'}
-              </button>
+              <Button 
+                type="submit" 
+                variant="submit" 
+                size="large" 
+                fullWidth 
+                loading={isSubmitting}
+                disabled={isSubmitting}
+              >
+                Submit Interest
+              </Button>
             </form>
         </PageSection>
 
@@ -227,9 +235,15 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
                   required
                   disabled={isSubmitting}
                 />
-                <button type="submit" className={styles.emailButton} disabled={isSubmitting}>
-                  {isSubmitting ? 'Signing Up...' : 'Sign Up'}
-                </button>
+                <Button 
+                  type="submit" 
+                  variant="primary" 
+                  size="medium"
+                  loading={isSubmitting}
+                  disabled={isSubmitting}
+                >
+                  Sign Up
+                </Button>
               </div>
               <p className={styles.emailDisclaimer}>
                 We respect your privacy and will never share your information. Unsubscribe at any time.
@@ -340,9 +354,16 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
               </div>
             )}
 
-            <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting...' : data.interestFormSection.formFields.submitButtonText}
-            </button>
+            <Button 
+              type="submit" 
+              variant="submit" 
+              size="large" 
+              fullWidth 
+              loading={isSubmitting}
+              disabled={isSubmitting}
+            >
+              {data.interestFormSection.formFields.submitButtonText}
+            </Button>
           </form>
       </PageSection>
 
@@ -362,9 +383,15 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
                 required
                 disabled={isSubmitting}
               />
-              <button type="submit" className={styles.emailButton} disabled={isSubmitting}>
-                {isSubmitting ? 'Signing Up...' : data.emailSignupSection.buttonText}
-              </button>
+              <Button 
+                type="submit" 
+                variant="primary" 
+                size="medium"
+                loading={isSubmitting}
+                disabled={isSubmitting}
+              >
+                {data.emailSignupSection.buttonText}
+              </Button>
             </div>
             <p className={styles.emailDisclaimer}>
               {data.emailSignupSection.disclaimer}

@@ -28,21 +28,7 @@
   margin-right: auto;
 }
 
-.heroButton {
-  display: inline-block;
-  background-color: var(--brand-yellow);
-  color: var(--brand-black);
-  padding: var(--space-4) var(--space-7);
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
-}
-
-.heroButton:hover {
-  background-color: var(--brand-black);
-  color: var(--brand-yellow);
-}
+/* Hero button styles now handled by LinkButton component */
 
 /* Section Styles */
 .introSection,
@@ -120,38 +106,7 @@
   flex-wrap: wrap;
 }
 
-.ctaPrimaryButton {
-  display: inline-block;
-  background-color: var(--brand-black);
-  color: var(--brand-offwhite);
-  padding: var(--space-4) var(--space-7);
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
-}
-
-.ctaPrimaryButton:hover {
-  background-color: var(--brand-yellow);
-  color: var(--brand-black);
-}
-
-.ctaSecondaryButton {
-  display: inline-block;
-  background-color: transparent;
-  color: var(--brand-black);
-  padding: var(--space-4) var(--space-7);
-  font-weight: 600;
-  text-decoration: none;
-  border: 2px solid var(--brand-black);
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
-}
-
-.ctaSecondaryButton:hover {
-  background-color: var(--brand-black);
-  color: var(--brand-offwhite);
-}
+/* CTA button styles now handled by LinkButton component */
 
 /* Fallback Content */
 .fallbackContent {

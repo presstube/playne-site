@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 import Card from '../Card/Card'
+import Button from '../Button/Button'
 import styles from './DonationCard.module.css'
 
 interface DonationCardProps {
@@ -42,12 +43,14 @@ export default function DonationCard({
           </ul>
         )}
         
-        <button 
-          className={styles.donateButton}
+        <Button 
+          variant="primary"
+          size="large"
+          fullWidth
           onClick={handleDonate}
         >
           Donate {amount}
-        </button>
+        </Button>
       </div>
     </Card>
   )
