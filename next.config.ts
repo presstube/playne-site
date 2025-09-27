@@ -31,7 +31,6 @@ const nextConfig: NextConfig = {
   
   // Build optimization
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['@sanity/image-url', '@portabletext/react'],
   },
 
