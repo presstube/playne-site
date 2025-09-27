@@ -1,7 +1,10 @@
+'use client'
+
 import styles from './SupportPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
 import PageHero from '@/components/PageHero/PageHero'
 import PageSection from '@/components/PageSection/PageSection'
+import DonationCard from '@/components/DonationCard/DonationCard'
 import { PortableTextBlock } from 'sanity'
 
 interface SupportPageData {
@@ -51,6 +54,12 @@ interface SupportPageProps {
 }
 
 export default function SupportPage({ data }: SupportPageProps) {
+  const handleDonate = (amount: string) => {
+    // TODO: Implement donation functionality
+    console.log(`Donate ${amount} clicked`)
+    // This could redirect to a payment processor, open a modal, etc.
+  }
+
   // Fallback content if no Sanity data
   if (!data) {
     return (
@@ -67,41 +76,33 @@ export default function SupportPage({ data }: SupportPageProps) {
         >
             
             <div className={styles.donationTiers}>
-              <div className={styles.donationTier}>
-                <div className={styles.tierAmount}>$25</div>
-                <h3 className={styles.tierTitle}>Supporter</h3>
-                <p className={styles.tierDescription}>
-                  Provides materials for one student in a PLAYNE workshop
-                </p>
-                <button className={styles.donateButton}>Donate $25</button>
-              </div>
+              <DonationCard
+                amount="$25"
+                title="Supporter"
+                description="Provides materials for one student in a PLAYNE workshop"
+                onDonate={handleDonate}
+              />
 
-              <div className={styles.donationTier}>
-                <div className={styles.tierAmount}>$50</div>
-                <h3 className={styles.tierTitle}>Advocate</h3>
-                <p className={styles.tierDescription}>
-                  Supports a full workshop session for a small group
-                </p>
-                <button className={styles.donateButton}>Donate $50</button>
-              </div>
+              <DonationCard
+                amount="$50"
+                title="Advocate"
+                description="Supports a full workshop session for a small group"
+                onDonate={handleDonate}
+              />
 
-              <div className={styles.donationTier}>
-                <div className={styles.tierAmount}>$100</div>
-                <h3 className={styles.tierTitle}>Champion</h3>
-                <p className={styles.tierDescription}>
-                  Funds a complete curriculum pillar module for a classroom
-                </p>
-                <button className={styles.donateButton}>Donate $100</button>
-              </div>
+              <DonationCard
+                amount="$100"
+                title="Champion"
+                description="Funds a complete curriculum pillar module for a classroom"
+                onDonate={handleDonate}
+              />
 
-              <div className={styles.donationTier}>
-                <div className={styles.tierAmount}>$250</div>
-                <h3 className={styles.tierTitle}>Changemaker</h3>
-                <p className={styles.tierDescription}>
-                  Sponsors a full program series for an entire class
-                </p>
-                <button className={styles.donateButton}>Donate $250</button>
-              </div>
+              <DonationCard
+                amount="$250"
+                title="Changemaker"
+                description="Sponsors a full program series for an entire class"
+                onDonate={handleDonate}
+              />
             </div>
         </PageSection>
 
@@ -205,19 +206,14 @@ export default function SupportPage({ data }: SupportPageProps) {
           
           <div className={styles.donationTiers}>
             {data.donationSection.donationTiers.map((tier, index) => (
-              <div key={index} className={styles.donationTier}>
-                <div className={styles.tierAmount}>{tier.amount}</div>
-                <h3 className={styles.tierTitle}>{tier.title}</h3>
-                <p className={styles.tierDescription}>{tier.description}</p>
-                {tier.benefits && tier.benefits.length > 0 && (
-                  <ul className={styles.tierBenefits}>
-                    {tier.benefits.map((benefit, benefitIndex) => (
-                      <li key={benefitIndex}>{benefit}</li>
-                    ))}
-                  </ul>
-                )}
-                <button className={styles.donateButton}>Donate {tier.amount}</button>
-              </div>
+              <DonationCard
+                key={index}
+                amount={tier.amount}
+                title={tier.title}
+                description={tier.description}
+                benefits={tier.benefits}
+                onDonate={handleDonate}
+              />
             ))}
           </div>
       </PageSection>

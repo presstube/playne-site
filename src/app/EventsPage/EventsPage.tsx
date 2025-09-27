@@ -2,6 +2,7 @@ import styles from './EventsPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
 import PageHero from '@/components/PageHero/PageHero'
 import PageSection from '@/components/PageSection/PageSection'
+import EventCard from '@/components/EventCard/EventCard'
 import { PortableTextBlock } from 'sanity'
 
 interface Event {
@@ -48,59 +49,45 @@ function formatDate(dateString: string): string {
   })
 }
 
-function EventCard({ event }: { event: Event }) {
+function EventCardWrapper({ event }: { event: Event }) {
+  const formattedDate = formatDate(event.date)
+  const eventType = event.isVirtual ? `${event.eventType} (Virtual)` : event.eventType
+  
   return (
-    <div className={styles.eventCard}>
-      <div className={styles.eventHeader}>
-        <div className={styles.eventDate}>
-          <div className={styles.eventDateText}>{formatDate(event.date)}</div>
-          {event.time && <div className={styles.eventTime}>{event.time}</div>}
+    <EventCard
+      title={event.title}
+      date={formattedDate}
+      time={event.time}
+      location={event.location}
+      type={eventType}
+      description={<PortableText content={event.description} />}
+    >
+      {event.tags && event.tags.length > 0 && (
+        <div className={styles.eventTags}>
+          {event.tags.map((tag, index) => (
+            <span key={index} className={styles.eventTag}>{tag}</span>
+          ))}
         </div>
-        <div className={styles.eventType}>
-          <span className={`${styles.eventTypeTag} ${styles[event.eventType]}`}>
-            {event.eventType}
-          </span>
-          {event.isVirtual && (
-            <span className={styles.virtualTag}>Virtual</span>
-          )}
-        </div>
-      </div>
+      )}
       
-      <div className={styles.eventContent}>
-        <h3 className={styles.eventTitle}>{event.title}</h3>
-        <div className={styles.eventLocation}>{event.location}</div>
-        
-        <div className={styles.eventDescription}>
-          <PortableText content={event.description} />
-        </div>
-        
-        {event.tags && event.tags.length > 0 && (
-          <div className={styles.eventTags}>
-            {event.tags.map((tag, index) => (
-              <span key={index} className={styles.eventTag}>{tag}</span>
-            ))}
+      <div className={styles.eventFooter}>
+        {event.capacity && (
+          <div className={styles.eventCapacity}>
+            Capacity: {event.capacity} people
           </div>
         )}
-        
-        <div className={styles.eventFooter}>
-          {event.capacity && (
-            <div className={styles.eventCapacity}>
-              Capacity: {event.capacity} people
-            </div>
-          )}
-          {event.registrationUrl && (
-            <a 
-              href={event.registrationUrl} 
-              className={styles.registerButton}
-              target="_blank" 
-              rel="noopener noreferrer"
-            >
-              Register
-            </a>
-          )}
-        </div>
+        {event.registrationUrl && (
+          <a 
+            href={event.registrationUrl} 
+            className={styles.registerButton}
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
+            Register
+          </a>
+        )}
       </div>
-    </div>
+    </EventCard>
   )
 }
 
@@ -149,7 +136,7 @@ export default function EventsPage({ data }: EventsPageProps) {
               <h2 className={styles.sectionTitle}>Upcoming Events</h2>
               <div className={styles.eventsList}>
                 {data.upcomingEvents.map((event) => (
-                  <EventCard key={event._id} event={event} />
+                  <EventCardWrapper key={event._id} event={event} />
                 ))}
               </div>
             </div>
@@ -160,7 +147,7 @@ export default function EventsPage({ data }: EventsPageProps) {
               <h2 className={styles.sectionTitle}>Past Events</h2>
               <div className={styles.eventsList}>
                 {data.pastEvents.map((event) => (
-                  <EventCard key={event._id} event={event} />
+                  <EventCardWrapper key={event._id} event={event} />
                 ))}
               </div>
             </div>

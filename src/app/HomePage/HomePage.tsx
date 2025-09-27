@@ -1,5 +1,6 @@
 import styles from './HomePage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
+import ActionCard from '@/components/ActionCard/ActionCard'
 import Link from 'next/link'
 import { PortableTextBlock } from 'sanity'
 
@@ -119,18 +120,16 @@ export default function HomePage({ data }: HomePageProps) {
           {data.featuredPrograms.programs && data.featuredPrograms.programs.length > 0 && (
             <div className={styles.programsGrid}>
               {data.featuredPrograms.programs.map((program, index) => (
-                <div key={index} className={styles.programCard}>
-                  {program.icon && (
-                    <div className={styles.programIcon}>{program.icon}</div>
-                  )}
-                  <h3 className={styles.programTitle}>{program.title}</h3>
-                  <p className={styles.programDescription}>{program.description}</p>
-                  {program.link && (
-                    <Link href={program.link} className={styles.programLink}>
-                      Learn More
-                    </Link>
-                  )}
-                </div>
+                <ActionCard
+                  key={index}
+                  variant="bordered"
+                  title={program.title}
+                  description={program.description}
+                  icon={program.icon}
+                  actionType="link"
+                  actionText="Learn More"
+                  actionHref={program.link}
+                />
               ))}
             </div>
           )}
