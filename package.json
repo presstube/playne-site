@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "setup": "node scripts/init-sanity.js"
+    "setup": "node scripts/init-sanity.js",
+    "deploy:check": "node scripts/deploy-setup.js",
+    "deploy:build": "npm run deploy:check && npm run build"
   },
   "dependencies": {
     "@portabletext/react": "^4.0.3",

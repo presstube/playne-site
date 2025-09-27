@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   // Static generation optimization
   output: 'standalone',
   
+  // Vercel-specific optimizations
+  outputFileTracingRoot: __dirname,
+  
   // Image optimization for Sanity images
   images: {
     remotePatterns: [
