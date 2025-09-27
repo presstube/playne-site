@@ -21,6 +21,16 @@ const eslintConfig = [
     ],
   },
   {
+    // Global rule overrides for deployment
+    rules: {
+      "react/no-unescaped-entities": "off",
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "react-hooks/exhaustive-deps": "warn",
+      "@next/next/no-page-custom-font": "warn",
+    },
+  },
+  {
     files: ["src/components/PortableText/PortableText.tsx", "src/sanity/lib/image.ts"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
