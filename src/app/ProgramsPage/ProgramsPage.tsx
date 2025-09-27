@@ -16,7 +16,7 @@ interface ProgramsPageData {
     pillars: Array<{
       title: string
       description: string
-      icon?: any
+      icon?: string
     }>
   }
   learningModules: {
