@@ -1,0 +1,14 @@
+/* PageNavigation Component Styles */
+
+.pageNavigation {
+  /* Hidden component - no visual indicators as requested */
+  display: none;
+}
+
+/* 
+  This component handles navigation logic only.
+  No visual elements are rendered per requirements:
+  - No visual indicators
+  - No animations
+  - Same behavior on desktop/mobile
+*/

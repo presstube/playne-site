@@ -1,14 +1,21 @@
+'use client'
+
 import styles from './RootLayout.module.css'
 import Topnav from '@/components/Topnav/Topnav'
+import PageNavigation from '@/components/PageNavigation/PageNavigation'
 import { ReactNode } from 'react'
+import { usePathname } from 'next/navigation'
 
 interface RootLayoutProps {
   children: ReactNode
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
+  const pathname = usePathname()
+  
   return (
     <div className={styles.rootLayout}>
+      <PageNavigation currentPath={pathname} />
       <Topnav />
       <main className={styles.main}>
         <div className={styles.container}>
