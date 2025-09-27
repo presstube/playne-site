@@ -8,6 +8,7 @@ import TextInput from '@/components/TextInput/TextInput'
 import TextArea from '@/components/TextArea/TextArea'
 import Select from '@/components/Select/Select'
 import Button from '@/components/Button/Button'
+import { SanityImage, SeoData } from '@/sanity/lib/types'
 
 interface GetInvolvedPageData {
   _id: string
@@ -23,7 +24,7 @@ interface GetInvolvedPageData {
     currentPartners: Array<{
       name: string
       description: string
-      logo?: any
+      logo?: SanityImage
       website: string
     }>
   }
@@ -46,10 +47,7 @@ interface GetInvolvedPageData {
     buttonText: string
     disclaimer: string
   }
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
+  seo?: SeoData
 }
 
 interface GetInvolvedPageProps {

@@ -6,6 +6,7 @@ import PageHero from '@/components/PageHero/PageHero'
 import PageSection from '@/components/PageSection/PageSection'
 import DonationCard from '@/components/DonationCard/DonationCard'
 import { PortableTextBlock } from 'sanity'
+import { SeoData } from '@/sanity/lib/types'
 
 interface SupportPageData {
   _id: string
@@ -43,10 +44,7 @@ interface SupportPageData {
       description: string
     }>
   }
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
+  seo?: SeoData
 }
 
 interface SupportPageProps {

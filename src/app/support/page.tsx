@@ -1,8 +1,9 @@
 import SupportPage from '../SupportPage/SupportPage'
-import { client } from '@/sanity/lib/client'
+import { staticClient } from '@/sanity/lib/client'
 import { supportPageQuery } from '@/sanity/lib/queries'
 import { Metadata } from 'next'
 import { PortableTextBlock } from 'sanity'
+import { SeoData } from '@/sanity/lib/types'
 
 interface SupportPageData {
   _id: string
@@ -40,15 +41,12 @@ interface SupportPageData {
       description: string
     }>
   }
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
+  seo?: SeoData
 }
 
 async function getSupportPage(): Promise<SupportPageData | null> {
   try {
-    return await client.fetch(supportPageQuery)
+    return await staticClient.fetch(supportPageQuery)
   } catch (error) {
     console.error('Error fetching support page:', error)
     return null

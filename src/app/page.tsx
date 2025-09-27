@@ -1,8 +1,9 @@
 import HomePage from './HomePage/HomePage'
-import { client } from '@/sanity/lib/client'
+import { staticClient } from '@/sanity/lib/client'
 import { homePageQuery } from '@/sanity/lib/queries'
 import { Metadata } from 'next'
 import { PortableTextBlock } from 'sanity'
+import { SanityImage, SeoData } from '@/sanity/lib/types'
 
 interface HomePageData {
   _id: string
@@ -15,7 +16,7 @@ interface HomePageData {
       text?: string
       link?: string
     }
-    heroImage?: any
+    heroImage?: SanityImage
   }
   introSection?: {
     title?: string
@@ -43,15 +44,12 @@ interface HomePageData {
       link?: string
     }
   }
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
+  seo?: SeoData
 }
 
 async function getHomePage(): Promise<HomePageData | null> {
   try {
-    return await client.fetch(homePageQuery)
+    return await staticClient.fetch(homePageQuery)
   } catch (error) {
     console.error('Error fetching home page:', error)
     return null

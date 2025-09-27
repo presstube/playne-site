@@ -4,6 +4,7 @@ import PageHero from '@/components/PageHero/PageHero'
 import PageSection from '@/components/PageSection/PageSection'
 import ContentCard from '@/components/ContentCard/ContentCard'
 import { PortableTextBlock } from 'sanity'
+import { SeoData } from '@/sanity/lib/types'
 
 interface ProgramsPageData {
   _id: string
@@ -30,10 +31,7 @@ interface ProgramsPageData {
       ageGroup: string
     }>
   }
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
+  seo?: SeoData
 }
 
 interface ProgramsPageProps {

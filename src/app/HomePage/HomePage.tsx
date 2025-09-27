@@ -4,6 +4,7 @@ import ActionCard from '@/components/ActionCard/ActionCard'
 import LinkButton from '@/components/LinkButton/LinkButton'
 import Link from 'next/link'
 import { PortableTextBlock } from 'sanity'
+import { SanityImage, SeoData } from '@/sanity/lib/types'
 
 interface HomePageData {
   _id: string
@@ -16,7 +17,7 @@ interface HomePageData {
       text?: string
       link?: string
     }
-    heroImage?: any
+    heroImage?: SanityImage
   }
   introSection?: {
     title?: string
@@ -44,10 +45,7 @@ interface HomePageData {
       link?: string
     }
   }
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
+  seo?: SeoData
 }
 
 interface HomePageProps {

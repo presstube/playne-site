@@ -5,6 +5,7 @@ import PageSection from '@/components/PageSection/PageSection'
 import EventCard from '@/components/EventCard/EventCard'
 import LinkButton from '@/components/LinkButton/LinkButton'
 import { PortableTextBlock } from 'sanity'
+import { SanityImage, SeoData } from '@/sanity/lib/types'
 
 interface Event {
   _id: string
@@ -18,7 +19,7 @@ interface Event {
   isVirtual: boolean
   registrationUrl?: string
   capacity?: number
-  image?: any
+  image?: SanityImage
   tags?: string[]
 }
 
@@ -30,10 +31,7 @@ interface EventsPageData {
   upcomingEvents: Event[]
   pastEvents: Event[]
   isEventsVisible: boolean
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
+  seo?: SeoData
 }
 
 interface EventsPageProps {

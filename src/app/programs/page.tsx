@@ -1,8 +1,9 @@
 import ProgramsPage from '../ProgramsPage/ProgramsPage'
-import { client } from '@/sanity/lib/client'
+import { staticClient } from '@/sanity/lib/client'
 import { programsPageQuery } from '@/sanity/lib/queries'
 import { Metadata } from 'next'
 import { PortableTextBlock } from 'sanity'
+import { SeoData } from '@/sanity/lib/types'
 
 interface ProgramsPageData {
   _id: string
@@ -29,15 +30,12 @@ interface ProgramsPageData {
       ageGroup: string
     }>
   }
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
+  seo?: SeoData
 }
 
 async function getProgramsPage(): Promise<ProgramsPageData | null> {
   try {
-    return await client.fetch(programsPageQuery)
+    return await staticClient.fetch(programsPageQuery)
   } catch (error) {
     console.error('Error fetching programs page:', error)
     return null

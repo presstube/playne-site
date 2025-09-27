@@ -1,8 +1,9 @@
 import AboutPage from '../AboutPage/AboutPage'
-import { client } from '@/sanity/lib/client'
+import { staticClient } from '@/sanity/lib/client'
 import { aboutPageQuery } from '@/sanity/lib/queries'
 import { Metadata } from 'next'
 import { PortableTextBlock } from 'sanity'
+import { SanityImage, SeoData } from '@/sanity/lib/types'
 
 interface AboutPageData {
   _id: string
@@ -23,18 +24,15 @@ interface AboutPageData {
       name: string
       role: string
       bio: string
-      image?: any
+        image?: SanityImage
     }>
   }
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
+  seo?: SeoData
 }
 
 async function getAboutPage(): Promise<AboutPageData | null> {
   try {
-    return await client.fetch(aboutPageQuery)
+    return await staticClient.fetch(aboutPageQuery)
   } catch (error) {
     console.error('Error fetching about page:', error)
     return null

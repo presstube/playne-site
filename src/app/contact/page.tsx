@@ -1,8 +1,9 @@
 import ContactPage from '../ContactPage/ContactPage'
-import { client } from '@/sanity/lib/client'
+import { staticClient } from '@/sanity/lib/client'
 import { contactPageQuery } from '@/sanity/lib/queries'
 import { Metadata } from 'next'
 import { PortableTextBlock } from 'sanity'
+import { SeoData } from '@/sanity/lib/types'
 
 interface ContactPageData {
   _id: string
@@ -36,15 +37,12 @@ interface ContactPageData {
     address?: string
     hours?: string
   }
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
+  seo?: SeoData
 }
 
 async function getContactPage(): Promise<ContactPageData | null> {
   try {
-    return await client.fetch(contactPageQuery)
+    return await staticClient.fetch(contactPageQuery)
   } catch (error) {
     console.error('Error fetching contact page:', error)
     return null

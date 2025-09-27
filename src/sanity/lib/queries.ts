@@ -1,5 +1,40 @@
 import { groq } from 'next-sanity'
 
+// Common SEO projection for consistent metadata
+const seoProjection = `
+  seo {
+    metaTitle,
+    metaDescription,
+    openGraphImage {
+      asset-> {
+        _id,
+        url,
+        metadata {
+          dimensions {
+            width,
+            height
+          }
+        }
+      }
+    }
+  }
+`
+
+// Common image projection for optimized image handling
+const imageProjection = `
+  asset-> {
+    _id,
+    url,
+    metadata {
+      dimensions {
+        width,
+        height
+      },
+      lqip
+    }
+  }
+`
+
 export const homePageQuery = groq`
   *[_type == "homePage"][0] {
     _id,
@@ -12,7 +47,9 @@ export const homePageQuery = groq`
         text,
         link
       },
-      heroImage
+      heroImage {
+        ${imageProjection}
+      }
     },
     introSection {
       title,
@@ -40,7 +77,7 @@ export const homePageQuery = groq`
         link
       }
     },
-    seo
+    ${seoProjection}
   }
 `
 
@@ -64,10 +101,12 @@ export const aboutPageQuery = groq`
         name,
         role,
         bio,
-        image
+        image {
+          ${imageProjection}
+        }
       }
     },
-    seo
+    ${seoProjection}
   }
 `
 
@@ -97,7 +136,7 @@ export const programsPageQuery = groq`
         ageGroup
       }
     },
-    seo
+    ${seoProjection}
   }
 `
 
@@ -116,7 +155,9 @@ export const getInvolvedPageQuery = groq`
       currentPartners[] {
         name,
         description,
-        logo,
+        logo {
+          ${imageProjection}
+        },
         website
       }
     },
@@ -139,7 +180,7 @@ export const getInvolvedPageQuery = groq`
       buttonText,
       disclaimer
     },
-    seo
+    ${seoProjection}
   }
 `
 
@@ -180,7 +221,7 @@ export const supportPageQuery = groq`
         description
       }
     },
-    seo
+    ${seoProjection}
   }
 `
 
@@ -217,7 +258,7 @@ export const contactPageQuery = groq`
       address,
       hours
     },
-    seo
+    ${seoProjection}
   }
 `
 
@@ -228,7 +269,7 @@ export const eventsPageQuery = groq`
     subtitle,
     description,
     isEventsVisible,
-    seo,
+    ${seoProjection},
     "upcomingEvents": *[_type == "event" && date >= now()] | order(date asc) {
       _id,
       title,
@@ -241,7 +282,9 @@ export const eventsPageQuery = groq`
       isVirtual,
       registrationUrl,
       capacity,
-      image,
+      image {
+        ${imageProjection}
+      },
       tags
     },
     "pastEvents": *[_type == "event" && date < now()] | order(date desc) {
@@ -256,7 +299,9 @@ export const eventsPageQuery = groq`
       isVirtual,
       registrationUrl,
       capacity,
-      image,
+      image {
+        ${imageProjection}
+      },
       tags
     }
   }

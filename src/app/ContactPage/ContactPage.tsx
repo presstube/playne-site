@@ -10,6 +10,7 @@ import TextArea from '@/components/TextArea/TextArea'
 import FormRow from '@/components/FormRow/FormRow'
 import Button from '@/components/Button/Button'
 import { PortableTextBlock } from 'sanity'
+import { SeoData } from '@/sanity/lib/types'
 
 interface ContactPageData {
   _id: string
@@ -43,10 +44,7 @@ interface ContactPageData {
     address?: string
     hours?: string
   }
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
+  seo?: SeoData
 }
 
 interface ContactPageProps {

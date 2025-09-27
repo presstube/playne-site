@@ -3,6 +3,7 @@ import PortableText from '@/components/PortableText/PortableText'
 import PageHero from '@/components/PageHero/PageHero'
 import PageSection from '@/components/PageSection/PageSection'
 import { PortableTextBlock } from 'sanity'
+import { SanityImage, SeoData } from '@/sanity/lib/types'
 
 interface AboutPageData {
   _id: string
@@ -23,13 +24,10 @@ interface AboutPageData {
       name: string
       role: string
       bio: string
-      image?: any
+        image?: SanityImage
     }>
   }
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
+  seo?: SeoData
 }
 
 interface AboutPageProps {

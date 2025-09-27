@@ -1,8 +1,9 @@
 import EventsPage from '../EventsPage/EventsPage'
-import { client } from '@/sanity/lib/client'
+import { staticClient } from '@/sanity/lib/client'
 import { eventsPageQuery } from '@/sanity/lib/queries'
 import { Metadata } from 'next'
 import { PortableTextBlock } from 'sanity'
+import { SanityImage, SeoData } from '@/sanity/lib/types'
 
 interface Event {
   _id: string
@@ -16,7 +17,7 @@ interface Event {
   isVirtual: boolean
   registrationUrl?: string
   capacity?: number
-  image?: any
+  image?: SanityImage
   tags?: string[]
 }
 
@@ -28,15 +29,12 @@ interface EventsPageData {
   upcomingEvents: Event[]
   pastEvents: Event[]
   isEventsVisible: boolean
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
+  seo?: SeoData
 }
 
 async function getEventsPage(): Promise<EventsPageData | null> {
   try {
-    return await client.fetch(eventsPageQuery)
+    return await staticClient.fetch(eventsPageQuery)
   } catch (error) {
     console.error('Error fetching events page:', error)
     return null

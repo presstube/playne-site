@@ -1,7 +1,8 @@
 import GetInvolvedPage from '../GetInvolvedPage/GetInvolvedPage'
-import { client } from '@/sanity/lib/client'
+import { staticClient } from '@/sanity/lib/client'
 import { getInvolvedPageQuery } from '@/sanity/lib/queries'
 import { Metadata } from 'next'
+import { SanityImage, SeoData } from '@/sanity/lib/types'
 
 interface GetInvolvedPageData {
   _id: string
@@ -17,7 +18,7 @@ interface GetInvolvedPageData {
     currentPartners: Array<{
       name: string
       description: string
-      logo?: any
+      logo?: SanityImage
       website: string
     }>
   }
@@ -40,15 +41,12 @@ interface GetInvolvedPageData {
     buttonText: string
     disclaimer: string
   }
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
+  seo?: SeoData
 }
 
 async function getGetInvolvedPage(): Promise<GetInvolvedPageData | null> {
   try {
-    return await client.fetch(getInvolvedPageQuery)
+    return await staticClient.fetch(getInvolvedPageQuery)
   } catch (error) {
     console.error('Error fetching get involved page:', error)
     return null
