@@ -1,0 +1,42 @@
+.headline {
+  font-family: var(--font-family-display);
+  letter-spacing: -0.01em; /* tracking-krana */
+  line-height: 0.76; /* leading-kranaCaps */
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.noTransform {
+  text-transform: none;
+}
+
+.alignLeft {
+  text-align: left;
+}
+
+.alignCenter {
+  text-align: center;
+}
+
+/* Sizes mapped from spike: 5xl/6xl/7xl-ish with fluid clamp */
+.size_sm {
+  font-size: clamp(1.75rem, 3vw + 1rem, 2.5rem);
+}
+
+.size_md {
+  font-size: clamp(2.5rem, 4vw + 1rem, 3.75rem);
+}
+
+.size_lg {
+  font-size: clamp(3rem, 5vw + 1rem, 4.5rem);
+}
+
+.themeLight {
+  color: var(--brand-black);
+}
+
+.themeDark {
+  color: var(--brand-offwhite);
+}
+
+
