@@ -3,6 +3,11 @@
   margin: 0 auto;
 }
 
+.brandHeroContainer {
+  padding: var(--space-8) var(--space-4) 0;
+  text-align: center;
+}
+
 /* Hero Section */
 .heroSection {
   text-align: center;

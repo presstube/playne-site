@@ -2,6 +2,7 @@ import styles from './HomePage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
 import ActionCard from '@/components/ActionCard/ActionCard'
 import LinkButton from '@/components/LinkButton/LinkButton'
+import BrandHero from '@/components/BrandHero/BrandHero'
 import Link from 'next/link'
 import { PortableTextBlock } from 'sanity'
 import { SanityImage, SeoData } from '@/sanity/lib/types'
@@ -71,6 +72,9 @@ export default function HomePage({ data }: HomePageProps) {
 
   return (
     <div className={styles.homePage}>
+      <div className={styles.brandHeroContainer}>
+        <BrandHero />
+      </div>
       {/* Hero Section */}
       {data.heroSection && (
         <section className={styles.heroSection}>
