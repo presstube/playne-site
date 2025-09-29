@@ -2,7 +2,7 @@
 
 import styles from './SupportPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
-import Headline from '@/components/Headline/Headline'
+import HeadlineSub from '@/components/HeadlineSub/HeadlineSub'
 import PageSection from '@/components/PageSection/PageSection'
 import DonationCard from '@/components/DonationCard/DonationCard'
 import { PortableTextBlock } from 'sanity'
@@ -63,16 +63,15 @@ export default function SupportPage({ data }: SupportPageProps) {
     return (
       <div className={styles.supportPage}>
         <div className={styles.brandHeader}>
-          <Headline 
-            text="Support PLAYNE"
-            caseType="all-caps"
-            align="center"
-            fg="var(--brand-offwhite)"
-            bg="var(--brand-black)"
-          />
-          <p className={styles.brandSubtitle}>
-            Help us empower young minds through practical life education
-          </p>
+          <div className={styles.brandHeaderInner}>
+            <HeadlineSub 
+              headline="Support PLAYNE"
+              sub="Help us empower young minds through practical life education"
+              align="center"
+              fg="var(--brand-offwhite)"
+              bg="var(--brand-black)"
+            />
+          </div>
         </div>
 
         <PageSection 
@@ -199,16 +198,15 @@ export default function SupportPage({ data }: SupportPageProps) {
   return (
     <div className={styles.supportPage}>
       <div className={styles.brandHeader}>
-        <Headline 
-          text={data.title}
-          caseType="all-caps"
-          align="center"
-          fg="var(--brand-offwhite)"
-          bg="var(--brand-black)"
-        />
-        {data.subtitle && (
-          <p className={styles.brandSubtitle}>{data.subtitle}</p>
-        )}
+        <div className={styles.brandHeaderInner}>
+          <HeadlineSub 
+            headline={data.title}
+            sub={data.subtitle}
+            align="center"
+            fg="var(--brand-offwhite)"
+            bg="var(--brand-black)"
+          />
+        </div>
       </div>
 
       <PageSection 

@@ -1,6 +1,6 @@
 import styles from './EventsPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
-import Headline from '@/components/Headline/Headline'
+import HeadlineSub from '@/components/HeadlineSub/HeadlineSub'
 import PageSection from '@/components/PageSection/PageSection'
 import EventCard from '@/components/EventCard/EventCard'
 import LinkButton from '@/components/LinkButton/LinkButton'
@@ -96,16 +96,15 @@ export default function EventsPage({ data }: EventsPageProps) {
     return (
       <div className={styles.eventsPage}>
         <div className={styles.brandHeader}>
-          <Headline 
-            text="Events"
-            caseType="all-caps"
-            align="center"
-            fg="var(--brand-offwhite)"
-            bg="var(--brand-black)"
-          />
-          <p className={styles.brandSubtitle}>
-            Join us for talks, workshops, and educational experiences
-          </p>
+          <div className={styles.brandHeaderInner}>
+            <HeadlineSub 
+              headline="Events"
+              sub="Join us for talks, workshops, and educational experiences"
+              align="center"
+              fg="var(--brand-offwhite)"
+              bg="var(--brand-black)"
+            />
+          </div>
         </div>
 
         <PageSection>
@@ -134,16 +133,15 @@ export default function EventsPage({ data }: EventsPageProps) {
   return (
     <div className={styles.eventsPage}>
       <div className={styles.brandHeader}>
-        <Headline 
-          text={data.title}
-          caseType="all-caps"
-          align="center"
-          fg="var(--brand-offwhite)"
-          bg="var(--brand-black)"
-        />
-        {data.subtitle && (
-          <p className={styles.brandSubtitle}>{data.subtitle}</p>
-        )}
+        <div className={styles.brandHeaderInner}>
+          <HeadlineSub 
+            headline={data.title}
+            sub={data.subtitle}
+            align="center"
+            fg="var(--brand-offwhite)"
+            bg="var(--brand-black)"
+          />
+        </div>
       </div>
 
       <PageSection>

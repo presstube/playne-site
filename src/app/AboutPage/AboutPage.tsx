@@ -1,6 +1,6 @@
 import styles from './AboutPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
-import Headline from '@/components/Headline/Headline'
+import HeadlineSub from '@/components/HeadlineSub/HeadlineSub'
 import PageSection from '@/components/PageSection/PageSection'
 import { PortableTextBlock } from 'sanity'
 import { SanityImage, SeoData } from '@/sanity/lib/types'
@@ -40,16 +40,15 @@ export default function AboutPage({ data }: AboutPageProps) {
     return (
       <div className={styles.aboutPage}>
         <div className={styles.brandHeader}>
-          <Headline 
-            text="About PLAYNE"
-            caseType="all-caps"
-            align="center"
-            fg="var(--brand-offwhite)"
-            bg="var(--brand-black)"
-          />
-          <p className={styles.brandSubtitle}>
-            Empowering young minds through practical life education
-          </p>
+          <div className={styles.brandHeaderInner}>
+            <HeadlineSub 
+              headline="About PLAYNE"
+              sub="Empowering young minds through practical life education"
+              align="center"
+              fg="var(--brand-offwhite)"
+              bg="var(--brand-black)"
+            />
+          </div>
         </div>
 
         <PageSection id="mission" title="Our Mission">
@@ -89,16 +88,15 @@ export default function AboutPage({ data }: AboutPageProps) {
   return (
     <div className={styles.aboutPage}>
       <div className={styles.brandHeader}>
-        <Headline 
-          text={data.title}
-          caseType="all-caps"
-          align="center"
-          fg="var(--brand-offwhite)"
-          bg="var(--brand-black)"
-        />
-        {data.subtitle && (
-          <p className={styles.brandSubtitle}>{data.subtitle}</p>
-        )}
+        <div className={styles.brandHeaderInner}>
+          <HeadlineSub 
+            headline={data.title}
+            sub={data.subtitle}
+            align="center"
+            fg="var(--brand-offwhite)"
+            bg="var(--brand-black)"
+          />
+        </div>
       </div>
 
       <PageSection id="mission" title={data.mission.title}>

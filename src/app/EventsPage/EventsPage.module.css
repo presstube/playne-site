@@ -9,6 +9,11 @@
   margin-bottom: var(--space-12);
 }
 
+.brandHeaderInner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
 .brandSubtitle {
   text-align: center;
   font-family: var(--font-family-sans);

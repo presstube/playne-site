@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from 'react'
 import styles from './GetInvolvedPage.module.css'
-import Headline from '@/components/Headline/Headline'
+import HeadlineSub from '@/components/HeadlineSub/HeadlineSub'
 import PageSection from '@/components/PageSection/PageSection'
 import TextInput from '@/components/TextInput/TextInput'
 import TextArea from '@/components/TextArea/TextArea'
@@ -112,16 +112,15 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
     return (
       <div className={styles.getInvolvedPage}>
         <div className={styles.brandHeader}>
-          <Headline 
-            text="Get Involved"
-            caseType="all-caps"
-            align="center"
-            fg="var(--brand-offwhite)"
-            bg="var(--brand-black)"
-          />
-          <p className={styles.brandSubtitle}>
-            Join us in empowering young minds through practical life education
-          </p>
+          <div className={styles.brandHeaderInner}>
+            <HeadlineSub 
+              headline="Get Involved"
+              sub="Join us in empowering young minds through practical life education"
+              align="center"
+              fg="var(--brand-offwhite)"
+              bg="var(--brand-black)"
+            />
+          </div>
         </div>
 
         <PageSection 
@@ -264,16 +263,15 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
   return (
     <div className={styles.getInvolvedPage}>
       <div className={styles.brandHeader}>
-        <Headline 
-          text={data.title}
-          caseType="all-caps"
-          align="center"
-          fg="var(--brand-offwhite)"
-          bg="var(--brand-black)"
-        />
-        {data.subtitle && (
-          <p className={styles.brandSubtitle}>{data.subtitle}</p>
-        )}
+        <div className={styles.brandHeaderInner}>
+          <HeadlineSub 
+            headline={data.title}
+            sub={data.subtitle}
+            align="center"
+            fg="var(--brand-offwhite)"
+            bg="var(--brand-black)"
+          />
+        </div>
       </div>
 
       <PageSection 

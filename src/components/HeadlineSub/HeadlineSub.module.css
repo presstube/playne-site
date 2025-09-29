@@ -1,0 +1,32 @@
+.wrapper {
+  width: 100%;
+  padding: var(--space-10) var(--space-7);
+  border-radius: 1rem;
+}
+
+.headline {
+  font-family: var(--font-family-display);
+  font-weight: 400;
+  font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 0.88; /* all caps -12% */
+  text-transform: uppercase;
+}
+
+.sub {
+  margin-top: var(--space-4);
+  font-family: var(--font-family-sans);
+  font-weight: 400;
+  font-size: clamp(1.125rem, 1.2vw + 0.9rem, 1.5rem);
+  letter-spacing: -0.01em;
+  line-height: 1.12; /* +12% */
+}
+
+.alignLeft { text-align: left; }
+.alignCenter { text-align: center; }
+
+.caseCaps { text-transform: uppercase; }
+.caseTitle { text-transform: none; }
+
+
