@@ -3,7 +3,7 @@
 import { FormEvent, useState } from 'react'
 import styles from './ContactPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
-import PageHero from '@/components/PageHero/PageHero'
+import Headline from '@/components/Headline/Headline'
 import PageSection from '@/components/PageSection/PageSection'
 import TextInput from '@/components/TextInput/TextInput'
 import TextArea from '@/components/TextArea/TextArea'
@@ -84,10 +84,18 @@ export default function ContactPage({ data }: ContactPageProps) {
   if (!data) {
     return (
       <div className={styles.contactPage}>
-        <PageHero 
-          title="Contact Us" 
-          subtitle="Get in touch with PLAYNE to learn more about our programs" 
-        />
+        <div className={styles.brandHeader}>
+          <Headline 
+            text="Contact Us"
+            caseType="all-caps"
+            align="center"
+            fg="var(--brand-offwhite)"
+            bg="var(--brand-black)"
+          />
+          <p className={styles.brandSubtitle}>
+            Get in touch with PLAYNE to learn more about our programs
+          </p>
+        </div>
 
         <PageSection 
           id="general-contact" 
@@ -218,7 +226,18 @@ export default function ContactPage({ data }: ContactPageProps) {
   // Render with Sanity data
   return (
     <div className={styles.contactPage}>
-      <PageHero title={data.title} subtitle={data.subtitle} />
+      <div className={styles.brandHeader}>
+        <Headline 
+          text={data.title}
+          caseType="all-caps"
+          align="center"
+          fg="var(--brand-offwhite)"
+          bg="var(--brand-black)"
+        />
+        {data.subtitle && (
+          <p className={styles.brandSubtitle}>{data.subtitle}</p>
+        )}
+      </div>
 
       <PageSection 
         id="general-contact" 

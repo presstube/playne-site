@@ -1,6 +1,6 @@
 import styles from './AboutPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
-import PageHero from '@/components/PageHero/PageHero'
+import Headline from '@/components/Headline/Headline'
 import PageSection from '@/components/PageSection/PageSection'
 import { PortableTextBlock } from 'sanity'
 import { SanityImage, SeoData } from '@/sanity/lib/types'
@@ -39,10 +39,18 @@ export default function AboutPage({ data }: AboutPageProps) {
   if (!data) {
     return (
       <div className={styles.aboutPage}>
-        <PageHero 
-          title="About PLAYNE" 
-          subtitle="Empowering young minds through practical life education" 
-        />
+        <div className={styles.brandHeader}>
+          <Headline 
+            text="About PLAYNE"
+            caseType="all-caps"
+            align="center"
+            fg="var(--brand-offwhite)"
+            bg="var(--brand-black)"
+          />
+          <p className={styles.brandSubtitle}>
+            Empowering young minds through practical life education
+          </p>
+        </div>
 
         <PageSection id="mission" title="Our Mission">
           <div className={styles.missionContent}>
@@ -80,7 +88,18 @@ export default function AboutPage({ data }: AboutPageProps) {
   // Render with Sanity data
   return (
     <div className={styles.aboutPage}>
-      <PageHero title={data.title} subtitle={data.subtitle} />
+      <div className={styles.brandHeader}>
+        <Headline 
+          text={data.title}
+          caseType="all-caps"
+          align="center"
+          fg="var(--brand-offwhite)"
+          bg="var(--brand-black)"
+        />
+        {data.subtitle && (
+          <p className={styles.brandSubtitle}>{data.subtitle}</p>
+        )}
+      </div>
 
       <PageSection id="mission" title={data.mission.title}>
         <div className={styles.missionContent}>

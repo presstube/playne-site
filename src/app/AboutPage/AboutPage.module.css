@@ -5,6 +5,18 @@
 }
 
 
+.brandHeader {
+  margin-bottom: var(--space-12);
+}
+
+.brandSubtitle {
+  text-align: center;
+  font-family: var(--font-family-sans);
+  color: var(--brand-black);
+  margin-top: var(--space-4);
+}
+
+
 
 .missionContent, .storyContent, .teamContent {
   line-height: 1.7;

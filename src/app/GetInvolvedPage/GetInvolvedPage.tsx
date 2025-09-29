@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from 'react'
 import styles from './GetInvolvedPage.module.css'
-import PageHero from '@/components/PageHero/PageHero'
+import Headline from '@/components/Headline/Headline'
 import PageSection from '@/components/PageSection/PageSection'
 import TextInput from '@/components/TextInput/TextInput'
 import TextArea from '@/components/TextArea/TextArea'
@@ -111,10 +111,18 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
   if (!data) {
     return (
       <div className={styles.getInvolvedPage}>
-        <PageHero 
-          title="Get Involved" 
-          subtitle="Join us in empowering young minds through practical life education" 
-        />
+        <div className={styles.brandHeader}>
+          <Headline 
+            text="Get Involved"
+            caseType="all-caps"
+            align="center"
+            fg="var(--brand-offwhite)"
+            bg="var(--brand-black)"
+          />
+          <p className={styles.brandSubtitle}>
+            Join us in empowering young minds through practical life education
+          </p>
+        </div>
 
         <PageSection 
           id="partners" 
@@ -255,7 +263,18 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
   // Render with Sanity data
   return (
     <div className={styles.getInvolvedPage}>
-      <PageHero title={data.title} subtitle={data.subtitle} />
+      <div className={styles.brandHeader}>
+        <Headline 
+          text={data.title}
+          caseType="all-caps"
+          align="center"
+          fg="var(--brand-offwhite)"
+          bg="var(--brand-black)"
+        />
+        {data.subtitle && (
+          <p className={styles.brandSubtitle}>{data.subtitle}</p>
+        )}
+      </div>
 
       <PageSection 
         id="partners" 

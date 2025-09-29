@@ -2,7 +2,7 @@
 
 import styles from './SupportPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
-import PageHero from '@/components/PageHero/PageHero'
+import Headline from '@/components/Headline/Headline'
 import PageSection from '@/components/PageSection/PageSection'
 import DonationCard from '@/components/DonationCard/DonationCard'
 import { PortableTextBlock } from 'sanity'
@@ -62,10 +62,18 @@ export default function SupportPage({ data }: SupportPageProps) {
   if (!data) {
     return (
       <div className={styles.supportPage}>
-        <PageHero 
-          title="Support PLAYNE" 
-          subtitle="Help us empower young minds through practical life education" 
-        />
+        <div className={styles.brandHeader}>
+          <Headline 
+            text="Support PLAYNE"
+            caseType="all-caps"
+            align="center"
+            fg="var(--brand-offwhite)"
+            bg="var(--brand-black)"
+          />
+          <p className={styles.brandSubtitle}>
+            Help us empower young minds through practical life education
+          </p>
+        </div>
 
         <PageSection 
           id="donations" 
@@ -190,7 +198,18 @@ export default function SupportPage({ data }: SupportPageProps) {
   // Render with Sanity data
   return (
     <div className={styles.supportPage}>
-      <PageHero title={data.title} subtitle={data.subtitle} />
+      <div className={styles.brandHeader}>
+        <Headline 
+          text={data.title}
+          caseType="all-caps"
+          align="center"
+          fg="var(--brand-offwhite)"
+          bg="var(--brand-black)"
+        />
+        {data.subtitle && (
+          <p className={styles.brandSubtitle}>{data.subtitle}</p>
+        )}
+      </div>
 
       <PageSection 
         id="donations" 

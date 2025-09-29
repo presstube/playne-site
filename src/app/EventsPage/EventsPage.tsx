@@ -1,6 +1,6 @@
 import styles from './EventsPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
-import PageHero from '@/components/PageHero/PageHero'
+import Headline from '@/components/Headline/Headline'
 import PageSection from '@/components/PageSection/PageSection'
 import EventCard from '@/components/EventCard/EventCard'
 import LinkButton from '@/components/LinkButton/LinkButton'
@@ -95,10 +95,18 @@ export default function EventsPage({ data }: EventsPageProps) {
   if (!data || !data.isEventsVisible) {
     return (
       <div className={styles.eventsPage}>
-        <PageHero 
-          title="Events" 
-          subtitle="Join us for talks, workshops, and educational experiences" 
-        />
+        <div className={styles.brandHeader}>
+          <Headline 
+            text="Events"
+            caseType="all-caps"
+            align="center"
+            fg="var(--brand-offwhite)"
+            bg="var(--brand-black)"
+          />
+          <p className={styles.brandSubtitle}>
+            Join us for talks, workshops, and educational experiences
+          </p>
+        </div>
 
         <PageSection>
           <div className={styles.comingSoon}>
@@ -125,7 +133,18 @@ export default function EventsPage({ data }: EventsPageProps) {
   // Render with Sanity data
   return (
     <div className={styles.eventsPage}>
-      <PageHero title={data.title} subtitle={data.subtitle} />
+      <div className={styles.brandHeader}>
+        <Headline 
+          text={data.title}
+          caseType="all-caps"
+          align="center"
+          fg="var(--brand-offwhite)"
+          bg="var(--brand-black)"
+        />
+        {data.subtitle && (
+          <p className={styles.brandSubtitle}>{data.subtitle}</p>
+        )}
+      </div>
 
       <PageSection>
         <p className={styles.pageDescription}>{data.description}</p>

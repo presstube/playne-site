@@ -1,3 +1,4 @@
+"use client"
 import styles from './Headline.module.css'
 
 type HeadlineTag = 'h1' | 'h2' | 'div'

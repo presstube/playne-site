@@ -1,6 +1,6 @@
 import styles from './ProgramsPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
-import PageHero from '@/components/PageHero/PageHero'
+import Headline from '@/components/Headline/Headline'
 import PageSection from '@/components/PageSection/PageSection'
 import ContentCard from '@/components/ContentCard/ContentCard'
 import { PortableTextBlock } from 'sanity'
@@ -43,10 +43,18 @@ export default function ProgramsPage({ data }: ProgramsPageProps) {
   if (!data) {
     return (
       <div className={styles.programsPage}>
-        <PageHero 
-          title="Programs" 
-          subtitle="Practical life education through creativity and hands-on learning" 
-        />
+        <div className={styles.brandHeader}>
+          <Headline 
+            text="Programs"
+            caseType="all-caps"
+            align="center"
+            fg="var(--brand-offwhite)"
+            bg="var(--brand-black)"
+          />
+          <p className={styles.brandSubtitle}>
+            Practical life education through creativity and hands-on learning
+          </p>
+        </div>
 
         <PageSection 
           id="curriculum-pillars" 
@@ -98,7 +106,18 @@ export default function ProgramsPage({ data }: ProgramsPageProps) {
   // Render with Sanity data
   return (
     <div className={styles.programsPage}>
-      <PageHero title={data.title} subtitle={data.subtitle} />
+      <div className={styles.brandHeader}>
+        <Headline 
+          text={data.title}
+          caseType="all-caps"
+          align="center"
+          fg="var(--brand-offwhite)"
+          bg="var(--brand-black)"
+        />
+        {data.subtitle && (
+          <p className={styles.brandSubtitle}>{data.subtitle}</p>
+        )}
+      </div>
 
       <PageSection 
         id="curriculum-pillars" 
