@@ -1,19 +1,22 @@
 .topnav {
   background-color: var(--color-background-primary);
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: none;
 }
 
 .container {
   max-width: 112rem;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 1rem; /* symmetric side padding */
 }
 
 .content {
   display: flex;
   justify-content: space-between;
   height: 4rem;
+  padding-left: 0; /* rely on .container padding */
+  padding-right: 0;
+  align-items: center; /* center Menu vertically */
 }
 
 .brand {
@@ -25,12 +28,13 @@
   display: flex;
   align-items: center;
   text-decoration: none;
+  padding-left: 0; /* logo hugs container padding */
 }
 
 .logo {
   height: 2rem;
   width: auto;
-  cursor: pointer;
+  cursor: default;
   transition: transform 0.2s ease;
 }
 
@@ -102,5 +106,159 @@
   .container {
     padding-left: 2rem;
     padding-right: 2rem;
+  }
+}
+
+/* --- Mobile menu and hamburger --- */
+
+.menuButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  padding: 0 0.25rem; /* give text a little breathing room */
+  background: transparent;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  color: var(--brand-black);
+  font-weight: 600;
+  line-height: 2.5rem; /* maintain hit area height */
+  margin-right: var(--space-2); /* nudge inward from right edge */
+}
+
+.menuIcon {
+  position: relative;
+  width: 1.5rem;
+  height: 1rem;
+  display: inline-block;
+}
+
+.menuBar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--brand-black);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.menuBar:nth-child(1) { top: 0; }
+.menuBar:nth-child(2) { top: calc(50% - 1px); }
+.menuBar:nth-child(3) { bottom: 0; }
+
+.menuIconOpen .menuBar:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.menuIconOpen .menuBar:nth-child(2) {
+  opacity: 0;
+}
+.menuIconOpen .menuBar:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Desktop vs mobile visibility */
+@media (min-width: 1024px) {
+  .menuButton { display: none; }
+}
+
+@media (max-width: 1023px) {
+  .navigation { display: none; }
+}
+
+/* Backdrop */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 40;
+}
+
+.backdropOpen {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Full-screen mobile menu */
+.mobileMenu {
+  position: fixed;
+  inset: 0;
+  background: var(--brand-offwhite);
+  color: var(--brand-black);
+  transform: translateY(-8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobileMenuOpen {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobileHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.closeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  padding: 0; /* align with header edges similar to Menu button */
+  background: transparent;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  color: var(--brand-black);
+  font-weight: 600;
+  line-height: 2.5rem;
+}
+
+.mobileNav {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+}
+
+.mobileNavLink {
+  color: var(--brand-black);
+  text-decoration: none;
+  padding: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.mobileNavLink:last-child {
+  border-bottom: none;
+}
+
+@media (min-width: 640px) {
+  .mobileHeader { padding: 0 1.5rem; }
+  .mobileNav { padding: 1rem 1.5rem; }
+}
+
+@media (min-width: 1024px) {
+  .backdrop { display: none; }
+  .mobileMenu { display: none; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .backdrop, .mobileMenu, .menuBar {
+    transition: none;
   }
 }

@@ -1,0 +1,12 @@
+.brandNav {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 2rem;
+  width: auto;
+  display: block;
+}
+
+
