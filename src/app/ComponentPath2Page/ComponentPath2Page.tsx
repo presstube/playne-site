@@ -1,49 +1,46 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import styles from './ComponentPathPage.module.css'
-import Path from '@/components/Path/Path'
-import { BRAND_COLORS } from '@/components/Path/Path'
+import styles from './ComponentPath2Page.module.css'
+import Path2 from '@/components/Path2/Path2'
+import { BRAND_COLORS } from '@/components/Path2/Path2'
 
 interface Division {
   id: string
   style: React.CSSProperties
   pathCount: number
   paths: Array<{ 
-    meander: number
     color: string
     lobes: 0 | 1 | 2
     amplitude: number
     strokeWidth: number
-    style: 'gentle' | 'exaggerated'
+    bias: 'left' | 'right' | 'auto'
   }>
   isDark: boolean
 }
 
-export default function ComponentPathPage() {
+export default function ComponentPath2Page() {
   const [divisions, setDivisions] = useState<Division[]>([])
 
   useEffect(() => {
     const layout = generateRandomLayout()
     const withPaths = layout.map(div => {
       const pathCount = Math.floor(1 + Math.random() * 3)
-      const isDark = Math.random() < 0.3 // 30% chance of dark background
+      const isDark = Math.random() < 0.3
       
-      // Select unique colors for this container
       const availableColors = isDark 
-        ? ['#EAEADA', '#A9ECD4', '#FCDC4A'] // light colors for dark bg
-        : ['#FC555B', '#FCDC4A', '#FB6DCB', '#A9ECD4'] // standard colors
+        ? ['#EAEADA', '#A9ECD4', '#FCDC4A']
+        : ['#FC555B', '#FCDC4A', '#FB6DCB', '#A9ECD4']
       
       const shuffled = [...availableColors].sort(() => Math.random() - 0.5)
       const selectedColors = shuffled.slice(0, pathCount)
       
       const paths = selectedColors.map(color => ({
-        meander: 0.6 + Math.random() * 0.4, // 0.6-1.0
         color,
-        lobes: [0, 1, 2][Math.floor(Math.random() * 3)] as 0 | 1 | 2, // Random lobe count
-        amplitude: 0.35 + Math.random() * 0.25, // 0.35-0.6
+        lobes: [0, 1, 2][Math.floor(Math.random() * 3)] as 0 | 1 | 2,
+        amplitude: 0.3 + Math.random() * 0.3, // 0.3-0.6
         strokeWidth: 50 + Math.floor(Math.random() * 30), // 50-80px
-        style: (Math.random() < 0.8 ? 'exaggerated' : 'gentle') as 'gentle' | 'exaggerated' // 80% exaggerated
+        bias: (['left', 'right', 'auto'][Math.floor(Math.random() * 3)]) as 'left' | 'right' | 'auto'
       }))
       
       return { ...div, pathCount, paths, isDark }
@@ -54,7 +51,7 @@ export default function ComponentPathPage() {
   if (divisions.length === 0) return null
 
   return (
-    <div className={styles.componentPathPage}>
+    <div className={styles.componentPath2Page}>
       {divisions.map((division) => (
         <div 
           key={division.id} 
@@ -65,14 +62,13 @@ export default function ComponentPathPage() {
           }}
         >
           {division.paths.map((pathConfig, idx) => (
-            <Path 
+            <Path2 
               key={idx} 
-              style={pathConfig.style}
               lobes={pathConfig.lobes}
               amplitude={pathConfig.amplitude}
-              meander={pathConfig.meander}
               color={pathConfig.color}
               strokeWidth={pathConfig.strokeWidth}
+              bias={pathConfig.bias}
             />
           ))}
         </div>
@@ -83,31 +79,26 @@ export default function ComponentPathPage() {
 
 function generateRandomLayout(): Array<Omit<Division, 'pathCount' | 'paths' | 'isDark'>> {
   const layouts = [
-    // 2 divisions - vertical split (40/60)
     () => [
       { id: 'a', style: { gridColumn: '1 / 2', gridRow: '1 / 3' } },
       { id: 'b', style: { gridColumn: '2 / 4', gridRow: '1 / 3' } },
     ],
-    // 3 divisions - one left tall, two right stacked (uneven)
     () => [
       { id: 'a', style: { gridColumn: '1 / 2', gridRow: '1 / 3' } },
       { id: 'b', style: { gridColumn: '2 / 4', gridRow: '1 / 2' } },
       { id: 'c', style: { gridColumn: '2 / 4', gridRow: '2 / 3' } },
     ],
-    // 3 divisions - top wide, bottom split asymmetric
     () => [
       { id: 'a', style: { gridColumn: '1 / 4', gridRow: '1 / 2' } },
       { id: 'b', style: { gridColumn: '1 / 3', gridRow: '2 / 3' } },
       { id: 'c', style: { gridColumn: '3 / 4', gridRow: '2 / 3' } },
     ],
-    // 4 divisions - L-shape + corner
     () => [
       { id: 'a', style: { gridColumn: '1 / 3', gridRow: '1 / 2' } },
       { id: 'b', style: { gridColumn: '3 / 4', gridRow: '1 / 2' } },
       { id: 'c', style: { gridColumn: '1 / 2', gridRow: '2 / 3' } },
       { id: 'd', style: { gridColumn: '2 / 4', gridRow: '2 / 3' } },
     ],
-    // 5 divisions - left column + 2x2 grid right
     () => [
       { id: 'a', style: { gridColumn: '1 / 2', gridRow: '1 / 3' } },
       { id: 'b', style: { gridColumn: '2 / 3', gridRow: '1 / 2' } },
@@ -115,33 +106,28 @@ function generateRandomLayout(): Array<Omit<Division, 'pathCount' | 'paths' | 'i
       { id: 'd', style: { gridColumn: '2 / 3', gridRow: '2 / 3' } },
       { id: 'e', style: { gridColumn: '3 / 4', gridRow: '2 / 3' } },
     ],
-    // 3 divisions - diagonal-ish split
     () => [
       { id: 'a', style: { gridColumn: '1 / 3', gridRow: '1 / 2' } },
       { id: 'b', style: { gridColumn: '3 / 4', gridRow: '1 / 3' } },
       { id: 'c', style: { gridColumn: '1 / 3', gridRow: '2 / 3' } },
     ],
-    // 4 divisions - tetris shapes
     () => [
       { id: 'a', style: { gridColumn: '1 / 2', gridRow: '1 / 3' } },
       { id: 'b', style: { gridColumn: '2 / 4', gridRow: '1 / 2' } },
       { id: 'c', style: { gridColumn: '2 / 3', gridRow: '2 / 3' } },
       { id: 'd', style: { gridColumn: '3 / 4', gridRow: '2 / 3' } },
     ],
-    // 3 divisions - top sliver + two tall
     () => [
       { id: 'a', style: { gridColumn: '1 / 4', gridRow: '1 / 2' } },
       { id: 'b', style: { gridColumn: '1 / 2', gridRow: '2 / 3' } },
       { id: 'c', style: { gridColumn: '2 / 4', gridRow: '2 / 3' } },
     ],
-    // 5 divisions - mondrian-style
     () => [
       { id: 'a', style: { gridColumn: '1 / 3', gridRow: '1 / 2' } },
       { id: 'b', style: { gridColumn: '3 / 4', gridRow: '1 / 3' } },
       { id: 'c', style: { gridColumn: '1 / 2', gridRow: '2 / 3' } },
       { id: 'd', style: { gridColumn: '2 / 3', gridRow: '2 / 3' } },
     ],
-    // 4 divisions - corner emphasis
     () => [
       { id: 'a', style: { gridColumn: '1 / 2', gridRow: '1 / 2' } },
       { id: 'b', style: { gridColumn: '2 / 4', gridRow: '1 / 3' } },
@@ -152,5 +138,4 @@ function generateRandomLayout(): Array<Omit<Division, 'pathCount' | 'paths' | 'i
   const randomLayout = layouts[Math.floor(Math.random() * layouts.length)]
   return randomLayout()
 }
-
 

@@ -3,7 +3,7 @@
 import styles from './RootLayout.module.css'
 import Topnav from '@/components/Topnav/Topnav'
 import PageNavigation from '@/components/PageNavigation/PageNavigation'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 
 interface RootLayoutProps {
@@ -12,11 +12,7 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   const pathname = usePathname()
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-  const isFrameless = mounted && pathname?.startsWith('/components')
+  const isFrameless = pathname?.startsWith('/components')
   
   return (
     <div className={styles.rootLayout}>
