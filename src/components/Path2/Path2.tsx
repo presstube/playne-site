@@ -25,6 +25,7 @@ interface Path2Props {
   amplitude?: number // 0-1 of min(width,height)
   bias?: 'left' | 'right' | 'auto'
   wildness?: number // 0-1, controls how dramatic the curve bodies are (default 0.9)
+  onClick?: (e: React.MouseEvent) => void
 }
 
 export default function Path2({ 
@@ -33,21 +34,33 @@ export default function Path2({
   lobes = 1, 
   amplitude = 0.4,
   bias = 'auto',
-  wildness = 0.9
+  wildness = 0.9,
+  onClick
 }: Path2Props = {}) {
+  console.log('Path2 rendering with props:', { colorProp, strokeWidth, lobes, amplitude, bias, wildness })
   const [pathData, setPathData] = useState<string>('')
   const [color, setColor] = useState<string>('')
   const containerRef = useRef<SVGSVGElement>(null)
 
   useEffect(() => {
+    console.log('Path2 useEffect fired')
     const generatePath = () => {
-      if (!containerRef.current) return
+      console.log('generatePath called, containerRef.current:', containerRef.current)
+      if (!containerRef.current) {
+        console.log('No container ref yet, returning')
+        return
+      }
 
       const rect = containerRef.current.getBoundingClientRect()
       const width = rect.width
       const height = rect.height
 
-      if (width === 0 || height === 0) return
+      if (width === 0 || height === 0) {
+        console.log('Container has zero dimensions:', { width, height })
+        return
+      }
+
+      console.log('Container bounds:', { width, height, x: rect.x, y: rect.y })
 
       // Choose random entry and exit sides
       const sides: Side[] = ['top', 'bottom', 'left', 'right']
@@ -60,6 +73,9 @@ export default function Path2({
 
       const entry = getPointOnSide(entrySide, width, height, strokeWidth)
       const exit = getPointOnSide(exitSide, width, height, strokeWidth)
+
+      console.log('Path entry:', entry, 'from side:', entrySide)
+      console.log('Path exit:', exit, 'from side:', exitSide)
 
       const path = generateExplicitBeziers({ 
         start: entry, 
@@ -93,17 +109,21 @@ export default function Path2({
   }, [lobes, amplitude, bias, colorProp, strokeWidth, wildness])
 
   if (!pathData || !color) {
+    console.log('Path2 not rendering path yet:', { hasPathData: !!pathData, hasColor: !!color })
     return <svg ref={containerRef} className={styles.path2} xmlns="http://www.w3.org/2000/svg" />
   }
 
+  console.log('Path2 rendering full path with color:', color)
   return (
-    <svg ref={containerRef} className={styles.path2} xmlns="http://www.w3.org/2000/svg">
+    <svg ref={containerRef} className={styles.path2} xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none' }}>
       <path
         d={pathData}
         fill="none"
         stroke={color}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
+        onClick={onClick}
+        style={{ cursor: 'pointer', pointerEvents: 'auto' }}
       />
     </svg>
   )
@@ -113,7 +133,7 @@ function getPointOnSide(side: Side, width: number, height: number, strokeWidth: 
   const margin = 0.2
   const min = margin
   const max = 1 - margin
-  const overhang = strokeWidth * 3
+  const overhang = strokeWidth * 0.75 // Reduced from 3x to 0.75x for better visibility
 
   switch (side) {
     case 'top':
