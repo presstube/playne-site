@@ -164,10 +164,10 @@ function generateExplicitBeziers(opts: BezierOptions): string {
     return generateSingleCurve(start, end, dirX, dirY, perpX, perpY, biasSign, maxSafeAmp, minRadius)
   } else if (lobes === 1) {
     // S-curve: two cubic Béziers with opposite offsets
-    return generateSCurve(start, end, dirX, dirY, perpX, perpY, biasSign, maxSafeAmp, minRadius, pathLength)
+    return generateSCurve(start, end, dirX, dirY, perpX, perpY, biasSign, maxSafeAmp, minRadius, pathLength, strokeWidth)
   } else {
     // Double S-curve: three cubic Béziers
-    return generateDoubleSCurve(start, end, dirX, dirY, perpX, perpY, biasSign, maxSafeAmp, minRadius, pathLength)
+    return generateDoubleSCurve(start, end, dirX, dirY, perpX, perpY, biasSign, maxSafeAmp, minRadius, pathLength, strokeWidth)
   }
 }
 
@@ -207,25 +207,32 @@ function generateSCurve(
   sign: number,
   amp: number,
   minRadius: number,
-  pathLength: number
+  pathLength: number,
+  strokeWidth: number
 ): string {
   // Two cubic Béziers meeting at midpoint with C1 continuity
   const midX = (start.x + end.x) / 2
   const midY = (start.y + end.y) / 2
   
-  // First curve bends one way
-  const cp1x = start.x + (midX - start.x) * 0.5 + perpX * amp * sign
-  const cp1y = start.y + (midY - start.y) * 0.5 + perpY * amp * sign
+  // Push amplitude into curve bodies (cp1 and cp4)
+  const cp1x = start.x + (midX - start.x) * 0.4 + perpX * amp * sign * 0.9
+  const cp1y = start.y + (midY - start.y) * 0.4 + perpY * amp * sign * 0.9
   
-  const cp2x = midX + perpX * amp * sign * 0.3
-  const cp2y = midY + perpY * amp * sign * 0.3
+  // Junction control points: positioned AWAY from midpoint along path, with moderate perpendicular offset
+  // This ensures smooth flow through the transition, not a straight segment
+  const junctionOffset = Math.min(amp * 0.25, strokeWidth * 0.8)
   
-  // Second curve bends opposite way with smooth transition
-  const cp3x = midX - perpX * amp * sign * 0.3
-  const cp3y = midY - perpY * amp * sign * 0.3
+  // cp2: approach the junction from first curve side
+  const cp2x = midX - (midX - start.x) * 0.15 + perpX * junctionOffset * sign
+  const cp2y = midY - (midY - start.y) * 0.15 + perpY * junctionOffset * sign
   
-  const cp4x = end.x - (end.x - midX) * 0.5 - perpX * amp * sign
-  const cp4y = end.y - (end.y - midY) * 0.5 - perpY * amp * sign
+  // cp3: exit the junction toward second curve side
+  const cp3x = midX + (end.x - midX) * 0.15 - perpX * junctionOffset * sign
+  const cp3y = midY + (end.y - midY) * 0.15 - perpY * junctionOffset * sign
+  
+  // Second curve body: full amplitude
+  const cp4x = end.x - (end.x - midX) * 0.4 - perpX * amp * sign * 0.9
+  const cp4y = end.y - (end.y - midY) * 0.4 - perpY * amp * sign * 0.9
   
   return `M ${start.x} ${start.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${midX} ${midY} C ${cp3x} ${cp3y}, ${cp4x} ${cp4y}, ${end.x} ${end.y}`
 }
@@ -240,7 +247,8 @@ function generateDoubleSCurve(
   sign: number,
   amp: number,
   minRadius: number,
-  pathLength: number
+  pathLength: number,
+  strokeWidth: number
 ): string {
   // Three cubic Béziers at t=[0, 0.33, 0.67, 1.0] with alternating offsets
   const dx = end.x - start.x
@@ -252,26 +260,32 @@ function generateDoubleSCurve(
   const p2x = start.x + dx * 0.67
   const p2y = start.y + dy * 0.67
   
-  // First segment: positive offset
-  const cp1x = start.x + dx * 0.16 + perpX * amp * sign * 0.8
-  const cp1y = start.y + dy * 0.16 + perpY * amp * sign * 0.8
+  // Junction offsets: moderate, with upstream/downstream positioning
+  const junctionOffset = Math.min(amp * 0.25, strokeWidth * 0.8)
   
-  const cp2x = p1x + perpX * amp * sign * 0.5
-  const cp2y = p1y + perpY * amp * sign * 0.5
+  // First segment: body gets full amplitude
+  const cp1x = start.x + dx * 0.16 + perpX * amp * sign * 0.85
+  const cp1y = start.y + dy * 0.16 + perpY * amp * sign * 0.85
   
-  // Second segment: negative offset
-  const cp3x = p1x - perpX * amp * sign * 0.5
-  const cp3y = p1y - perpY * amp * sign * 0.5
+  // cp2: approach p1 junction from upstream
+  const cp2x = p1x - dx * 0.1 + perpX * junctionOffset * sign
+  const cp2y = p1y - dy * 0.1 + perpY * junctionOffset * sign
   
-  const cp4x = p2x - perpX * amp * sign * 0.8
-  const cp4y = p2y - perpY * amp * sign * 0.8
+  // cp3: exit p1 junction downstream
+  const cp3x = p1x + dx * 0.1 - perpX * junctionOffset * sign
+  const cp3y = p1y + dy * 0.1 - perpY * junctionOffset * sign
   
-  // Third segment: positive offset again
-  const cp5x = p2x + perpX * amp * sign * 0.5
-  const cp5y = p2y + perpY * amp * sign * 0.5
+  // cp4: approach p2 junction from upstream
+  const cp4x = p2x - dx * 0.1 - perpX * junctionOffset * sign
+  const cp4y = p2y - dy * 0.1 - perpY * junctionOffset * sign
   
-  const cp6x = end.x - dx * 0.16 + perpX * amp * sign * 0.8
-  const cp6y = end.y - dy * 0.16 + perpY * amp * sign * 0.8
+  // cp5: exit p2 junction downstream
+  const cp5x = p2x + dx * 0.1 + perpX * junctionOffset * sign
+  const cp5y = p2y + dy * 0.1 + perpY * junctionOffset * sign
+  
+  // Final segment: full amplitude body
+  const cp6x = end.x - dx * 0.16 + perpX * amp * sign * 0.85
+  const cp6y = end.y - dy * 0.16 + perpY * amp * sign * 0.85
   
   return `M ${start.x} ${start.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p1x} ${p1y} C ${cp3x} ${cp3y}, ${cp4x} ${cp4y}, ${p2x} ${p2y} C ${cp5x} ${cp5y}, ${cp6x} ${cp6y}, ${end.x} ${end.y}`
 }
