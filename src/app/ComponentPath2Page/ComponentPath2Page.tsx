@@ -15,6 +15,7 @@ interface Division {
     amplitude: number
     strokeWidth: number
     bias: 'left' | 'right' | 'auto'
+    wildness: number
   }>
   isDark: boolean
 }
@@ -38,9 +39,10 @@ export default function ComponentPath2Page() {
       const paths = selectedColors.map(color => ({
         color,
         lobes: [0, 1, 2][Math.floor(Math.random() * 3)] as 0 | 1 | 2,
-        amplitude: 0.3 + Math.random() * 0.3, // 0.3-0.6
+        amplitude: 0.4 + Math.random() * 0.35, // 0.4-0.75 (increased upper bound)
         strokeWidth: 50 + Math.floor(Math.random() * 30), // 50-80px
-        bias: (['left', 'right', 'auto'][Math.floor(Math.random() * 3)]) as 'left' | 'right' | 'auto'
+        bias: (['left', 'right', 'auto'][Math.floor(Math.random() * 3)]) as 'left' | 'right' | 'auto',
+        wildness: 1.5 // Full wildness for all paths
       }))
       
       return { ...div, pathCount, paths, isDark }
@@ -69,6 +71,7 @@ export default function ComponentPath2Page() {
               color={pathConfig.color}
               strokeWidth={pathConfig.strokeWidth}
               bias={pathConfig.bias}
+              wildness={pathConfig.wildness}
             />
           ))}
         </div>

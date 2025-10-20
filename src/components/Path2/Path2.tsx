@@ -24,6 +24,7 @@ interface Path2Props {
   lobes?: 0 | 1 | 2
   amplitude?: number // 0-1 of min(width,height)
   bias?: 'left' | 'right' | 'auto'
+  wildness?: number // 0-1, controls how dramatic the curve bodies are (default 0.9)
 }
 
 export default function Path2({ 
@@ -31,7 +32,8 @@ export default function Path2({
   strokeWidth = 60, 
   lobes = 1, 
   amplitude = 0.4,
-  bias = 'auto'
+  bias = 'auto',
+  wildness = 0.9
 }: Path2Props = {}) {
   const [pathData, setPathData] = useState<string>('')
   const [color, setColor] = useState<string>('')
@@ -67,7 +69,8 @@ export default function Path2({
         lobes, 
         amplitude, 
         strokeWidth,
-        bias 
+        bias,
+        wildness
       })
       
       setPathData(path)
@@ -87,7 +90,7 @@ export default function Path2({
       clearTimeout(timer)
       window.removeEventListener('resize', handleResize)
     }
-  }, [lobes, amplitude, bias, colorProp, strokeWidth])
+  }, [lobes, amplitude, bias, colorProp, strokeWidth, wildness])
 
   if (!pathData || !color) {
     return <svg ref={containerRef} className={styles.path2} xmlns="http://www.w3.org/2000/svg" />
@@ -133,10 +136,11 @@ interface BezierOptions {
   amplitude: number
   strokeWidth: number
   bias: 'left' | 'right' | 'auto'
+  wildness: number
 }
 
 function generateExplicitBeziers(opts: BezierOptions): string {
-  const { start, end, width, height, lobes, amplitude, strokeWidth, bias } = opts
+  const { start, end, width, height, lobes, amplitude, strokeWidth, bias, wildness } = opts
 
   // Calculate minimum safe radius based on stroke width
   const minRadius = 2.5 * strokeWidth
@@ -161,13 +165,13 @@ function generateExplicitBeziers(opts: BezierOptions): string {
   
   if (lobes === 0) {
     // Single gentle curve to one side
-    return generateSingleCurve(start, end, dirX, dirY, perpX, perpY, biasSign, maxSafeAmp, minRadius)
+    return generateSingleCurve(start, end, dirX, dirY, perpX, perpY, biasSign, maxSafeAmp, minRadius, wildness)
   } else if (lobes === 1) {
     // S-curve: two cubic Béziers with opposite offsets
-    return generateSCurve(start, end, dirX, dirY, perpX, perpY, biasSign, maxSafeAmp, minRadius, pathLength, strokeWidth)
+    return generateSCurve(start, end, dirX, dirY, perpX, perpY, biasSign, maxSafeAmp, minRadius, pathLength, strokeWidth, wildness)
   } else {
     // Double S-curve: three cubic Béziers
-    return generateDoubleSCurve(start, end, dirX, dirY, perpX, perpY, biasSign, maxSafeAmp, minRadius, pathLength, strokeWidth)
+    return generateDoubleSCurve(start, end, dirX, dirY, perpX, perpY, biasSign, maxSafeAmp, minRadius, pathLength, strokeWidth, wildness)
   }
 }
 
@@ -180,19 +184,20 @@ function generateSingleCurve(
   perpY: number, 
   sign: number, 
   amp: number,
-  minRadius: number
+  minRadius: number,
+  wildness: number
 ): string {
   // Single cubic Bézier with control points offset perpendicular
-  // Place controls at 1/3 and 2/3 along the path, offset by amplitude
+  // Wildness scales the perpendicular offset
   
   const dx = end.x - start.x
   const dy = end.y - start.y
   
-  const cp1x = start.x + dx * 0.33 + perpX * amp * sign
-  const cp1y = start.y + dy * 0.33 + perpY * amp * sign
+  const cp1x = start.x + dx * 0.33 + perpX * amp * sign * wildness
+  const cp1y = start.y + dy * 0.33 + perpY * amp * sign * wildness
   
-  const cp2x = start.x + dx * 0.67 + perpX * amp * sign
-  const cp2y = start.y + dy * 0.67 + perpY * amp * sign
+  const cp2x = start.x + dx * 0.67 + perpX * amp * sign * wildness
+  const cp2y = start.y + dy * 0.67 + perpY * amp * sign * wildness
   
   return `M ${start.x} ${start.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${end.x} ${end.y}`
 }
@@ -208,18 +213,20 @@ function generateSCurve(
   amp: number,
   minRadius: number,
   pathLength: number,
-  strokeWidth: number
+  strokeWidth: number,
+  wildness: number
 ): string {
   // Two cubic Béziers meeting at midpoint with C1 continuity
   const midX = (start.x + end.x) / 2
   const midY = (start.y + end.y) / 2
   
-  // Push amplitude into curve bodies (cp1 and cp4)
-  const cp1x = start.x + (midX - start.x) * 0.4 + perpX * amp * sign * 0.9
-  const cp1y = start.y + (midY - start.y) * 0.4 + perpY * amp * sign * 0.9
+  // Push amplitude into curve bodies - wildness scales the drama
+  const cp1x = start.x + (midX - start.x) * 0.4 + perpX * amp * sign * wildness
+  const cp1y = start.y + (midY - start.y) * 0.4 + perpY * amp * sign * wildness
   
   // Junction control points: positioned AWAY from midpoint along path, with moderate perpendicular offset
   // This ensures smooth flow through the transition, not a straight segment
+  // Junction offset stays fixed for smoothness regardless of wildness
   const junctionOffset = Math.min(amp * 0.25, strokeWidth * 0.8)
   
   // cp2: approach the junction from first curve side
@@ -230,9 +237,9 @@ function generateSCurve(
   const cp3x = midX + (end.x - midX) * 0.15 - perpX * junctionOffset * sign
   const cp3y = midY + (end.y - midY) * 0.15 - perpY * junctionOffset * sign
   
-  // Second curve body: full amplitude
-  const cp4x = end.x - (end.x - midX) * 0.4 - perpX * amp * sign * 0.9
-  const cp4y = end.y - (end.y - midY) * 0.4 - perpY * amp * sign * 0.9
+  // Second curve body: full amplitude scaled by wildness
+  const cp4x = end.x - (end.x - midX) * 0.4 - perpX * amp * sign * wildness
+  const cp4y = end.y - (end.y - midY) * 0.4 - perpY * amp * sign * wildness
   
   return `M ${start.x} ${start.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${midX} ${midY} C ${cp3x} ${cp3y}, ${cp4x} ${cp4y}, ${end.x} ${end.y}`
 }
@@ -248,7 +255,8 @@ function generateDoubleSCurve(
   amp: number,
   minRadius: number,
   pathLength: number,
-  strokeWidth: number
+  strokeWidth: number,
+  wildness: number
 ): string {
   // Three cubic Béziers at t=[0, 0.33, 0.67, 1.0] with alternating offsets
   const dx = end.x - start.x
@@ -261,11 +269,12 @@ function generateDoubleSCurve(
   const p2y = start.y + dy * 0.67
   
   // Junction offsets: moderate, with upstream/downstream positioning
+  // Keep fixed for smoothness
   const junctionOffset = Math.min(amp * 0.25, strokeWidth * 0.8)
   
-  // First segment: body gets full amplitude
-  const cp1x = start.x + dx * 0.16 + perpX * amp * sign * 0.85
-  const cp1y = start.y + dy * 0.16 + perpY * amp * sign * 0.85
+  // First segment: body gets amplitude scaled by wildness
+  const cp1x = start.x + dx * 0.16 + perpX * amp * sign * wildness
+  const cp1y = start.y + dy * 0.16 + perpY * amp * sign * wildness
   
   // cp2: approach p1 junction from upstream
   const cp2x = p1x - dx * 0.1 + perpX * junctionOffset * sign
@@ -283,9 +292,9 @@ function generateDoubleSCurve(
   const cp5x = p2x + dx * 0.1 + perpX * junctionOffset * sign
   const cp5y = p2y + dy * 0.1 + perpY * junctionOffset * sign
   
-  // Final segment: full amplitude body
-  const cp6x = end.x - dx * 0.16 + perpX * amp * sign * 0.85
-  const cp6y = end.y - dy * 0.16 + perpY * amp * sign * 0.85
+  // Final segment: amplitude scaled by wildness
+  const cp6x = end.x - dx * 0.16 + perpX * amp * sign * wildness
+  const cp6y = end.y - dy * 0.16 + perpY * amp * sign * wildness
   
   return `M ${start.x} ${start.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p1x} ${p1y} C ${cp3x} ${cp3y}, ${cp4x} ${cp4y}, ${p2x} ${p2y} C ${cp5x} ${cp5y}, ${cp6x} ${cp6y}, ${end.x} ${end.y}`
 }
