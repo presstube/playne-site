@@ -39,10 +39,10 @@ export default function ComponentPath2Page() {
       const paths = selectedColors.map(color => ({
         color,
         lobes: [0, 1, 2][Math.floor(Math.random() * 3)] as 0 | 1 | 2,
-        amplitude: 0.4 + Math.random() * 0.35, // 0.4-0.75 (increased upper bound)
+        amplitude: 0.4 + Math.random() * 0.35, // 0.4-0.75
         strokeWidth: 50 + Math.floor(Math.random() * 30), // 50-80px
         bias: (['left', 'right', 'auto'][Math.floor(Math.random() * 3)]) as 'left' | 'right' | 'auto',
-        wildness: 1.5 // Full wildness for all paths
+        wildness: 0.8 + Math.random() * 0.7 // 0.8-1.5 varied wildness
       }))
       
       return { ...div, pathCount, paths, isDark }

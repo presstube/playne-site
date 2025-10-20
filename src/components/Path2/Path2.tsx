@@ -40,6 +40,7 @@ export default function Path2({
   console.log('Path2 rendering with props:', { colorProp, strokeWidth, lobes, amplitude, bias, wildness })
   const [pathData, setPathData] = useState<string>('')
   const [color, setColor] = useState<string>('')
+  const [hasOnScreenEndpoint, setHasOnScreenEndpoint] = useState(false)
   const containerRef = useRef<SVGSVGElement>(null)
 
   useEffect(() => {
@@ -62,20 +63,55 @@ export default function Path2({
 
       console.log('Container bounds:', { width, height, x: rect.x, y: rect.y })
 
-      // Choose random entry and exit sides
-      const sides: Side[] = ['top', 'bottom', 'left', 'right']
-      const entrySide = sides[Math.floor(Math.random() * sides.length)]
-      let exitSide = sides[Math.floor(Math.random() * sides.length)]
-      
-      while (exitSide === entrySide) {
-        exitSide = sides[Math.floor(Math.random() * sides.length)]
+      // 1 in 7 chance (~14%) to have one endpoint on-screen
+      const hasOnScreenEndpoint = Math.random() < (1/7)
+      const startOnScreen = hasOnScreenEndpoint && Math.random() < 0.5 // 50/50 which end if true
+      const endOnScreen = hasOnScreenEndpoint && !startOnScreen
+
+      let entry: Point
+      let exit: Point
+
+      if (startOnScreen) {
+        // Start somewhere in the middle of the container
+        entry = {
+          x: width * (0.2 + Math.random() * 0.6), // 20-80% across
+          y: height * (0.2 + Math.random() * 0.6) // 20-80% down
+        }
+        console.log('Path starting ON-SCREEN:', entry)
+      } else {
+        // Start from a random side (off-screen)
+        const sides: Side[] = ['top', 'bottom', 'left', 'right']
+        const entrySide = sides[Math.floor(Math.random() * sides.length)]
+        entry = getPointOnSide(entrySide, width, height, strokeWidth)
+        console.log('Path entry:', entry, 'from side:', entrySide)
       }
 
-      const entry = getPointOnSide(entrySide, width, height, strokeWidth)
-      const exit = getPointOnSide(exitSide, width, height, strokeWidth)
-
-      console.log('Path entry:', entry, 'from side:', entrySide)
-      console.log('Path exit:', exit, 'from side:', exitSide)
+      if (endOnScreen) {
+        // End somewhere in the middle of the container
+        exit = {
+          x: width * (0.2 + Math.random() * 0.6),
+          y: height * (0.2 + Math.random() * 0.6)
+        }
+        console.log('Path ending ON-SCREEN:', exit)
+      } else {
+        // Exit from a random side (off-screen)
+        const sides: Side[] = ['top', 'bottom', 'left', 'right']
+        let exitSide = sides[Math.floor(Math.random() * sides.length)]
+        
+        // If starting off-screen, ensure exit is from a different side
+        if (!startOnScreen) {
+          const entrySide = sides.find(s => {
+            const testPoint = getPointOnSide(s, width, height, strokeWidth)
+            return Math.abs(testPoint.x - entry.x) < 10 && Math.abs(testPoint.y - entry.y) < 10
+          })
+          while (exitSide === entrySide) {
+            exitSide = sides[Math.floor(Math.random() * sides.length)]
+          }
+        }
+        
+        exit = getPointOnSide(exitSide, width, height, strokeWidth)
+        console.log('Path exit:', exit, 'from side:', exitSide)
+      }
 
       const path = generateExplicitBeziers({ 
         start: entry, 
@@ -93,6 +129,9 @@ export default function Path2({
 
       const chosen = colorProp || BRAND_COLORS[Math.floor(Math.random() * BRAND_COLORS.length)]
       setColor(chosen)
+      
+      // Store whether this path has an on-screen endpoint for rendering
+      setHasOnScreenEndpoint(startOnScreen || endOnScreen)
     }
 
     const timer = setTimeout(() => {
@@ -121,7 +160,7 @@ export default function Path2({
         fill="none"
         stroke={color}
         strokeWidth={strokeWidth}
-        strokeLinecap="round"
+        strokeLinecap={hasOnScreenEndpoint ? 'butt' : 'round'}
         onClick={onClick}
         style={{ cursor: 'pointer', pointerEvents: 'auto' }}
       />
