@@ -113,6 +113,19 @@ export default function Path2({
         console.log('Path exit:', exit, 'from side:', exitSide)
       }
 
+      // Safety check: if both points are off-screen, ensure the line between them crosses the container
+      if (!startOnScreen && !endOnScreen) {
+        const lineIntersectsContainer = doesLineIntersectRect(entry, exit, width, height)
+        if (!lineIntersectsContainer) {
+          // Force one endpoint to be on-screen to ensure visibility
+          console.log('Path would be completely off-screen, forcing one endpoint on-screen')
+          entry = {
+            x: width * (0.2 + Math.random() * 0.6),
+            y: height * (0.2 + Math.random() * 0.6)
+          }
+        }
+      }
+
       const path = generateExplicitBeziers({ 
         start: entry, 
         end: exit, 
@@ -160,7 +173,7 @@ export default function Path2({
         fill="none"
         stroke={color}
         strokeWidth={strokeWidth}
-        strokeLinecap={hasOnScreenEndpoint ? 'butt' : 'round'}
+        strokeLinecap="butt"
         onClick={onClick}
         style={{ cursor: 'pointer', pointerEvents: 'auto' }}
       />
@@ -184,6 +197,51 @@ function getPointOnSide(side: Side, width: number, height: number, strokeWidth: 
     case 'right':
       return { x: width + overhang, y: height * (min + Math.random() * (max - min)) }
   }
+}
+
+// Check if a line segment from p1 to p2 intersects with a rectangle (0,0,width,height)
+function doesLineIntersectRect(p1: Point, p2: Point, width: number, height: number): boolean {
+  // If either point is inside the rectangle, the line intersects
+  if ((p1.x >= 0 && p1.x <= width && p1.y >= 0 && p1.y <= height) ||
+      (p2.x >= 0 && p2.x <= width && p2.y >= 0 && p2.y <= height)) {
+    return true
+  }
+
+  // Check if line intersects any of the four edges of the rectangle
+  const rectEdges = [
+    { x1: 0, y1: 0, x2: width, y2: 0 },       // top edge
+    { x1: width, y1: 0, x2: width, y2: height }, // right edge
+    { x1: width, y1: height, x2: 0, y2: height }, // bottom edge
+    { x1: 0, y1: height, x2: 0, y2: 0 }       // left edge
+  ]
+
+  for (const edge of rectEdges) {
+    if (doLinesIntersect(
+      p1.x, p1.y, p2.x, p2.y,
+      edge.x1, edge.y1, edge.x2, edge.y2
+    )) {
+      return true
+    }
+  }
+
+  return false
+}
+
+// Check if two line segments intersect using cross product method
+function doLinesIntersect(
+  x1: number, y1: number, x2: number, y2: number,
+  x3: number, y3: number, x4: number, y4: number
+): boolean {
+  const denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+  
+  if (Math.abs(denom) < 1e-10) {
+    return false // Lines are parallel
+  }
+
+  const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denom
+  const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denom
+
+  return t >= 0 && t <= 1 && u >= 0 && u <= 1
 }
 
 interface BezierOptions {

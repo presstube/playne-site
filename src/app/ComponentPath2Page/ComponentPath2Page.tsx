@@ -26,7 +26,7 @@ export default function ComponentPath2Page() {
   useEffect(() => {
     const layout = generateRandomLayout()
     const withPaths = layout.map(div => {
-      const pathCount = Math.floor(1 + Math.random() * 3)
+      const pathCount = Math.floor(1 + Math.random() * 5)
       const isDark = Math.random() < 0.3
       
       const availableColors = isDark 
