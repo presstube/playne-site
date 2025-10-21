@@ -1,14 +1,109 @@
 .brandShader {
+  position: relative;
   width: 100%;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  background-color: var(--brand-black);
+  cursor: pointer;
 }
 
-.logo {
-  display: block;
+/* Background mode - brand offwhite background, still masked */
+.brandShader.background {
+  background-color: var(--brand-offwhite);
+}
+
+.shaderContainer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Masked mode (default) and Background mode: shader is masked by SVG shape */
+.shaderContainer:not(.fullscreen) {
+  mask-image: url('/svg/Playne_Logo_Black_RGB.svg');
+  mask-size: 50%;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: url('/svg/Playne_Logo_Black_RGB.svg');
+  -webkit-mask-size: 50%;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+}
+
+/* Fullscreen mode: shader fills entire viewport, no mask */
+.shaderContainer.fullscreen {
+  mask: none;
+  -webkit-mask: none;
+}
+
+/* SVG overlay only appears in fullscreen mode, on top of shader */
+.logoOverlay {
+  position: absolute;
   width: 50%;
   height: auto;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoOverlay svg {
+  width: 100%;
+  height: auto;
+}
+
+.controls {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  text-align: center;
+  color: var(--brand-offwhite);
+  font-family: var(--font-family-sans);
+  pointer-events: none;
+}
+
+/* Adjust control colors for background mode */
+.background .controls {
+  color: var(--brand-black);
+}
+
+.shaderInfo {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.background .shaderInfo {
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.8);
+}
+
+.instructions {
+  font-size: 0.875rem;
+  opacity: 0.8;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.background .instructions {
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.8);
+}
+
+.loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand-offwhite);
+  font-family: var(--font-family-sans);
 }
 
