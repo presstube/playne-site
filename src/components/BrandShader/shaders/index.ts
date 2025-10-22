@@ -1,5 +1,6 @@
 import { perlinNoiseShader } from './PerlinNoiseShader'
 import { wavyLinesShader } from './WavyLinesShader'
+import { wavyLinesHardShader } from './WavyLinesHardShader'
 import { bubblegumBlobsShader } from './BubblegumBlobsShader'
 import { rainbowRipplesShader } from './RainbowRipplesShader'
 import { kaleidoscopeDreamsShader } from './KaleidoscopeDreamsShader'
@@ -16,7 +17,8 @@ export const shaderRegistry: ShaderConfig[] = [
   kaleidoscopeDreamsShader,
   confettiCelebrationShader,
   cosmicSpiralsShader,
-  seascapeShader
+  seascapeShader,
+  wavyLinesHardShader
 ]
 
 export const getShaderByKey = (key: string): ShaderConfig | undefined => {

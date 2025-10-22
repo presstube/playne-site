@@ -71,29 +71,25 @@ const fragmentShader = `
     float stripes = sin(uv.x * 20.0 + uTime * 2.0) * 0.5 + 0.5;
     combined = mix(combined, stripes, 0.3);
     
-    // Map to brand colors with smooth transitions
-    vec3 color;
-    float t = combined;
-    
-    // Interpolate through the active colors
+    // HARD EDGE: Use floor to quantize the value into discrete bands
     int colorCount = uColorCount;
     if (colorCount < 2) colorCount = 2;
     if (colorCount > 5) colorCount = 5;
     
-    float segmentSize = 1.0 / float(colorCount - 1);
-    int segment = int(floor(t / segmentSize));
-    if (segment >= colorCount - 1) segment = colorCount - 2;
+    // Create hard edges by flooring to discrete bands
+    float bands = float(colorCount);
+    float bandIndex = floor(combined * bands);
     
-    float localT = (t - float(segment) * segmentSize) / segmentSize;
-    color = mix(uColors[segment], uColors[segment + 1], localT);
+    // Map to color index
+    int colorIndex = int(mod(bandIndex, float(colorCount)));
+    vec3 color = uColors[colorIndex];
     
-    // Add some brightness variation based on waves
-    float brightness = 0.7 + wave1 * 0.4;
-    color *= brightness;
-    
-    // Add some subtle glow in the wave peaks
-    float glow = smoothstep(0.7, 1.0, wave1) * 0.3;
-    color += vec3(glow);
+    // Optional: Add subtle edge darkening for definition
+    float edgeThreshold = 0.02;
+    float nextBand = floor((combined + edgeThreshold) * bands);
+    if (nextBand != bandIndex) {
+      color *= 0.92;
+    }
     
     gl_FragColor = vec4(color, 1.0);
   }
@@ -111,9 +107,9 @@ const vertexShader = `
 // Initialize with random colors
 const initialColors = getRandomColorSet()
 
-export const wavyLinesShader: ShaderConfig = {
-  key: '2',
-  name: 'Wavy Lines',
+export const wavyLinesHardShader: ShaderConfig = {
+  key: '7',
+  name: 'Wavy Lines Hard',
   fragmentShader,
   vertexShader,
   uniforms: {
@@ -123,5 +119,4 @@ export const wavyLinesShader: ShaderConfig = {
     uColorCount: { value: getColorCount(initialColors) }
   }
 }
-
 
