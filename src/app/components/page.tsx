@@ -13,6 +13,8 @@ import ContentCard from '@/components/ContentCard/ContentCard'
 import EventCard from '@/components/EventCard/EventCard'
 import DonationCard from '@/components/DonationCard/DonationCard'
 import Path2 from '@/components/Path2/Path2'
+import BrandShaderHero from '@/components/BrandShaderHero/BrandShaderHero'
+import TitleBodyQuote from '@/components/TitleBodyQuote/TitleBodyQuote'
 import { BRAND_COLORS } from '@/components/Path2/Path2'
 
 // Headline demo data
@@ -40,6 +42,38 @@ const SUBS = [
   'Creativity at the center of education',
   'Wellness, finance, nutrition, and body awareness',
   'Programs designed to spark curiosity',
+]
+
+// TitleBodyQuote demo data
+const SUBTITLE_BODY = [
+  {
+    subtitle: "Who Are We?",
+    body: "Founded by Shantell Martin, Playne creates engaging, interactive learning experiences that foster confidence, critical thinking, and self‑expression."
+  },
+  {
+    subtitle: "What We Do",
+    body: "We pair original artworks with thoughtfully designed lessons so students can explore their bodies, feelings, and ideas through drawing, movement, and discussion."
+  },
+  {
+    subtitle: "How It Works",
+    body: "Simple materials, open prompts, and plenty of reflection. Lessons are flexible, welcoming, and built to work in classrooms, after‑school programs, and community spaces."
+  },
+  {
+    subtitle: "Why Playne?",
+    body: "Because young people deserve tools that help them think freely, care for themselves and others, and imagine new possibilities."
+  },
+  {
+    subtitle: "Our Approach",
+    body: "Playful, practical, and people‑centered. We blend observation, making, and conversation to help ideas click in the hands, the body, and the mind."
+  },
+]
+
+const PULL_QUOTES = [
+  "Art teaches more than technique — it teaches resilience, adaptability, and the ability to see the world in new ways.",
+  "We ask students who they are before telling them who to be.",
+  "Learning becomes real when hands, bodies, and ideas move together.",
+  "Confidence grows when we make, reflect, and try again — gently.",
+  "A single line can open a conversation that changes the day.",
 ]
 
 type CaseType = 'all-caps' | 'title-case'
@@ -161,6 +195,26 @@ export default function Page() {
     setHsFg(nextFg)
   }, [])
 
+  // TitleBodyQuote state
+  const [tbqSubBodyIdx, setTbqSubBodyIdx] = useState(0)
+  const [tbqQuoteIdx, setTbqQuoteIdx] = useState(0)
+  const [tbqIsDark, setTbqIsDark] = useState(false)
+
+  const currentSubBody = useMemo(
+    () => SUBTITLE_BODY[tbqSubBodyIdx % SUBTITLE_BODY.length],
+    [tbqSubBodyIdx]
+  )
+  const currentQuote = useMemo(
+    () => PULL_QUOTES[tbqQuoteIdx % PULL_QUOTES.length],
+    [tbqQuoteIdx]
+  )
+
+  const handleTbqClick = useCallback(() => {
+    setTbqSubBodyIdx((p) => (p + 1) % SUBTITLE_BODY.length)
+    setTbqQuoteIdx((p) => (p + 1) % PULL_QUOTES.length)
+    setTbqIsDark(Math.random() < 0.5)
+  }, [])
+
   // Path2 state
   const [path2Key, setPath2Key] = useState(0)
   const [divisions, setDivisions] = useState<Division[]>([])
@@ -248,6 +302,8 @@ export default function Page() {
 
   return (
     <div className={styles.page}>
+      <BrandShaderHero />
+      
       <h1 className={styles.pageTitle}>COMPONENTS</h1>
 
       {/* Headline */}
@@ -283,6 +339,23 @@ export default function Page() {
               fg={hsFg}
               bg={hsBg}
               borderColor={hsBg === PAGE_BG ? 'rgba(35,31,32,0.12)' : undefined}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* TitleBodyQuote */}
+      <section className={styles.componentSection}>
+        <h2 className={styles.componentLabel}>Title Body Quote</h2>
+        <div className={styles.headlineDemo} onClick={handleTbqClick} role="button" aria-label="Click to cycle content and randomize theme" tabIndex={0}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTbqClick() } }}
+        >
+          <div className={styles.headlineDemoInner}>
+            <TitleBodyQuote
+              subtitle={currentSubBody.subtitle}
+              body={currentSubBody.body}
+              quote={currentQuote}
+              isDark={tbqIsDark}
             />
           </div>
         </div>
