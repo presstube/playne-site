@@ -15,6 +15,7 @@ import DonationCard from '@/components/DonationCard/DonationCard'
 import Path2 from '@/components/Path2/Path2'
 import BrandShaderHero from '@/components/BrandShaderHero/BrandShaderHero'
 import TitleBodyQuote from '@/components/TitleBodyQuote/TitleBodyQuote'
+import Shape from '@/components/Shape/Shape'
 import { BRAND_COLORS } from '@/components/Path2/Path2'
 
 // Headline demo data
@@ -215,6 +216,13 @@ export default function Page() {
     setTbqIsDark(Math.random() < 0.5)
   }, [])
 
+  // Shape state
+  const [shapeKey, setShapeKey] = useState(0)
+
+  const handleShapeClick = useCallback(() => {
+    setShapeKey((p) => p + 1)
+  }, [])
+
   // Path2 state
   const [path2Key, setPath2Key] = useState(0)
   const [divisions, setDivisions] = useState<Division[]>([])
@@ -357,6 +365,18 @@ export default function Page() {
               quote={currentQuote}
               isDark={tbqIsDark}
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Shape */}
+      <section className={styles.componentSection}>
+        <h2 className={styles.componentLabel}>Shape Generator</h2>
+        <div className={styles.headlineDemo} onClick={handleShapeClick} role="button" aria-label="Click to generate new shape" tabIndex={0}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleShapeClick() } }}
+        >
+          <div className={styles.headlineDemoInner}>
+            <Shape key={shapeKey} />
           </div>
         </div>
       </section>
