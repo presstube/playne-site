@@ -1,5 +1,5 @@
 "use client"
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import styles from './Shape.module.css'
 import { generateShape } from './shapeGenerator'
 
@@ -38,7 +38,16 @@ export default function Shape({
   className
 }: ShapeProps) {
   
+  const [mounted, setMounted] = useState(false)
+  
+  // Only generate shape on client side to avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  
   const shape = useMemo(() => {
+    if (!mounted) return null
+    
     const actualType = shapeType === 'random' 
       ? (Math.random() < 0.6 ? 'blob' : 'spike')
       : shapeType
@@ -53,22 +62,35 @@ export default function Shape({
       lobes,
       rotation
     })
-  }, [shapeType, width, height, lobes, rotation, seed])
+  }, [mounted, shapeType, width, height, lobes, rotation, seed])
 
   const shapeColor = useMemo(() => {
+    if (!mounted) return '#231f20'
     return color || pickRandomBrandColor()
-  }, [color])
+  }, [mounted, color])
 
   const cx = (...args: Array<string | false | null | undefined>) => args.filter(Boolean).join(' ')
+
+  if (!mounted || !shape) {
+    return (
+      <div className={cx(styles.shapeContainer, className)}>
+        <svg 
+          viewBox={`0 0 ${width} ${height}`}
+          className={styles.svg}
+          xmlns="http://www.w3.org/2000/svg"
+          style={{ width: '100%', height: 'auto' }}
+        />
+      </div>
+    )
+  }
 
   return (
     <div className={cx(styles.shapeContainer, className)}>
       <svg 
         viewBox={`0 0 ${shape.width} ${shape.height}`}
-        width="100%"
-        height="auto"
         className={styles.svg}
         xmlns="http://www.w3.org/2000/svg"
+        style={{ width: '100%', height: 'auto' }}
       >
         <g transform={`translate(${shape.width / 2}, ${shape.height / 2}) rotate(${shape.rotation})`}>
           <path
