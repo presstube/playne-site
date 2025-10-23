@@ -17,7 +17,11 @@ import PathContainer from '@/components/PathContainer/PathContainer'
 import BrandShaderHero from '@/components/BrandShaderHero/BrandShaderHero'
 import TitleBodyQuote from '@/components/TitleBodyQuote/TitleBodyQuote'
 import Shape from '@/components/Shape/Shape'
+import Photo from '@/components/Photo/Photo'
 import { BRAND_COLORS } from '@/components/Path2/Path2'
+import { GalleryImage, pickRandomImage } from '@/lib/image-hat'
+import { client } from '@/sanity/lib/client'
+import { allGalleryImagesQuery } from '@/sanity/lib/galleries-queries'
 
 // Headline demo data
 const HEADLINE_COPY = [
@@ -185,6 +189,11 @@ export default function Page() {
   } | null>(null)
   const [pathContainerKey, setPathContainerKey] = useState(0)
 
+  // Photo state
+  const [currentImage, setCurrentImage] = useState<GalleryImage | null>(null)
+  const [allImages, setAllImages] = useState<GalleryImage[]>([])
+  const [isPhotoLoading, setIsPhotoLoading] = useState(false)
+
   // Brand colors for background selection
   const PATH_BRAND_COLORS = [
     '#231f20', // black
@@ -231,10 +240,44 @@ export default function Page() {
     generatePathContainer()
   }, [generatePathContainer])
 
+  // Fetch gallery images for Photo section
+  useEffect(() => {
+    async function fetchImages() {
+      try {
+        const images = await client.fetch(allGalleryImagesQuery)
+        setAllImages(images)
+        if (images.length > 0) {
+          setCurrentImage(pickRandomImage(images))
+        }
+      } catch (error) {
+        console.error('Error fetching images:', error)
+      }
+    }
+    fetchImages()
+  }, [])
+
   const handlePathContainerClick = useCallback(() => {
     generatePathContainer()
     setPathContainerKey(k => k + 1)
   }, [generatePathContainer])
+
+  const handlePhotoClick = useCallback(() => {
+    if (allImages.length > 0) {
+      setIsPhotoLoading(true)
+      // Pick a different image (not the current one)
+      let newImage = pickRandomImage(allImages)
+      let attempts = 0
+      while (newImage?.assetId === currentImage?.assetId && attempts < 10) {
+        newImage = pickRandomImage(allImages)
+        attempts++
+      }
+      setCurrentImage(newImage)
+    }
+  }, [allImages, currentImage])
+
+  const handlePhotoLoad = useCallback(() => {
+    setIsPhotoLoading(false)
+  }, [])
 
   return (
     <div className={styles.page}>
@@ -336,6 +379,25 @@ export default function Page() {
                 pathCount={pathContainer.pathCount}
               />
             </div>
+          </div>
+        )}
+      </section>
+
+      {/* Photo */}
+      <section className={`${styles.componentSection} ${styles.photoSection}`}>
+        <h2 className={styles.componentLabel}>Photo</h2>
+        {currentImage ? (
+          <div className={styles.photoDemo}>
+            <Photo 
+              image={currentImage} 
+              onClick={handlePhotoClick}
+              loading={isPhotoLoading}
+              onImageLoad={handlePhotoLoad}
+            />
+          </div>
+        ) : (
+          <div className={styles.photoDemo}>
+            <p>Loading images...</p>
           </div>
         )}
       </section>

@@ -128,6 +128,24 @@
   user-select: none;
 }
 
+/* Photo section - full viewport height */
+.photoSection {
+  height: 100vh;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.photoDemo {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: var(--brand-offwhite);
+}
+
 /* Graveyard section */
 .graveyard {
   margin-top: 8rem;
