@@ -1,17 +1,33 @@
 import { ShaderConfig } from './types'
 
-// PLAYNE Brand Colors (excluding black and offwhite)
+// PLAYNE Brand Colors (including black for random selection)
 const brandColorPalette = [
   [0.988, 0.333, 0.357],  // brandRed
   [0.988, 0.863, 0.290],  // brandYellow
   [0.984, 0.427, 0.796],  // brandPink
   [0.663, 0.925, 0.831],  // brandBlue
+  [0.137, 0.122, 0.125],  // brandBlack #231f20
 ]
 
-// Get 2-4 random colors from the palette
+// Get specific brand blue/teal and yellow as default
+export function getDefaultColorSet(): number[] {
+  const yellow = brandColorPalette[1]  // brandYellow
+  const blue = brandColorPalette[3]    // brandBlue
+  
+  // Build flat array: [yellow RGB, blue RGB, padding...]
+  return [
+    yellow[0], yellow[1], yellow[2],
+    blue[0], blue[1], blue[2],
+    0, 0, 0,  // padding
+    0, 0, 0,  // padding
+    0, 0, 0   // padding
+  ]
+}
+
+// Get 2-4 random colors from the palette (including black)
 export function getRandomColorSet(): number[] {
   const count = Math.floor(Math.random() * 3) + 2 // 2-4 colors
-  const indices = [0, 1, 2, 3]
+  const indices = [0, 1, 2, 3, 4]  // Now includes index 4 (black)
   
   // Shuffle
   for (let i = indices.length - 1; i > 0; i--) {
@@ -104,8 +120,8 @@ const vertexShader = `
   }
 `
 
-// Initialize with random colors
-const initialColors = getRandomColorSet()
+// Initialize with default blue/teal and yellow
+const initialColors = getDefaultColorSet()
 
 export const wavyLinesHardShader: ShaderConfig = {
   key: '7',
