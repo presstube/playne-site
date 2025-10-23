@@ -1,5 +1,4 @@
 import { ReactNode } from 'react'
-import Card from '../Card/Card'
 import styles from './EventCard.module.css'
 
 interface EventCardProps {
@@ -23,8 +22,13 @@ export default function EventCard({
   children,
   className 
 }: EventCardProps) {
+  const classNames = [
+    styles.eventCard,
+    className
+  ].filter(Boolean).join(' ')
+
   return (
-    <Card className={className}>
+    <div className={classNames}>
       <div className={styles.header}>
         <div className={styles.dateTime}>
           <div className={styles.date}>{date}</div>
@@ -45,6 +49,6 @@ export default function EventCard({
         
         {children}
       </div>
-    </Card>
+    </div>
   )
 }

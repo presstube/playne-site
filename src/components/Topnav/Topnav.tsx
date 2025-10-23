@@ -91,15 +91,6 @@ export default function Topnav() {
               <Link href="/programs" className={styles.navLink}>
                 Programs
               </Link>
-              <Link href="/events" className={styles.navLink}>
-                Events
-              </Link>
-              <Link href="/get-involved" className={styles.navLink}>
-                Get Involved
-              </Link>
-              <Link href="/support" className={styles.navLink}>
-                Support PLAYNE
-              </Link>
               <Link href="/contact" className={styles.navLink}>
                 Contact
               </Link>
@@ -159,15 +150,6 @@ export default function Topnav() {
           </Link>
           <Link href="/programs" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
             Programs
-          </Link>
-          <Link href="/events" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
-            Events
-          </Link>
-          <Link href="/get-involved" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
-            Get Involved
-          </Link>
-          <Link href="/support" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
-            Support PLAYNE
           </Link>
           <Link href="/contact" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
             Contact

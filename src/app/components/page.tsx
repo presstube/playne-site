@@ -6,10 +6,7 @@ import styles from './page.module.css'
 import Headline from '@/components/Headline/Headline'
 import HeadlineSub from '@/components/HeadlineSub/HeadlineSub'
 import Button from '@/components/Button/Button'
-import LinkButton from '@/components/LinkButton/LinkButton'
 import Card from '@/components/Card/Card'
-import ActionCard from '@/components/ActionCard/ActionCard'
-import ContentCard from '@/components/ContentCard/ContentCard'
 import EventCard from '@/components/EventCard/EventCard'
 import DonationCard from '@/components/DonationCard/DonationCard'
 import Path2 from '@/components/Path2/Path2'
@@ -398,57 +395,90 @@ export default function Page() {
         )}
       </section>
 
-      {/* Graveyard */}
-      <div className={styles.graveyard}>
-        <div className={styles.graveyardDivider}></div>
-        <h2 className={styles.graveyardTitle}>GRAVEYARD</h2>
+      {/* Nuts & Bolts */}
+      <div className={styles.nutsBolts}>
+        <div className={styles.nutsBoltsDivider}></div>
+        <h2 className={styles.nutsBottsTitle}>NUTS & BOLTS</h2>
 
-        <section className={styles.graveyardSection}>
+        {/* Buttons */}
+        <section className={styles.nutsBoltsSection}>
+          <h3 className={styles.sectionHeading}>Buttons</h3>
           <div className={styles.examples}>
             <div className={styles.example}>
-              <Button onClick={() => console.log('clicked')}>Button Component</Button>
-              <p className={styles.label}>Button</p>
+              <Button onClick={() => console.log('clicked')}>Default Button</Button>
+              <p className={styles.label}>Button - Black (default)</p>
             </div>
             <div className={styles.example}>
-              <LinkButton href="/get-involved">LinkButton Component</LinkButton>
-              <p className={styles.label}>LinkButton</p>
+              <Button color="red" onClick={() => console.log('clicked')}>Red Button</Button>
+              <p className={styles.label}>Button - Red</p>
+            </div>
+            <div className={styles.example}>
+              <Button color="yellow" onClick={() => console.log('clicked')}>Yellow Button</Button>
+              <p className={styles.label}>Button - Yellow</p>
+            </div>
+            <div className={styles.example}>
+              <Button color="pink" onClick={() => console.log('clicked')}>Pink Button</Button>
+              <p className={styles.label}>Button - Pink</p>
+            </div>
+            <div className={styles.example}>
+              <Button color="blue" onClick={() => console.log('clicked')}>Blue Button</Button>
+              <p className={styles.label}>Button - Blue</p>
+            </div>
+            <div className={styles.example}>
+              <Button color="black" variant="outlined" onClick={() => console.log('clicked')}>Outlined</Button>
+              <p className={styles.label}>Button - Outlined</p>
+            </div>
+            <div className={styles.example}>
+              <Button color="blue" href="/test">Link Button</Button>
+              <p className={styles.label}>Button - As Link</p>
             </div>
           </div>
         </section>
 
-        <section className={styles.graveyardSection}>
+        {/* Cards */}
+        <section className={styles.nutsBoltsSection}>
+          <h3 className={styles.sectionHeading}>Cards</h3>
           <div className={styles.cardGrid}>
             <div className={styles.example}>
-              <Card>
-                <h3>Basic Card</h3>
-                <p>Standard card container with border and padding</p>
+              <Card title="Basic Card" body="Simple card with title and body text" />
+              <p className={styles.label}>Card - Title + Body</p>
+            </div>
+
+            <div className={styles.example}>
+              <Card 
+                title="Card with CTA" 
+                body="Card with a call-to-action button" 
+                cta={{ text: "Learn More", href: "/about", color: "blue" }}
+              />
+              <p className={styles.label}>Card - With CTA</p>
+            </div>
+
+            <div className={styles.example}>
+              <Card variant="bordered" title="Bordered Card" body="Card with bordered variant" />
+              <p className={styles.label}>Card - Bordered</p>
+            </div>
+
+            <div className={styles.example}>
+              <Card variant="accent">
+                <h3 style={{ margin: '0 0 1rem 0', fontFamily: 'var(--font-heading)' }}>Custom Content</h3>
+                <p style={{ margin: 0 }}>Using children prop for completely custom layout</p>
               </Card>
-              <p className={styles.label}>Card</p>
+              <p className={styles.label}>Card - Custom</p>
             </div>
+          </div>
+        </section>
 
-            <div className={styles.example}>
-              <ActionCard
-                title="Action Card"
-                description="Card with title, description, and action button"
-                actionText="Learn More"
-                actionHref="/about"
-              />
-              <p className={styles.label}>ActionCard</p>
-            </div>
-
-            <div className={styles.example}>
-              <ContentCard
-                title="Content Card"
-                description="Rich content card with headline and body text for program details or story snippets"
-              />
-              <p className={styles.label}>ContentCard</p>
-            </div>
-
+        {/* Specialized Cards */}
+        <section className={styles.nutsBoltsSection}>
+          <h3 className={styles.sectionHeading}>Specialized Cards</h3>
+          <div className={styles.cardGrid}>
             <div className={styles.example}>
               <EventCard
                 title="Workshop: Financial Literacy"
                 date="March 15, 2025"
+                time="2:00 PM - 4:00 PM"
                 location="PLAYNE Center"
+                type="Workshop"
                 description="Learn essential money management skills"
               />
               <p className={styles.label}>EventCard</p>
@@ -459,6 +489,7 @@ export default function Page() {
                 amount="$50"
                 title="Monthly Support"
                 description="Support one student for a month"
+                benefits={['Access to all programs', 'Monthly updates', 'Community events']}
                 onDonate={(amt) => console.log(`${amt} selected`)}
               />
               <p className={styles.label}>DonationCard</p>

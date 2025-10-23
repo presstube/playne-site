@@ -1,48 +1,78 @@
 import { ReactNode, ButtonHTMLAttributes } from 'react'
+import Link from 'next/link'
 import styles from './Button.module.css'
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'color'> {
   children: ReactNode
-  variant?: 'primary' | 'secondary' | 'hero' | 'submit' | 'danger'
+  onClick?: () => void
+  href?: string
+  external?: boolean
+  color?: 'red' | 'yellow' | 'pink' | 'blue' | 'black'
+  variant?: 'filled' | 'outlined'
   size?: 'small' | 'medium' | 'large'
   fullWidth?: boolean
-  loading?: boolean
   className?: string
+  loading?: boolean
 }
 
 export default function Button({ 
   children,
-  variant = 'primary',
+  onClick,
+  href,
+  external = false,
+  color = 'black',
+  variant = 'filled',
   size = 'medium',
   fullWidth = false,
-  loading = false,
-  disabled,
+  disabled = false,
+  type = 'button',
   className,
+  loading = false,
   ...rest 
 }: ButtonProps) {
   const classNames = [
     styles.button,
-    styles[variant],
-    styles[size],
+    styles[`color-${color}`],
+    styles[`variant-${variant}`],
+    styles[`size-${size}`],
     fullWidth && styles.fullWidth,
+    disabled && styles.disabled,
     loading && styles.loading,
     className
   ].filter(Boolean).join(' ')
 
+  // If href is provided, render as link
+  if (href) {
+    if (external) {
+      return (
+        <a 
+          href={href}
+          className={classNames}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {children}
+        </a>
+      )
+    }
+    
+    return (
+      <Link href={href} className={classNames}>
+        {children}
+      </Link>
+    )
+  }
+
+  // Otherwise render as button
   return (
     <button 
+      type={type}
       className={classNames}
-      disabled={disabled || loading}
+      onClick={onClick}
+      disabled={disabled}
       {...rest}
     >
-      {loading ? (
-        <>
-          <span className={styles.spinner}></span>
-          {typeof children === 'string' ? 'Loading...' : children}
-        </>
-      ) : (
-        children
-      )}
+      {children}
     </button>
   )
 }

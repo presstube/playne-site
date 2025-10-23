@@ -1,69 +1,77 @@
+.donationCard {
+  background-color: var(--brand-offwhite);
+  border: 2px solid var(--brand-black);
+  border-radius: 8px;
+  padding: 2rem;
+  transition: all 0.2s ease;
+}
+
+.donationCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(35, 31, 32, 0.1);
+}
+
 .content {
-  text-align: center;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  gap: 1rem;
 }
 
 .amount {
-  font-size: 2.5rem;
+  font-family: var(--font-heading);
+  font-size: 3rem;
   font-weight: 700;
-  color: var(--color-primary);
-  margin-bottom: 1rem;
+  color: var(--brand-blue);
+  margin: 0;
+  line-height: 1;
 }
 
 .title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin-bottom: 1rem;
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--brand-black);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .description {
-  color: var(--color-text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: 1rem;
   line-height: 1.6;
-  margin-bottom: 1.5rem;
-  flex-grow: 1;
+  color: var(--brand-black);
 }
 
 .description p {
   margin: 0;
 }
 
+.description p + p {
+  margin-top: 0.75rem;
+}
+
 .benefits {
   list-style: none;
   padding: 0;
-  margin: 0 0 1.5rem 0;
-  text-align: left;
+  margin: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .benefits li {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text-secondary);
+  font-family: var(--font-family-sans);
   font-size: 0.875rem;
-}
-
-.benefits li:last-child {
-  border-bottom: none;
+  color: var(--brand-black);
+  padding-left: 1.5rem;
+  position: relative;
 }
 
 .benefits li::before {
   content: '✓';
-  color: var(--color-primary);
-  font-weight: bold;
-  margin-right: 0.5rem;
-}
-
-/* Donate button styles now handled by Button component */
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .amount {
-    font-size: 2rem;
-  }
-  
-  .title {
-    font-size: 1.125rem;
-  }
+  position: absolute;
+  left: 0;
+  color: var(--brand-blue);
+  font-weight: 700;
 }

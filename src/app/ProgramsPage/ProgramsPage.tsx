@@ -2,7 +2,7 @@ import styles from './ProgramsPage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
 import HeadlineSub from '@/components/HeadlineSub/HeadlineSub'
 import PageSection from '@/components/PageSection/PageSection'
-import ContentCard from '@/components/ContentCard/ContentCard'
+import Card from '@/components/Card/Card'
 import { PortableTextBlock } from 'sanity'
 import { SeoData } from '@/sanity/lib/types'
 
@@ -62,28 +62,28 @@ export default function ProgramsPage({ data }: ProgramsPageProps) {
         >
             
             <div className={styles.pillarsGrid}>
-              <ContentCard
-                variant="accent-border"
+              <Card
+                variant="accent"
                 title="Anatomy & Body Awareness"
-                description="We often only learn about our bodies when something goes wrong. Playne classes teach whole-body awareness where students learn about anatomy, movement, and physical expression from head to toes that increases confidence and agility."
+                body="We often only learn about our bodies when something goes wrong. Playne classes teach whole-body awareness where students learn about anatomy, movement, and physical expression from head to toes that increases confidence and agility."
               />
 
-              <ContentCard
-                variant="accent-border"
+              <Card
+                variant="accent"
                 title="Wellness & Self-Care"
-                description="In a time of constant distractions, our programs focus on cultivating mindfulness about ourselves and the world around us. By traveling within, students learn more about how to manage their feelings to reduce stress and anxiety."
+                body="In a time of constant distractions, our programs focus on cultivating mindfulness about ourselves and the world around us. By traveling within, students learn more about how to manage their feelings to reduce stress and anxiety."
               />
 
-              <ContentCard
-                variant="accent-border"
+              <Card
+                variant="accent"
                 title="Nutrition & Healthy Living"
-                description="Nourishing our bodies starts with knowing what we need to feel our best. Learning about the building blocks of food we eat — how things grow, where our food comes from, and what we need to have a nutritious meal — is a vital part of creating a full life."
+                body="Nourishing our bodies starts with knowing what we need to feel our best. Learning about the building blocks of food we eat — how things grow, where our food comes from, and what we need to have a nutritious meal — is a vital part of creating a full life."
               />
 
-              <ContentCard
-                variant="accent-border"
+              <Card
+                variant="accent"
                 title="Financial Literacy"
-                description="By building a foundation of financial awareness, we design and nurture the vital decision-making skills that help students understand how to invest in themselves and plan for their futures."
+                body="By building a foundation of financial awareness, we design and nurture the vital decision-making skills that help students understand how to invest in themselves and plan for their futures."
               />
             </div>
         </PageSection>
@@ -125,11 +125,11 @@ export default function ProgramsPage({ data }: ProgramsPageProps) {
           
           <div className={styles.pillarsGrid}>
             {data.curriculumPillars.pillars.map((pillar, index) => (
-              <ContentCard
+              <Card
                 key={index}
-                variant="accent-border"
+                variant="accent"
                 title={pillar.title}
-                description={pillar.description}
+                body={pillar.description}
               />
             ))}
           </div>

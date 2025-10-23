@@ -3,7 +3,7 @@ import PortableText from '@/components/PortableText/PortableText'
 import HeadlineSub from '@/components/HeadlineSub/HeadlineSub'
 import PageSection from '@/components/PageSection/PageSection'
 import EventCard from '@/components/EventCard/EventCard'
-import LinkButton from '@/components/LinkButton/LinkButton'
+import Button from '@/components/Button/Button'
 import { PortableTextBlock } from 'sanity'
 import { SanityImage, SeoData } from '@/sanity/lib/types'
 
@@ -76,14 +76,14 @@ function EventCardWrapper({ event }: { event: Event }) {
           </div>
         )}
         {event.registrationUrl && (
-          <LinkButton 
+          <Button 
             href={event.registrationUrl} 
-            variant="primary"
+            color="blue"
             size="medium"
             external
           >
             Register
-          </LinkButton>
+          </Button>
         )}
       </div>
     </EventCard>
@@ -176,9 +176,9 @@ export default function EventsPage({ data }: EventsPageProps) {
               <p className={styles.noEventsDescription}>
                 We're planning our first events. Check back soon or sign up for updates!
               </p>
-              <LinkButton href="/get-involved" variant="primary" size="medium">
+              <Button href="/get-involved" color="blue" size="medium">
                 Get Notified
-              </LinkButton>
+              </Button>
             </div>
           )}
       </PageSection>

@@ -1,5 +1,4 @@
 import { ReactNode } from 'react'
-import Card from '../Card/Card'
 import Button from '../Button/Button'
 import styles from './DonationCard.module.css'
 
@@ -20,6 +19,11 @@ export default function DonationCard({
   onDonate,
   className 
 }: DonationCardProps) {
+  const classNames = [
+    styles.donationCard,
+    className
+  ].filter(Boolean).join(' ')
+
   const handleDonate = () => {
     if (onDonate) {
       onDonate(amount)
@@ -27,7 +31,7 @@ export default function DonationCard({
   }
 
   return (
-    <Card variant="bordered" className={className}>
+    <div className={classNames}>
       <div className={styles.content}>
         <div className={styles.amount}>{amount}</div>
         <h3 className={styles.title}>{title}</h3>
@@ -44,7 +48,7 @@ export default function DonationCard({
         )}
         
         <Button 
-          variant="primary"
+          color="blue"
           size="large"
           fullWidth
           onClick={handleDonate}
@@ -52,6 +56,6 @@ export default function DonationCard({
           Donate {amount}
         </Button>
       </div>
-    </Card>
+    </div>
   )
 }

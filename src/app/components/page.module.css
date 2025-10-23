@@ -139,22 +139,22 @@
   background-color: var(--brand-offwhite);
 }
 
-/* Graveyard section */
-.graveyard {
+/* Nuts & Bolts section */
+.nutsBolts {
   margin-top: 8rem;
   padding: 0 2rem 4rem 2rem;
   width: 100%;
   box-sizing: border-box;
 }
 
-.graveyardDivider {
+.nutsBoltsDivider {
   width: 100%;
   height: 8px;
   background-color: var(--brand-black);
   margin-bottom: 2rem;
 }
 
-.graveyardTitle {
+.nutsBottsTitle {
   font-family: var(--font-heading);
   font-size: 2.5rem;
   text-align: center;
@@ -164,11 +164,21 @@
   letter-spacing: 0.02em;
 }
 
-.graveyardSection {
-  margin-bottom: 3rem;
+.nutsBoltsSection {
+  margin-bottom: 4rem;
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.sectionHeading {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  text-align: center;
+  margin: 0 0 2rem 0;
+  color: var(--brand-black);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .examples {

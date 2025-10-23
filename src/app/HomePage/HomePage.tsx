@@ -1,7 +1,7 @@
 import styles from './HomePage.module.css'
 import PortableText from '@/components/PortableText/PortableText'
-import ActionCard from '@/components/ActionCard/ActionCard'
-import LinkButton from '@/components/LinkButton/LinkButton'
+import Card from '@/components/Card/Card'
+import Button from '@/components/Button/Button'
 import BrandHero from '@/components/BrandHero/BrandHero'
 import Link from 'next/link'
 import { PortableTextBlock } from 'sanity'
@@ -87,13 +87,13 @@ export default function HomePage({ data }: HomePageProps) {
             </div>
           )}
           {data.heroSection.ctaButton && data.heroSection.ctaButton.text && (
-            <LinkButton 
+            <Button 
               href={data.heroSection.ctaButton.link || '#'} 
-              variant="hero"
+              color="blue"
               size="large"
             >
               {data.heroSection.ctaButton.text}
-            </LinkButton>
+            </Button>
           )}
         </section>
       )}
@@ -124,15 +124,16 @@ export default function HomePage({ data }: HomePageProps) {
           {data.featuredPrograms.programs && data.featuredPrograms.programs.length > 0 && (
             <div className={styles.programsGrid}>
               {data.featuredPrograms.programs.map((program, index) => (
-                <ActionCard
+                <Card
                   key={index}
                   variant="bordered"
                   title={program.title}
-                  description={program.description}
-                  icon={program.icon}
-                  actionType="link"
-                  actionText="Learn More"
-                  actionHref={program.link}
+                  body={program.description}
+                  cta={{
+                    text: "Learn More",
+                    href: program.link,
+                    color: 'blue'
+                  }}
                 />
               ))}
             </div>
@@ -151,22 +152,23 @@ export default function HomePage({ data }: HomePageProps) {
           )}
           <div className={styles.ctaButtons}>
             {data.callToActionSection.primaryButton && data.callToActionSection.primaryButton.text && (
-              <LinkButton 
+              <Button 
                 href={data.callToActionSection.primaryButton.link || '#'} 
-                variant="primary"
+                color="blue"
                 size="large"
               >
                 {data.callToActionSection.primaryButton.text}
-              </LinkButton>
+              </Button>
             )}
             {data.callToActionSection.secondaryButton && data.callToActionSection.secondaryButton.text && (
-              <LinkButton 
+              <Button 
                 href={data.callToActionSection.secondaryButton.link || '#'} 
-                variant="secondary"
+                color="black"
+                variant="outlined"
                 size="large"
               >
                 {data.callToActionSection.secondaryButton.text}
-              </LinkButton>
+              </Button>
             )}
           </div>
         </section>
