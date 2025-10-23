@@ -1,0 +1,114 @@
+"use client"
+
+import { useMemo, useState, useEffect } from 'react'
+import styles from './PathContainer.module.css'
+import Path2 from '@/components/Path2/Path2'
+
+// Brand colors
+const BRAND_COLORS = [
+  '#231f20', // black
+  '#FC555B', // red
+  '#FCDC4A', // yellow
+  '#FB6DCB', // pink
+  '#A9ECD4', // blue
+  '#EAEADA', // offwhite
+]
+
+interface PathConfig {
+  color: string
+  lobes: 0 | 1 | 2
+  amplitude: number
+  strokeWidth: number
+  bias: 'left' | 'right' | 'auto'
+  wildness: number
+}
+
+export interface PathContainerProps {
+  width: number
+  height: number
+  bgColor: string
+  pathCount: number
+  className?: string
+}
+
+export default function PathContainer({
+  width,
+  height,
+  bgColor,
+  pathCount,
+  className
+}: PathContainerProps) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const paths = useMemo(() => {
+    if (!mounted) return []
+
+    // Filter out the background color from available path colors
+    const availableColors = BRAND_COLORS.filter(c => c !== bgColor)
+
+    // Shuffle and select colors
+    const shuffled = [...availableColors].sort(() => Math.random() - 0.5)
+    const selectedColors = shuffled.slice(0, pathCount)
+
+    // Scale stroke width based on container size
+    const sizeReference = Math.sqrt(width * height)
+    const smallestReference = Math.sqrt(300 * 200) // ~245
+    const largestReference = Math.sqrt(1000 * 700) // ~837
+    const scaleFactor = (sizeReference - smallestReference) / (largestReference - smallestReference)
+    const minStroke = 30 + scaleFactor * 50 // 30-80
+    const maxStroke = 50 + scaleFactor * 70 // 50-120
+
+    // Generate random path configs
+    return selectedColors.map(color => ({
+      color,
+      lobes: [0, 1, 2][Math.floor(Math.random() * 3)] as 0 | 1 | 2,
+      amplitude: 0.4 + Math.random() * 0.35, // 0.4-0.75
+      strokeWidth: Math.floor(minStroke + Math.random() * (maxStroke - minStroke)),
+      bias: (['left', 'right', 'auto'][Math.floor(Math.random() * 3)]) as 'left' | 'right' | 'auto',
+      wildness: 0.8 + Math.random() * 0.7 // 0.8-1.5
+    }))
+  }, [mounted, width, height, bgColor, pathCount])
+
+  const cx = (...args: Array<string | false | null | undefined>) => args.filter(Boolean).join(' ')
+
+  if (!mounted) {
+    return (
+      <div
+        className={cx(styles.container, className)}
+        style={{
+          width: `${width}px`,
+          height: `${height}px`,
+          backgroundColor: bgColor
+        }}
+      />
+    )
+  }
+
+  return (
+    <div
+      className={cx(styles.container, className)}
+      style={{
+        width: `${width}px`,
+        height: `${height}px`,
+        backgroundColor: bgColor
+      }}
+    >
+      {paths.map((pathConfig, idx) => (
+        <Path2
+          key={idx}
+          lobes={pathConfig.lobes}
+          amplitude={pathConfig.amplitude}
+          color={pathConfig.color}
+          strokeWidth={pathConfig.strokeWidth}
+          bias={pathConfig.bias}
+          wildness={pathConfig.wildness}
+        />
+      ))}
+    </div>
+  )
+}
+

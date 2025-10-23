@@ -47,10 +47,20 @@
   transform: scale(0.995);
 }
 
+/* Full width variant - strip padding */
+.headlineDemo--fullWidth {
+  padding: 0;
+}
+
 .headlineDemoInner {
   width: 100%;
   max-width: 800px;
   padding: 0;
+}
+
+.headlineDemoInner--fullWidth {
+  max-width: 100%;
+  padding: 0; /* No padding for full width - PathContainer handles its own centering */
 }
 
 /* Path2 demo */

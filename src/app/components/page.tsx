@@ -13,6 +13,7 @@ import ContentCard from '@/components/ContentCard/ContentCard'
 import EventCard from '@/components/EventCard/EventCard'
 import DonationCard from '@/components/DonationCard/DonationCard'
 import Path2 from '@/components/Path2/Path2'
+import PathContainer from '@/components/PathContainer/PathContainer'
 import BrandShaderHero from '@/components/BrandShaderHero/BrandShaderHero'
 import TitleBodyQuote from '@/components/TitleBodyQuote/TitleBodyQuote'
 import Shape from '@/components/Shape/Shape'
@@ -141,21 +142,6 @@ interface PathConfig {
 
 let nextPathId = 0
 
-interface Division {
-  id: string
-  style: React.CSSProperties
-  pathCount: number
-  paths: Array<{ 
-    color: string
-    lobes: 0 | 1 | 2
-    amplitude: number
-    strokeWidth: number
-    bias: 'left' | 'right' | 'auto'
-    wildness: number
-  }>
-  isDark: boolean
-}
-
 export default function Page() {
   // Headline state
   const [hlIdx, setHlIdx] = useState(0)
@@ -223,13 +209,66 @@ export default function Page() {
     setShapeKey((p) => p + 1)
   }, [])
 
-  // Path2 state
-  const [path2Key, setPath2Key] = useState(0)
-  const [divisions, setDivisions] = useState<Division[]>([])
+  // PathContainer state
+  const [mounted, setMounted] = useState(false)
+  const [pathContainer, setPathContainer] = useState<{
+    width: number
+    height: number
+    bgColor: string
+    pathCount: number
+  } | null>(null)
+  const [pathContainerKey, setPathContainerKey] = useState(0)
 
-  const regeneratePath2 = useCallback(() => {
-    setPath2Key(p => p + 1)
+  // Brand colors for background selection
+  const PATH_BRAND_COLORS = [
+    '#231f20', // black
+    '#FC555B', // red
+    '#FCDC4A', // yellow
+    '#FB6DCB', // pink
+    '#A9ECD4', // blue
+    '#EAEADA', // offwhite
+  ]
+
+  const generatePathContainer = useCallback(() => {
+    // 30% chance to go full width, 70% chance for random size
+    const shouldGoFullWidth = Math.random() < 0.3
+    
+    let width: number
+    let height: number
+    
+    if (shouldGoFullWidth) {
+      // Full width minus padding
+      width = typeof window !== 'undefined' ? window.innerWidth - 64 : 1200 // 64 = 2rem * 2 sides * 16px
+      height = Math.floor(200 + Math.random() * 500) // 200-700px height
+    } else {
+      // Radical variety in dimensions
+      const minWidth = 300
+      const maxWidth = 1000
+      const minHeight = 200
+      const maxHeight = 700
+      
+      width = Math.floor(minWidth + Math.random() * (maxWidth - minWidth))
+      height = Math.floor(minHeight + Math.random() * (maxHeight - minHeight))
+    }
+    
+    const pathCount = Math.floor(1 + Math.random() * 5) // 1-5 paths
+    
+    // Random background color from all brand colors
+    const bgColor = PATH_BRAND_COLORS[Math.floor(Math.random() * PATH_BRAND_COLORS.length)]
+    
+    setPathContainer({ width, height, bgColor, pathCount })
   }, [])
+
+  // Generate PathContainer client-side only
+  useEffect(() => {
+    setMounted(true)
+    generatePathContainer()
+  }, [generatePathContainer])
+
+  const handlePathContainerClick = useCallback(() => {
+    generatePathContainer()
+    setPathContainerKey(k => k + 1)
+  }, [generatePathContainer])
 
   // PhotoPath state
   const [selectedPhoto, setSelectedPhoto] = useState<string>('')
@@ -280,33 +319,6 @@ export default function Page() {
       generatePaths()
     }
   }, [photoImageLoaded, generatePaths])
-
-  useEffect(() => {
-    const layout = generateRandomLayout()
-    const withPaths = layout.map(div => {
-      const pathCount = Math.floor(1 + Math.random() * 5)
-      const isDark = Math.random() < 0.3
-      
-      const availableColors = isDark 
-        ? ['#EAEADA', '#A9ECD4', '#FCDC4A']
-        : ['#FC555B', '#FCDC4A', '#FB6DCB', '#A9ECD4']
-      
-      const shuffled = [...availableColors].sort(() => Math.random() - 0.5)
-      const selectedColors = shuffled.slice(0, pathCount)
-      
-      const paths = selectedColors.map(color => ({
-        color,
-        lobes: [0, 1, 2][Math.floor(Math.random() * 3)] as 0 | 1 | 2,
-        amplitude: 0.4 + Math.random() * 0.35,
-        strokeWidth: 50 + Math.floor(Math.random() * 30),
-        bias: (['left', 'right', 'auto'][Math.floor(Math.random() * 3)]) as 'left' | 'right' | 'auto',
-        wildness: 0.8 + Math.random() * 0.7
-      }))
-      
-      return { ...div, pathCount, paths, isDark }
-    })
-    setDivisions(withPaths)
-  }, [path2Key])
 
   return (
     <div className={styles.page}>
@@ -371,7 +383,7 @@ export default function Page() {
 
       {/* Shape */}
       <section className={styles.componentSection}>
-        <h2 className={styles.componentLabel}>Shape Generator</h2>
+        <h2 className={styles.componentLabel}>Shapes</h2>
         <div className={styles.headlineDemo} onClick={handleShapeClick} role="button" aria-label="Click to generate new shape" tabIndex={0}
           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleShapeClick() } }}
         >
@@ -381,35 +393,35 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Path2 */}
+      {/* Paths */}
       <section className={styles.componentSection}>
-        <h2 className={styles.componentLabel}>Path2</h2>
-        <div className={styles.path2Demo} onClick={regeneratePath2} role="button" aria-label="Regenerate paths" tabIndex={0}
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); regeneratePath2() } }}
-        >
-          {divisions.map((division) => (
-            <div 
-              key={division.id} 
-              className={styles.path2Division} 
-              style={{
-                ...division.style,
-                backgroundColor: division.isDark ? '#231f20' : 'transparent'
-              }}
-            >
-              {division.paths.map((pathConfig, idx) => (
-                <Path2 
-                  key={idx} 
-                  lobes={pathConfig.lobes}
-                  amplitude={pathConfig.amplitude}
-                  color={pathConfig.color}
-                  strokeWidth={pathConfig.strokeWidth}
-                  bias={pathConfig.bias}
-                  wildness={pathConfig.wildness}
-                />
-              ))}
+        <h2 className={styles.componentLabel}>Paths</h2>
+        {!mounted || !pathContainer ? (
+          <div className={`${styles.headlineDemo} ${styles['headlineDemo--fullWidth']}`}>
+            <div className={`${styles.headlineDemoInner} ${styles['headlineDemoInner--fullWidth']}`}>
+              <PathContainer
+                width={600}
+                height={400}
+                bgColor="transparent"
+                pathCount={3}
+              />
             </div>
-          ))}
-        </div>
+          </div>
+        ) : (
+          <div className={`${styles.headlineDemo} ${styles['headlineDemo--fullWidth']}`} onClick={handlePathContainerClick} role="button" aria-label="Click to generate new paths" tabIndex={0}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handlePathContainerClick() } }}
+          >
+            <div className={`${styles.headlineDemoInner} ${styles['headlineDemoInner--fullWidth']}`}>
+              <PathContainer
+                key={pathContainerKey}
+                width={pathContainer.width}
+                height={pathContainer.height}
+                bgColor={pathContainer.bgColor}
+                pathCount={pathContainer.pathCount}
+              />
+            </div>
+          </div>
+        )}
       </section>
 
       {/* PhotoPath */}
@@ -523,66 +535,4 @@ export default function Page() {
       </div>
     </div>
   )
-}
-
-function generateRandomLayout(): Array<Omit<Division, 'pathCount' | 'paths' | 'isDark'>> {
-  const layouts = [
-    () => [
-      { id: 'a', style: { gridColumn: '1 / 2', gridRow: '1 / 3' } },
-      { id: 'b', style: { gridColumn: '2 / 4', gridRow: '1 / 3' } },
-    ],
-    () => [
-      { id: 'a', style: { gridColumn: '1 / 2', gridRow: '1 / 3' } },
-      { id: 'b', style: { gridColumn: '2 / 4', gridRow: '1 / 2' } },
-      { id: 'c', style: { gridColumn: '2 / 4', gridRow: '2 / 3' } },
-    ],
-    () => [
-      { id: 'a', style: { gridColumn: '1 / 4', gridRow: '1 / 2' } },
-      { id: 'b', style: { gridColumn: '1 / 3', gridRow: '2 / 3' } },
-      { id: 'c', style: { gridColumn: '3 / 4', gridRow: '2 / 3' } },
-    ],
-    () => [
-      { id: 'a', style: { gridColumn: '1 / 3', gridRow: '1 / 2' } },
-      { id: 'b', style: { gridColumn: '3 / 4', gridRow: '1 / 2' } },
-      { id: 'c', style: { gridColumn: '1 / 2', gridRow: '2 / 3' } },
-      { id: 'd', style: { gridColumn: '2 / 4', gridRow: '2 / 3' } },
-    ],
-    () => [
-      { id: 'a', style: { gridColumn: '1 / 2', gridRow: '1 / 3' } },
-      { id: 'b', style: { gridColumn: '2 / 3', gridRow: '1 / 2' } },
-      { id: 'c', style: { gridColumn: '3 / 4', gridRow: '1 / 2' } },
-      { id: 'd', style: { gridColumn: '2 / 3', gridRow: '2 / 3' } },
-      { id: 'e', style: { gridColumn: '3 / 4', gridRow: '2 / 3' } },
-    ],
-    () => [
-      { id: 'a', style: { gridColumn: '1 / 3', gridRow: '1 / 2' } },
-      { id: 'b', style: { gridColumn: '3 / 4', gridRow: '1 / 3' } },
-      { id: 'c', style: { gridColumn: '1 / 3', gridRow: '2 / 3' } },
-    ],
-    () => [
-      { id: 'a', style: { gridColumn: '1 / 2', gridRow: '1 / 3' } },
-      { id: 'b', style: { gridColumn: '2 / 4', gridRow: '1 / 2' } },
-      { id: 'c', style: { gridColumn: '2 / 3', gridRow: '2 / 3' } },
-      { id: 'd', style: { gridColumn: '3 / 4', gridRow: '2 / 3' } },
-    ],
-    () => [
-      { id: 'a', style: { gridColumn: '1 / 4', gridRow: '1 / 2' } },
-      { id: 'b', style: { gridColumn: '1 / 2', gridRow: '2 / 3' } },
-      { id: 'c', style: { gridColumn: '2 / 4', gridRow: '2 / 3' } },
-    ],
-    () => [
-      { id: 'a', style: { gridColumn: '1 / 3', gridRow: '1 / 2' } },
-      { id: 'b', style: { gridColumn: '3 / 4', gridRow: '1 / 3' } },
-      { id: 'c', style: { gridColumn: '1 / 2', gridRow: '2 / 3' } },
-      { id: 'd', style: { gridColumn: '2 / 3', gridRow: '2 / 3' } },
-    ],
-    () => [
-      { id: 'a', style: { gridColumn: '1 / 2', gridRow: '1 / 2' } },
-      { id: 'b', style: { gridColumn: '2 / 4', gridRow: '1 / 3' } },
-      { id: 'c', style: { gridColumn: '1 / 2', gridRow: '2 / 3' } },
-    ],
-  ]
-
-  const randomLayout = layouts[Math.floor(Math.random() * layouts.length)]
-  return randomLayout()
 }

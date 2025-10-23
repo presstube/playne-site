@@ -1,0 +1,8 @@
+.container {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(35, 31, 32, 0.1);
+  border-radius: 0.5rem;
+  margin: 0 auto;
+}
+
