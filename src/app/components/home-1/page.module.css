@@ -1,0 +1,20 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--brand-offwhite);
+}
+
+.titleBodyQuoteContainer {
+  width: 50%;
+  position: relative;
+  left: 33%;
+  transform: translateX(-50%) rotate(-3deg);
+}
+
+.photoContainer {
+  width: 50%;
+  position: relative;
+  left: 66%;
+  transform: translateX(-50%) rotate(3deg);
+  margin-top: -8rem;
+}
+
