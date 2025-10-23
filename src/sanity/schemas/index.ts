@@ -6,5 +6,7 @@ import { supportPage } from './supportPage'
 import { contactPage } from './contactPage'
 import { event } from './event'
 import { eventsPage } from './eventsPage'
+import { gallery } from './gallery'
+import { galleriesPage } from './galleriesPage'
 
-export const schemaTypes = [homePage, aboutPage, programsPage, getInvolvedPage, supportPage, contactPage, event, eventsPage]
+export const schemaTypes = [homePage, aboutPage, programsPage, getInvolvedPage, supportPage, contactPage, event, eventsPage, gallery, galleriesPage]

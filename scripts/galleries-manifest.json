@@ -1,0 +1,169 @@
+{
+  "rockerfeller": {
+    "title": "Rockefeller Center Collection",
+    "slug": "rockefeller-center",
+    "photographer": "Kat Harris",
+    "location": "Rockefeller Center, New York City",
+    "tags": [
+      "workshop",
+      "nyc",
+      "community",
+      "art-sundae"
+    ],
+    "description": "A collection documenting creative workshops and community engagement at Rockefeller Center. These images capture moments of hands-on learning, artistic expression, and young people exploring practical life skills in an iconic New York City setting.",
+    "imageCount": 37,
+    "totalSizeMB": "305.98",
+    "images": [
+      {
+        "filename": "2024-Art_Sundae-PhotosByKatHarris-Courtesy_of_Rockefeller_Center_3437-2.jpg",
+        "sizeMB": 9.31,
+        "caption": "Art Sundae at Rockefeller Center, 2024",
+        "altText": "Art Sundae at Rockefeller Center, 2024",
+        "photographer": "Kat Harris, Courtesy of Rockefeller Center",
+        "order": 0
+      },
+      {
+        "filename": "2024-Art_Sundae-PhotosByKatHarris-Courtesy_of_Rockefeller_Center_3440.jpg",
+        "sizeMB": 10.25,
+        "caption": "Art Sundae at Rockefeller Center, 2024",
+        "altText": "Art Sundae at Rockefeller Center, 2024",
+        "photographer": "Kat Harris, Courtesy of Rockefeller Center",
+        "order": 1
+      },
+      {
+        "filename": "2024-Art_Sundae-PhotosByKatHarris-Courtesy_of_Rockefeller_Center_3443-2.jpg",
+        "sizeMB": 9.27,
+        "caption": "Art Sundae at Rockefeller Center, 2024",
+        "altText": "Art Sundae at Rockefeller Center, 2024",
+        "photographer": "Kat Harris, Courtesy of Rockefeller Center",
+        "order": 2
+      }
+    ],
+    "hasMoreImages": true
+  },
+  "shantell-drawings": {
+    "title": "Shantell Martin: Original Drawings",
+    "slug": "shantell-martin-drawings",
+    "photographer": "Shantell Martin",
+    "tags": [
+      "artist-collaboration",
+      "drawings",
+      "artwork",
+      "shantell-martin"
+    ],
+    "description": "Original artworks by acclaimed visual artist Shantell Martin. These pieces showcase her signature black-and-white line drawings, exploring themes of identity, play, and human connection through spontaneous mark-making.",
+    "imageCount": 5,
+    "totalSizeMB": "5.70",
+    "images": [
+      {
+        "filename": "DR0457.jpg",
+        "sizeMB": 2.89,
+        "caption": "Drawing DR0457",
+        "altText": "Drawing DR0457",
+        "photographer": "Shantell Martin",
+        "order": 0
+      },
+      {
+        "filename": "DR2043-image.jpg",
+        "sizeMB": 0.72,
+        "caption": "Drawing DR2043",
+        "altText": "Drawing DR2043",
+        "photographer": "Shantell Martin",
+        "order": 1
+      },
+      {
+        "filename": "DR2044-image.jpg",
+        "sizeMB": 0.7,
+        "caption": "Drawing DR2044",
+        "altText": "Drawing DR2044",
+        "photographer": "Shantell Martin",
+        "order": 2
+      }
+    ],
+    "hasMoreImages": true
+  },
+  "shantell-playne": {
+    "title": "Shantell Martin × PLAYNE",
+    "slug": "shantell-martin-playne",
+    "photographer": "Shantell Martin",
+    "tags": [
+      "artist-collaboration",
+      "workshop",
+      "playne",
+      "shantell-martin"
+    ],
+    "description": "A creative collaboration between visual artist Shantell Martin and PLAYNE, bringing together art and education to inspire young minds. These images document workshops and sessions where creativity becomes a tool for self-discovery and practical learning.",
+    "imageCount": 7,
+    "totalSizeMB": "8.01",
+    "images": [
+      {
+        "filename": "Shantell_Martin-Playne-7.jpg",
+        "sizeMB": 0.52,
+        "caption": "Shantell Martin × PLAYNE collaboration (Image 7)",
+        "altText": "Shantell Martin × PLAYNE collaboration (Image 7)",
+        "photographer": "Shantell Martin",
+        "order": 0
+      },
+      {
+        "filename": "Shantell_Martin_Playne-1.jpg",
+        "sizeMB": 1.34,
+        "caption": "Shantell Martin × PLAYNE collaboration (Image 1)",
+        "altText": "Shantell Martin × PLAYNE collaboration (Image 1)",
+        "photographer": "Shantell Martin",
+        "order": 1
+      },
+      {
+        "filename": "Shantell_Martin_Playne-2.jpg",
+        "sizeMB": 1.28,
+        "caption": "Shantell Martin × PLAYNE collaboration (Image 2)",
+        "altText": "Shantell Martin × PLAYNE collaboration (Image 2)",
+        "photographer": "Shantell Martin",
+        "order": 2
+      }
+    ],
+    "hasMoreImages": true
+  },
+  "yeasin": {
+    "title": "Free Arts Day 2025",
+    "slug": "free-arts-day-2025",
+    "photographer": "Yeasin's Gallery",
+    "date": "2025-07-16",
+    "location": "Community Arts Center",
+    "tags": [
+      "event",
+      "community",
+      "free-arts-day",
+      "yeasin"
+    ],
+    "description": "Celebrating Free Arts Day on July 16, 2025. Community members of all ages gathered to explore creativity, self-expression, and the joy of making art together. Captured by Yeasin's Gallery, these images document a day of vibrant artistic exploration and community connection.",
+    "imageCount": 23,
+    "totalSizeMB": "38.45",
+    "images": [
+      {
+        "filename": "2025_07_16-Free_Arts_Day-01-by_yeasinsgallery.jpg",
+        "sizeMB": 1.82,
+        "caption": "Free Arts Day, July 15, 2025",
+        "altText": "Free Arts Day, July 15, 2025",
+        "photographer": "Yeasin's Gallery",
+        "order": 0
+      },
+      {
+        "filename": "2025_07_16-Free_Arts_Day-02-by_yeasinsgallery.jpg",
+        "sizeMB": 1.31,
+        "caption": "Free Arts Day, July 15, 2025",
+        "altText": "Free Arts Day, July 15, 2025",
+        "photographer": "Yeasin's Gallery",
+        "order": 1
+      },
+      {
+        "filename": "2025_07_16-Free_Arts_Day-03-by_yeasinsgallery.jpg",
+        "sizeMB": 1.66,
+        "caption": "Free Arts Day, July 15, 2025",
+        "altText": "Free Arts Day, July 15, 2025",
+        "photographer": "Yeasin's Gallery",
+        "order": 2
+      }
+    ],
+    "hasMoreImages": true
+  }
+}

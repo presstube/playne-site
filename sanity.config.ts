@@ -45,6 +45,24 @@ const structure = (S: any) =>
         .title('Events')
         .child(S.documentTypeList('event').title('All Events')),
       
+      // Galleries section
+      S.divider(),
+      S.listItem()
+        .title('Galleries')
+        .child(
+          S.list()
+            .title('Gallery Management')
+            .items([
+              S.listItem()
+                .title('Galleries Page Settings')
+                .child(S.document().schemaType('galleriesPage').documentId('galleriesPage')),
+              S.divider(),
+              S.listItem()
+                .title('All Galleries')
+                .child(S.documentTypeList('gallery').title('Galleries')),
+            ])
+        ),
+      
       // Filter out singleton pages from the main list
       ...S.documentTypeListItems().filter(
         (listItem: any) => ![
@@ -55,7 +73,9 @@ const structure = (S: any) =>
           'supportPage',
           'contactPage',
           'eventsPage',
-          'event'
+          'event',
+          'galleriesPage',
+          'gallery'
         ].includes(listItem.getId())
       ),
     ])
