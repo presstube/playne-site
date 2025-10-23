@@ -305,8 +305,11 @@ async function uploadGallery(folderName) {
         _type: 'object',
         _key: `img-${Date.now()}-${i}`,
         asset: {
-          _type: 'reference',
-          _ref: asset._id,
+          _type: 'image',
+          asset: {
+            _type: 'reference',
+            _ref: asset._id,
+          },
         },
         caption: imageMeta.caption || '',
         altText: altText,
