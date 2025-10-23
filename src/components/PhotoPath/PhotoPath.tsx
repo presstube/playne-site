@@ -4,40 +4,9 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Path2 from '@/components/Path2/Path2'
 import { BRAND_COLORS } from '@/components/Path2/Path2'
+import { GalleryImage } from '@/lib/image-hat'
+import { urlFor } from '@/sanity/lib/image'
 import styles from './PhotoPath.module.css'
-
-const PHOTOS = [
-  '/images/2025_07_16-Free_Arts_Day-23-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-22-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-21-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-20-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-19-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-18-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-17-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-16-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-15-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-14-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-13-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-12-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-11-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-10-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-09-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-08-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-07-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-06-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-05-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-04-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-03-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-02-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-01-by_yeasinsgallery.jpg',
-  '/images/Shantell_Martin-Playne-7.jpg',
-  '/images/Shantell_Martin_Playne-6.jpg',
-  '/images/Shantell_Martin_Playne-5.jpg',
-  '/images/Shantell_Martin_Playne-4.jpg',
-  '/images/Shantell_Martin_Playne-3.jpg',
-  '/images/Shantell_Martin_Playne-2.jpg',
-  '/images/Shantell_Martin_Playne-1.jpg',
-]
 
 interface PathConfig {
   id: number
@@ -49,12 +18,21 @@ interface PathConfig {
   wildness: number
 }
 
+interface PhotoPathProps {
+  image: GalleryImage
+}
+
 let nextPathId = 0
 
-export default function PhotoPath() {
-  const [selectedPhoto, setSelectedPhoto] = useState<string>('')
+export default function PhotoPath({ image }: PhotoPathProps) {
   const [paths, setPaths] = useState<PathConfig[]>([])
   const [imageLoaded, setImageLoaded] = useState(false)
+
+  // Get optimized Sanity image URL
+  const imageUrl = urlFor(image.imageAsset)
+    .width(1200)
+    .quality(85)
+    .url()
 
   const generateRandomPathConfig = (): PathConfig => {
     const config = {
@@ -71,11 +49,8 @@ export default function PhotoPath() {
   }
 
   useEffect(() => {
-    console.log('PhotoPath mounting, selecting random photo and generating initial path')
-    const randomPhoto = PHOTOS[Math.floor(Math.random() * PHOTOS.length)]
-    console.log('Selected photo:', randomPhoto)
-    setSelectedPhoto(randomPhoto)
-  }, [])
+    console.log('PhotoPath mounting with Sanity image:', image.galleryTitle)
+  }, [image])
 
   useEffect(() => {
     if (imageLoaded) {
@@ -142,18 +117,18 @@ export default function PhotoPath() {
     }
   }
 
-  if (!selectedPhoto) return null
-
   return (
     <div className={styles.photoPath} onClick={handleContainerClick}>
       <div className={styles.imageWrapper}>
         <Image
-          src={selectedPhoto}
-          alt="PLAYNE artwork"
-          width={800}
-          height={600}
+          src={imageUrl}
+          alt={image.altText}
+          width={image.dimensions.width}
+          height={image.dimensions.height}
           style={{ width: '100%', height: 'auto', display: 'block' }}
           priority
+          placeholder="blur"
+          blurDataURL={image.lqip}
           onLoad={() => {
             console.log('Image loaded!')
             setImageLoaded(true)

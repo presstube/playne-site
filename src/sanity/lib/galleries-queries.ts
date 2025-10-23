@@ -125,3 +125,22 @@ export const galleriesByTagQuery = `
   }
 `
 
+// Get all images from all galleries (flat array) - for random selection
+export const allGalleryImagesQuery = `
+  *[_type == "gallery"] {
+    "images": images[] {
+      "imageAsset": asset,
+      "assetId": asset.asset->_id,
+      "url": asset.asset->url,
+      "metadata": asset.asset->metadata,
+      "dimensions": asset.asset->metadata.dimensions,
+      "lqip": asset.asset->metadata.lqip,
+      caption,
+      altText,
+      photographer,
+      "galleryTitle": ^.title,
+      "gallerySlug": ^.slug.current
+    }
+  }.images[]
+`
+
