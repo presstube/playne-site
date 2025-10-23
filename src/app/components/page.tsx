@@ -96,40 +96,6 @@ const BG_COLORS = [
 
 const PAGE_BG = 'var(--brand-offwhite)'
 
-// PhotoPath photos
-const PHOTOS = [
-  '/images/2025_07_16-Free_Arts_Day-23-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-22-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-21-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-20-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-19-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-18-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-17-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-16-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-15-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-14-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-13-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-12-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-11-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-10-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-09-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-08-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-07-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-06-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-05-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-04-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-03-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-02-by_yeasinsgallery.jpg',
-  '/images/2025_07_16-Free_Arts_Day-01-by_yeasinsgallery.jpg',
-  '/images/Shantell_Martin-Playne-7.jpg',
-  '/images/Shantell_Martin_Playne-6.jpg',
-  '/images/Shantell_Martin_Playne-5.jpg',
-  '/images/Shantell_Martin_Playne-4.jpg',
-  '/images/Shantell_Martin_Playne-3.jpg',
-  '/images/Shantell_Martin_Playne-2.jpg',
-  '/images/Shantell_Martin_Playne-1.jpg',
-]
-
 interface PathConfig {
   id: number
   color: string
@@ -270,56 +236,6 @@ export default function Page() {
     setPathContainerKey(k => k + 1)
   }, [generatePathContainer])
 
-  // PhotoPath state
-  const [selectedPhoto, setSelectedPhoto] = useState<string>('')
-  const [photoPaths, setPhotoPaths] = useState<PathConfig[]>([])
-  const [photoImageLoaded, setPhotoImageLoaded] = useState(false)
-
-  const generateRandomPathConfig = useCallback((): PathConfig => {
-    return {
-      id: nextPathId++,
-      color: BRAND_COLORS[Math.floor(Math.random() * 4)], // Exclude off-white
-      lobes: [0, 1, 2][Math.floor(Math.random() * 3)] as 0 | 1 | 2,
-      amplitude: 0.4 + Math.random() * 0.35, // 0.4-0.75
-      strokeWidth: 50 + Math.floor(Math.random() * 30), // 50-80px
-      bias: (['left', 'right', 'auto'][Math.floor(Math.random() * 3)]) as 'left' | 'right' | 'auto',
-      wildness: 0.9 + Math.random() * 0.6 // 0.9-1.5
-    }
-  }, [])
-
-  const generatePaths = useCallback(() => {
-    const count = Math.floor(1 + Math.random() * 5) // 1-5 paths
-    const newPaths = Array.from({ length: count }, () => generateRandomPathConfig())
-    setPhotoPaths(newPaths)
-  }, [generateRandomPathConfig])
-
-  const changePhoto = useCallback(() => {
-    const randomPhoto = PHOTOS[Math.floor(Math.random() * PHOTOS.length)]
-    setSelectedPhoto(randomPhoto)
-    setPhotoImageLoaded(false)
-    // Paths will regenerate when image loads
-  }, [])
-
-  const changePaths = useCallback(() => {
-    setPhotoPaths([]) // Clear paths first
-    setTimeout(() => {
-      generatePaths() // Then regenerate
-    }, 50)
-  }, [generatePaths])
-
-  // Initialize PhotoPath on mount
-  useEffect(() => {
-    const randomPhoto = PHOTOS[Math.floor(Math.random() * PHOTOS.length)]
-    setSelectedPhoto(randomPhoto)
-  }, [])
-
-  // Generate paths when photo loads
-  useEffect(() => {
-    if (photoImageLoaded) {
-      generatePaths()
-    }
-  }, [photoImageLoaded, generatePaths])
-
   return (
     <div className={styles.page}>
       <BrandShaderHero />
@@ -422,47 +338,6 @@ export default function Page() {
             </div>
           </div>
         )}
-      </section>
-
-      {/* PhotoPath */}
-      <section className={styles.componentSection}>
-        <h2 className={styles.componentLabel}>Photo With Paths</h2>
-        <div className={styles.photoPathDemo}>
-          <div className={styles.photoPathButtons}>
-            <Button onClick={changePhoto}>Change Photo</Button>
-            <Button onClick={changePaths}>Change Paths</Button>
-          </div>
-          {selectedPhoto && (
-            <div className={styles.photoPathImageContainer}>
-              <div className={styles.photoPathImageWrapper}>
-                <Image
-                  src={selectedPhoto}
-                  alt="PLAYNE artwork"
-                  width={800}
-                  height={600}
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
-                  priority
-                  onLoad={() => setPhotoImageLoaded(true)}
-                />
-                {photoImageLoaded && photoPaths.map(pathConfig => (
-                  <div 
-                    key={pathConfig.id}
-                    className={styles.photoPathPathWrapper}
-                  >
-                    <Path2
-                      color={pathConfig.color}
-                      lobes={pathConfig.lobes}
-                      amplitude={pathConfig.amplitude}
-                      strokeWidth={pathConfig.strokeWidth}
-                      bias={pathConfig.bias}
-                      wildness={pathConfig.wildness}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
       </section>
 
       {/* Graveyard */}

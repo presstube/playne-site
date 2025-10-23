@@ -1,0 +1,11 @@
+.photo {
+  display: inline-block;
+  overflow: hidden;
+  background-color: var(--brand-black);
+}
+
+.image {
+  display: block;
+  object-fit: contain;
+}
+
