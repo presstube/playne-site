@@ -20,19 +20,41 @@ interface PathConfig {
 
 interface PhotoPathProps {
   image: GalleryImage
+  pathResetTrigger?: number
+  addPathTrigger?: number
 }
 
 let nextPathId = 0
 
-export default function PhotoPath({ image }: PhotoPathProps) {
+export default function PhotoPath({ image, pathResetTrigger = 0, addPathTrigger = 0 }: PhotoPathProps) {
   const [paths, setPaths] = useState<PathConfig[]>([])
   const [imageLoaded, setImageLoaded] = useState(false)
+  const [screenSize, setScreenSize] = useState({ width: 1200, height: 800 })
 
-  // Get optimized Sanity image URL
+  // Get optimized Sanity image URL with responsive sizing
+  // Portrait: 80% of screen height, Landscape: 80% of screen width
+  const isPortrait = image.dimensions.aspectRatio < 1
+  const maxDimension = isPortrait 
+    ? Math.round(screenSize.height * 0.8)
+    : Math.round(screenSize.width * 0.8)
+
   const imageUrl = urlFor(image.imageAsset)
-    .width(1200)
+    .width(maxDimension)
     .quality(85)
     .url()
+
+  // Detect screen size
+  useEffect(() => {
+    const updateSize = () => {
+      setScreenSize({ 
+        width: window.innerWidth, 
+        height: window.innerHeight 
+      })
+    }
+    updateSize()
+    window.addEventListener('resize', updateSize)
+    return () => window.removeEventListener('resize', updateSize)
+  }, [])
 
   const generateRandomPathConfig = (): PathConfig => {
     const config = {
@@ -51,6 +73,25 @@ export default function PhotoPath({ image }: PhotoPathProps) {
   useEffect(() => {
     console.log('PhotoPath mounting with Sanity image:', image.galleryTitle)
   }, [image])
+
+  // Reset paths when image changes (NEW IMAGE button)
+  useEffect(() => {
+    if (pathResetTrigger > 0 && imageLoaded) {
+      console.log('Resetting paths due to new image')
+      const initialPath = generateRandomPathConfig()
+      setPaths([initialPath])
+      setImageLoaded(false) // Force reload
+    }
+  }, [pathResetTrigger])
+
+  // Add path when ADD PATH button clicked
+  useEffect(() => {
+    if (addPathTrigger > 0) {
+      console.log('Adding path via trigger')
+      const newPath = generateRandomPathConfig()
+      setPaths(prevPaths => [...prevPaths, newPath])
+    }
+  }, [addPathTrigger])
 
   useEffect(() => {
     if (imageLoaded) {
