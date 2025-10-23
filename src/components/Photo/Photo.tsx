@@ -37,38 +37,60 @@ export default function Photo({ image, borderRadius = '8px', onClick, loading = 
     return () => window.removeEventListener('resize', updateSize)
   }, [])
 
-  // Calculate image size: 80% of screen, respecting orientation
+  // Calculate image size: fit within 70% of screen (both width AND height)
   // Memoize to prevent recalculation on every render
-  const { isPortrait, maxWidth, maxHeight, imageUrl } = useMemo(() => {
-    const portrait = image.dimensions.aspectRatio < 1
+  const { imageUrl, displayWidth, displayHeight } = useMemo(() => {
     const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
     
-    // Calculate CSS pixel dimensions
-    const cssMaxWidth = portrait 
-      ? Math.round(screenSize.height * 0.8 * image.dimensions.aspectRatio) 
-      : Math.round(screenSize.width * 0.8)
-    const cssMaxHeight = portrait 
-      ? Math.round(screenSize.height * 0.8)
-      : Math.round(screenSize.width * 0.8 / image.dimensions.aspectRatio)
+    // Define the bounding box (70% of screen)
+    const maxWidth = screenSize.width * 0.7
+    const maxHeight = screenSize.height * 0.7
+    
+    const aspectRatio = image.dimensions.aspectRatio
+    
+    // Calculate dimensions if we constrain by width
+    const widthConstrainedW = maxWidth
+    const widthConstrainedH = maxWidth / aspectRatio
+    
+    // Calculate dimensions if we constrain by height
+    const heightConstrainedW = maxHeight * aspectRatio
+    const heightConstrainedH = maxHeight
+    
+    // Choose whichever fits within BOTH constraints
+    let finalWidth: number
+    let finalHeight: number
+    
+    if (widthConstrainedH <= maxHeight) {
+      // Width-constrained version fits within height limit
+      finalWidth = widthConstrainedW
+      finalHeight = widthConstrainedH
+    } else {
+      // Height-constrained version needed
+      finalWidth = heightConstrainedW
+      finalHeight = heightConstrainedH
+    }
+    
+    // Round to integers
+    const cssWidth = Math.round(finalWidth)
+    const cssHeight = Math.round(finalHeight)
     
     // Request at device pixel ratio for retina displays (2x, 3x, etc)
-    const targetMaxWidth = Math.round(cssMaxWidth * dpr)
-    const targetMaxHeight = Math.round(cssMaxHeight * dpr)
+    const targetWidth = Math.round(cssWidth * dpr)
+    const targetHeight = Math.round(cssHeight * dpr)
 
     // Use Sanity's image CDN with proper parameters
     const url = urlFor(image.imageAsset)
-      .width(targetMaxWidth)
-      .height(targetMaxHeight)
+      .width(targetWidth)
+      .height(targetHeight)
       .fit('max') // Don't crop, just constrain to max dimensions
       .auto('format') // Automatically choose best format (webp, etc)
       .quality(90)
       .url()
 
     return {
-      isPortrait: portrait,
-      maxWidth: portrait ? 'auto' : '80vw',
-      maxHeight: portrait ? '80vh' : 'auto',
-      imageUrl: url
+      imageUrl: url,
+      displayWidth: cssWidth,
+      displayHeight: cssHeight
     }
   }, [image, screenSize.width, screenSize.height])
 
@@ -79,38 +101,30 @@ export default function Photo({ image, borderRadius = '8px', onClick, loading = 
   }
 
   return (
-    <div 
-      className={styles.photo}
+    <Image
+      key={image.assetId} // Force remount on image change for instant snap
+      src={imageUrl}
+      alt={image.altText}
+      width={displayWidth}
+      height={displayHeight}
+      className={styles.image}
+      placeholder="blur"
+      blurDataURL={image.lqip}
+      priority
+      onLoad={handleImageLoad}
+      onClick={onClick}
       style={{ 
         borderRadius,
         cursor: onClick ? 'pointer' : 'default',
-        backgroundColor: 'var(--brand-black)',
+        width: `${displayWidth}px`,
+        height: `${displayHeight}px`,
+        maxWidth: '70vw',
+        maxHeight: '70vh',
+        opacity: (mounted && !loading) ? 1 : 0,
+        transition: loading ? 'none' : 'opacity 0.3s ease-in-out', // No transition when loading (instant snap)
       }}
-      onClick={onClick}
       suppressHydrationWarning
-    >
-      <Image
-        key={image.assetId} // Force remount on image change for instant snap
-        src={imageUrl}
-        alt={image.altText}
-        width={image.dimensions.width}
-        height={image.dimensions.height}
-        className={styles.image}
-        placeholder="blur"
-        blurDataURL={image.lqip}
-        priority
-        onLoad={handleImageLoad}
-        style={{ 
-          borderRadius,
-          maxWidth,
-          maxHeight,
-          width: isPortrait ? 'auto' : '100%',
-          height: isPortrait ? '100%' : 'auto',
-          opacity: (mounted && !loading) ? 1 : 0,
-          transition: loading ? 'none' : 'opacity 0.3s ease-in-out', // No transition when loading (instant snap)
-        }}
-      />
-    </div>
+    />
   )
 }
 

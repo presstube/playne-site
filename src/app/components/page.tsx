@@ -387,18 +387,14 @@ export default function Page() {
       <section className={`${styles.componentSection} ${styles.photoSection}`}>
         <h2 className={styles.componentLabel}>Photo</h2>
         {currentImage ? (
-          <div className={styles.photoDemo}>
-            <Photo 
-              image={currentImage} 
-              onClick={handlePhotoClick}
-              loading={isPhotoLoading}
-              onImageLoad={handlePhotoLoad}
-            />
-          </div>
+          <Photo 
+            image={currentImage} 
+            onClick={handlePhotoClick}
+            loading={isPhotoLoading}
+            onImageLoad={handlePhotoLoad}
+          />
         ) : (
-          <div className={styles.photoDemo}>
-            <p>Loading images...</p>
-          </div>
+          <p>Loading images...</p>
         )}
       </section>
 

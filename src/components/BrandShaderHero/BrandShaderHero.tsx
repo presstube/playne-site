@@ -9,7 +9,7 @@ import { getRandomColorSet, getColorCount } from '@/components/BrandShader/shade
 
 export default function BrandShaderHero() {
   const canvasRef = useRef<ShaderCanvasHandle>(null)
-  const [shaderIndex, setShaderIndex] = useState(0) // 0 = Hard Noise, 1 = Wavy Lines Hard
+  const [shaderIndex, setShaderIndex] = useState(1) // 0 = Hard Noise, 1 = Wavy Lines Hard (start with Wavy Lines)
   
   // Get shaders
   const hardEdgeShader = getShaderByIndex(5) // Hard Edge Noise
