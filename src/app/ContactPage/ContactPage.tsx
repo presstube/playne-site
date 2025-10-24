@@ -174,7 +174,7 @@ export default function ContactPage({ data }: ContactPageProps) {
 
                 <Button 
                   type="submit" 
-                  variant="submit" 
+                  variant="filled" 
                   size="large" 
                   fullWidth 
                   loading={isSubmitting}
@@ -314,7 +314,7 @@ export default function ContactPage({ data }: ContactPageProps) {
 
               <Button 
                 type="submit" 
-                variant="submit" 
+                variant="filled" 
                 size="large" 
                 fullWidth 
                 loading={isSubmitting}

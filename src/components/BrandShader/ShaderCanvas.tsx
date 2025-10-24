@@ -16,9 +16,9 @@ function ShaderPlane({ shader, materialRef }: ShaderPlaneProps) {
   // Create shader material with cloned uniforms
   const material = useMemo(() => {
     const uniforms = {
-      uTime: { value: 0 },
-      uResolution: { value: [window.innerWidth, window.innerHeight] },
-      ...shader.uniforms
+      ...shader.uniforms,
+      uTime: shader.uniforms?.uTime || { value: 0 },
+      uResolution: shader.uniforms?.uResolution || { value: [window.innerWidth, window.innerHeight] }
     }
     
     const mat = new THREE.ShaderMaterial({

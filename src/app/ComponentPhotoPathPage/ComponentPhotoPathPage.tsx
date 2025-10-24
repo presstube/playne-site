@@ -54,10 +54,10 @@ export default function ComponentPhotoPathPage({ image: initialImage }: Componen
   return (
     <div className={styles.componentPhotoPathPage}>
       <div className={styles.controls}>
-        <Button variant="primary" onClick={handleNewImage}>
+        <Button variant="filled" onClick={handleNewImage}>
           NEW IMAGE
         </Button>
-        <Button variant="secondary" onClick={handleAddPath}>
+        <Button variant="outlined" onClick={handleAddPath}>
           ADD PATH
         </Button>
       </div>

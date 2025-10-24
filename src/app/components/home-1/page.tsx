@@ -385,7 +385,7 @@ export default function Page() {
             // Fallback to defaults
             if (images.length > 0) {
               const defaultImage = images.find(
-                img => img.gallerySlug === HOME1_DEFAULTS.photo0.gallerySlug && 
+                (img: GalleryImage) => img.gallerySlug === HOME1_DEFAULTS.photo0.gallerySlug && 
                        img.assetId === HOME1_DEFAULTS.photo0.assetId
               ) || pickRandomImage(images)
               console.log('Using default/fallback photo 0:', defaultImage)
@@ -395,7 +395,7 @@ export default function Page() {
         } else {
           // Use defaults
           const defaultImage = images.find(
-            img => img.gallerySlug === HOME1_DEFAULTS.photo0.gallerySlug && 
+            (img: GalleryImage) => img.gallerySlug === HOME1_DEFAULTS.photo0.gallerySlug && 
                    img.assetId === HOME1_DEFAULTS.photo0.assetId
           )
           if (defaultImage) {
@@ -420,7 +420,7 @@ export default function Page() {
             // Fallback to defaults
             if (images.length > 0) {
               const defaultImage = images.find(
-                img => img.gallerySlug === HOME1_DEFAULTS.photo.gallerySlug && 
+                (img: GalleryImage) => img.gallerySlug === HOME1_DEFAULTS.photo.gallerySlug && 
                        img.assetId === HOME1_DEFAULTS.photo.assetId
               ) || pickRandomImage(images)
               console.log('Using default/fallback photo:', defaultImage)
@@ -430,7 +430,7 @@ export default function Page() {
         } else {
           // Use defaults
           const defaultImage = images.find(
-            img => img.gallerySlug === HOME1_DEFAULTS.photo.gallerySlug && 
+            (img: GalleryImage) => img.gallerySlug === HOME1_DEFAULTS.photo.gallerySlug && 
                    img.assetId === HOME1_DEFAULTS.photo.assetId
           )
           if (defaultImage) {
@@ -455,7 +455,7 @@ export default function Page() {
             // Fallback to defaults
             if (images.length > 0) {
               const defaultImage = images.find(
-                img => img.gallerySlug === HOME1_DEFAULTS.photo2.gallerySlug && 
+                (img: GalleryImage) => img.gallerySlug === HOME1_DEFAULTS.photo2.gallerySlug && 
                        img.assetId === HOME1_DEFAULTS.photo2.assetId
               ) || pickRandomImage(images)
               console.log('Using default/fallback photo 2:', defaultImage)
@@ -465,7 +465,7 @@ export default function Page() {
         } else {
           // Use defaults
           const defaultImage = images.find(
-            img => img.gallerySlug === HOME1_DEFAULTS.photo2.gallerySlug && 
+            (img: GalleryImage) => img.gallerySlug === HOME1_DEFAULTS.photo2.gallerySlug && 
                    img.assetId === HOME1_DEFAULTS.photo2.assetId
           )
           if (defaultImage) {
@@ -490,7 +490,7 @@ export default function Page() {
             // Fallback to defaults
             if (images.length > 0) {
               const defaultImage = images.find(
-                img => img.gallerySlug === HOME1_DEFAULTS.photo3.gallerySlug && 
+                (img: GalleryImage) => img.gallerySlug === HOME1_DEFAULTS.photo3.gallerySlug && 
                        img.assetId === HOME1_DEFAULTS.photo3.assetId
               ) || pickRandomImage(images)
               console.log('Using default/fallback photo 3:', defaultImage)
@@ -500,7 +500,7 @@ export default function Page() {
         } else {
           // Use defaults
           const defaultImage = images.find(
-            img => img.gallerySlug === HOME1_DEFAULTS.photo3.gallerySlug && 
+            (img: GalleryImage) => img.gallerySlug === HOME1_DEFAULTS.photo3.gallerySlug && 
                    img.assetId === HOME1_DEFAULTS.photo3.assetId
           )
           if (defaultImage) {

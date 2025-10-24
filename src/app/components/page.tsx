@@ -106,7 +106,7 @@ interface PathConfig {
   wildness: number
 }
 
-let nextPathId = 0
+const nextPathId = 0
 
 export default function Page() {
   // Headline state

@@ -213,7 +213,7 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
 
               <Button 
                 type="submit" 
-                variant="submit" 
+                variant="filled" 
                 size="large" 
                 fullWidth 
                 loading={isSubmitting}
@@ -242,7 +242,7 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
                 />
                 <Button 
                   type="submit" 
-                  variant="primary" 
+                  variant="filled" 
                   size="medium"
                   loading={isSubmitting}
                   disabled={isSubmitting}
@@ -371,7 +371,7 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
 
             <Button 
               type="submit" 
-              variant="submit" 
+              variant="filled" 
               size="large" 
               fullWidth 
               loading={isSubmitting}
@@ -400,7 +400,7 @@ export default function GetInvolvedPage({ data }: GetInvolvedPageProps) {
               />
               <Button 
                 type="submit" 
-                variant="primary" 
+                variant="filled" 
                 size="medium"
                 loading={isSubmitting}
                 disabled={isSubmitting}
