@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
+import seedrandom from 'seedrandom'
 import styles from './Path2.module.css'
 
 type Side = 'top' | 'bottom' | 'left' | 'right'
@@ -26,6 +27,7 @@ interface Path2Props {
   bias?: 'left' | 'right' | 'auto'
   wildness?: number // 0-1, controls how dramatic the curve bodies are (default 0.9)
   onClick?: (e: React.MouseEvent) => void
+  seed?: number // Seed for reproducible paths
 }
 
 export default function Path2({ 
@@ -35,7 +37,8 @@ export default function Path2({
   amplitude = 0.4,
   bias = 'auto',
   wildness = 0.9,
-  onClick
+  onClick,
+  seed
 }: Path2Props = {}) {
   console.log('Path2 rendering with props:', { colorProp, strokeWidth, lobes, amplitude, bias, wildness })
   const [pathData, setPathData] = useState<string>('')
@@ -63,9 +66,12 @@ export default function Path2({
 
       console.log('Container bounds:', { width, height, x: rect.x, y: rect.y })
 
+      // Create seeded random generator if seed provided, otherwise use Math.random
+      const rng = seed !== undefined ? seedrandom(seed.toString()) : Math.random
+
       // 1 in 7 chance (~14%) to have one endpoint on-screen
-      const hasOnScreenEndpoint = Math.random() < (1/7)
-      const startOnScreen = hasOnScreenEndpoint && Math.random() < 0.5 // 50/50 which end if true
+      const hasOnScreenEndpoint = rng() < (1/7)
+      const startOnScreen = hasOnScreenEndpoint && rng() < 0.5 // 50/50 which end if true
       const endOnScreen = hasOnScreenEndpoint && !startOnScreen
 
       let entry: Point
@@ -74,42 +80,42 @@ export default function Path2({
       if (startOnScreen) {
         // Start somewhere in the middle of the container
         entry = {
-          x: width * (0.2 + Math.random() * 0.6), // 20-80% across
-          y: height * (0.2 + Math.random() * 0.6) // 20-80% down
+          x: width * (0.2 + rng() * 0.6), // 20-80% across
+          y: height * (0.2 + rng() * 0.6) // 20-80% down
         }
         console.log('Path starting ON-SCREEN:', entry)
       } else {
         // Start from a random side (off-screen)
         const sides: Side[] = ['top', 'bottom', 'left', 'right']
-        const entrySide = sides[Math.floor(Math.random() * sides.length)]
-        entry = getPointOnSide(entrySide, width, height, strokeWidth)
+        const entrySide = sides[Math.floor(rng() * sides.length)]
+        entry = getPointOnSide(entrySide, width, height, strokeWidth, rng)
         console.log('Path entry:', entry, 'from side:', entrySide)
       }
 
       if (endOnScreen) {
         // End somewhere in the middle of the container
         exit = {
-          x: width * (0.2 + Math.random() * 0.6),
-          y: height * (0.2 + Math.random() * 0.6)
+          x: width * (0.2 + rng() * 0.6),
+          y: height * (0.2 + rng() * 0.6)
         }
         console.log('Path ending ON-SCREEN:', exit)
       } else {
         // Exit from a random side (off-screen)
         const sides: Side[] = ['top', 'bottom', 'left', 'right']
-        let exitSide = sides[Math.floor(Math.random() * sides.length)]
+        let exitSide = sides[Math.floor(rng() * sides.length)]
         
         // If starting off-screen, ensure exit is from a different side
         if (!startOnScreen) {
           const entrySide = sides.find(s => {
-            const testPoint = getPointOnSide(s, width, height, strokeWidth)
+            const testPoint = getPointOnSide(s, width, height, strokeWidth, rng)
             return Math.abs(testPoint.x - entry.x) < 10 && Math.abs(testPoint.y - entry.y) < 10
           })
           while (exitSide === entrySide) {
-            exitSide = sides[Math.floor(Math.random() * sides.length)]
+            exitSide = sides[Math.floor(rng() * sides.length)]
           }
         }
         
-        exit = getPointOnSide(exitSide, width, height, strokeWidth)
+        exit = getPointOnSide(exitSide, width, height, strokeWidth, rng)
         console.log('Path exit:', exit, 'from side:', exitSide)
       }
 
@@ -120,8 +126,8 @@ export default function Path2({
           // Force one endpoint to be on-screen to ensure visibility
           console.log('Path would be completely off-screen, forcing one endpoint on-screen')
           entry = {
-            x: width * (0.2 + Math.random() * 0.6),
-            y: height * (0.2 + Math.random() * 0.6)
+            x: width * (0.2 + rng() * 0.6),
+            y: height * (0.2 + rng() * 0.6)
           }
         }
       }
@@ -135,12 +141,13 @@ export default function Path2({
         amplitude, 
         strokeWidth,
         bias,
-        wildness
+        wildness,
+        rng
       })
       
       setPathData(path)
 
-      const chosen = colorProp || BRAND_COLORS[Math.floor(Math.random() * BRAND_COLORS.length)]
+      const chosen = colorProp || BRAND_COLORS[Math.floor(rng() * BRAND_COLORS.length)]
       setColor(chosen)
       
       // Store whether this path has an on-screen endpoint for rendering
@@ -158,7 +165,7 @@ export default function Path2({
       clearTimeout(timer)
       window.removeEventListener('resize', handleResize)
     }
-  }, [lobes, amplitude, bias, colorProp, strokeWidth, wildness])
+  }, [lobes, amplitude, bias, colorProp, strokeWidth, wildness, seed])
 
   if (!pathData || !color) {
     console.log('Path2 not rendering path yet:', { hasPathData: !!pathData, hasColor: !!color })
@@ -181,7 +188,7 @@ export default function Path2({
   )
 }
 
-function getPointOnSide(side: Side, width: number, height: number, strokeWidth: number): Point {
+function getPointOnSide(side: Side, width: number, height: number, strokeWidth: number, rng: () => number = Math.random): Point {
   const margin = 0.2
   const min = margin
   const max = 1 - margin
@@ -189,13 +196,13 @@ function getPointOnSide(side: Side, width: number, height: number, strokeWidth: 
 
   switch (side) {
     case 'top':
-      return { x: width * (min + Math.random() * (max - min)), y: -overhang }
+      return { x: width * (min + rng() * (max - min)), y: -overhang }
     case 'bottom':
-      return { x: width * (min + Math.random() * (max - min)), y: height + overhang }
+      return { x: width * (min + rng() * (max - min)), y: height + overhang }
     case 'left':
-      return { x: -overhang, y: height * (min + Math.random() * (max - min)) }
+      return { x: -overhang, y: height * (min + rng() * (max - min)) }
     case 'right':
-      return { x: width + overhang, y: height * (min + Math.random() * (max - min)) }
+      return { x: width + overhang, y: height * (min + rng() * (max - min)) }
   }
 }
 
@@ -254,10 +261,11 @@ interface BezierOptions {
   strokeWidth: number
   bias: 'left' | 'right' | 'auto'
   wildness: number
+  rng: () => number
 }
 
 function generateExplicitBeziers(opts: BezierOptions): string {
-  const { start, end, width, height, lobes, amplitude, strokeWidth, bias, wildness } = opts
+  const { start, end, width, height, lobes, amplitude, strokeWidth, bias, wildness, rng } = opts
 
   // Calculate minimum safe radius based on stroke width
   const minRadius = 2.5 * strokeWidth
@@ -274,7 +282,7 @@ function generateExplicitBeziers(opts: BezierOptions): string {
   const perpY = dirX
   
   // Determine bias direction
-  const biasSign = bias === 'left' ? 1 : bias === 'right' ? -1 : (Math.random() < 0.5 ? 1 : -1)
+  const biasSign = bias === 'left' ? 1 : bias === 'right' ? -1 : (rng() < 0.5 ? 1 : -1)
   
   // Calculate safe amplitude that respects minimum radius
   const requestedAmp = Math.min(width, height) * amplitude

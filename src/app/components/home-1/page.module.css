@@ -1,6 +1,7 @@
 .page {
   min-height: 100vh;
   background-color: var(--brand-offwhite);
+  padding-top: 4rem;
 }
 
 .titleBodyQuoteContainer {
@@ -8,6 +9,7 @@
   position: relative;
   left: 33%;
   transform: translateX(-50%) rotate(-3deg);
+  z-index: 2;
 }
 
 .photoContainer {
@@ -16,5 +18,34 @@
   left: 66%;
   transform: translateX(-50%) rotate(3deg);
   margin-top: -8rem;
+  z-index: 1;
+}
+
+.pathContainerWrapper {
+  width: 50%;
+  position: relative;
+  left: 33%;
+  transform: translateX(-50%) rotate(-3deg);
+  margin-top: -8rem;
+  padding: 0 2rem;
+  z-index: 2;
+}
+
+.titleBodyQuote2Container {
+  width: 50%;
+  position: relative;
+  left: 66%;
+  transform: translateX(-50%) rotate(3deg);
+  margin-top: -8rem;
+  z-index: 3;
+}
+
+.photo2Container {
+  width: 50%;
+  position: relative;
+  left: 33%;
+  transform: translateX(-50%) rotate(-3deg);
+  margin-top: -8rem;
+  z-index: 2;
 }
 

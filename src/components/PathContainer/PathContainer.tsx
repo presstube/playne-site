@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo, useState, useEffect } from 'react'
+import seedrandom from 'seedrandom'
 import styles from './PathContainer.module.css'
 import Path2 from '@/components/Path2/Path2'
 
@@ -21,6 +22,7 @@ interface PathConfig {
   strokeWidth: number
   bias: 'left' | 'right' | 'auto'
   wildness: number
+  seed: number // Each path gets its own seed
 }
 
 export interface PathContainerProps {
@@ -29,6 +31,7 @@ export interface PathContainerProps {
   bgColor: string
   pathCount: number
   className?: string
+  seed?: number // Optional seed for reproducible paths
 }
 
 export default function PathContainer({
@@ -36,7 +39,8 @@ export default function PathContainer({
   height,
   bgColor,
   pathCount,
-  className
+  className,
+  seed
 }: PathContainerProps) {
   const [mounted, setMounted] = useState(false)
 
@@ -47,11 +51,16 @@ export default function PathContainer({
   const paths = useMemo(() => {
     if (!mounted) return []
 
+    // Use provided seed or generate one
+    const containerSeed = seed ?? Math.random()
+    console.log('PathContainer generating paths with seed:', containerSeed)
+    const rng = seedrandom(containerSeed.toString())
+
     // Filter out the background color from available path colors
     const availableColors = BRAND_COLORS.filter(c => c !== bgColor)
 
-    // Shuffle and select colors
-    const shuffled = [...availableColors].sort(() => Math.random() - 0.5)
+    // Shuffle using seeded random
+    const shuffled = [...availableColors].sort(() => rng() - 0.5)
     const selectedColors = shuffled.slice(0, pathCount)
 
     // Scale stroke width based on container size
@@ -62,16 +71,17 @@ export default function PathContainer({
     const minStroke = 30 + scaleFactor * 50 // 30-80
     const maxStroke = 50 + scaleFactor * 70 // 50-120
 
-    // Generate random path configs
-    return selectedColors.map(color => ({
+    // Generate random path configs using seeded random
+    return selectedColors.map((color, idx) => ({
       color,
-      lobes: [0, 1, 2][Math.floor(Math.random() * 3)] as 0 | 1 | 2,
-      amplitude: 0.4 + Math.random() * 0.35, // 0.4-0.75
-      strokeWidth: Math.floor(minStroke + Math.random() * (maxStroke - minStroke)),
-      bias: (['left', 'right', 'auto'][Math.floor(Math.random() * 3)]) as 'left' | 'right' | 'auto',
-      wildness: 0.8 + Math.random() * 0.7 // 0.8-1.5
+      lobes: [0, 1, 2][Math.floor(rng() * 3)] as 0 | 1 | 2,
+      amplitude: 0.4 + rng() * 0.35, // 0.4-0.75
+      strokeWidth: Math.floor(minStroke + rng() * (maxStroke - minStroke)),
+      bias: (['left', 'right', 'auto'][Math.floor(rng() * 3)]) as 'left' | 'right' | 'auto',
+      wildness: 0.8 + rng() * 0.7, // 0.8-1.5
+      seed: containerSeed + idx // Unique seed per path
     }))
-  }, [mounted, width, height, bgColor, pathCount])
+  }, [mounted, width, height, bgColor, pathCount, seed])
 
   const cx = (...args: Array<string | false | null | undefined>) => args.filter(Boolean).join(' ')
 
@@ -106,6 +116,7 @@ export default function PathContainer({
           strokeWidth={pathConfig.strokeWidth}
           bias={pathConfig.bias}
           wildness={pathConfig.wildness}
+          seed={pathConfig.seed}
         />
       ))}
     </div>
