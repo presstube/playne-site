@@ -11,7 +11,6 @@ import EventCard from '@/components/EventCard/EventCard'
 import DonationCard from '@/components/DonationCard/DonationCard'
 import Path2 from '@/components/Path2/Path2'
 import PathContainer from '@/components/PathContainer/PathContainer'
-import BrandShaderHero from '@/components/BrandShaderHero/BrandShaderHero'
 import TitleBodyQuote from '@/components/TitleBodyQuote/TitleBodyQuote'
 import Shape from '@/components/Shape/Shape'
 import Photo from '@/components/Photo/Photo'
@@ -278,8 +277,6 @@ export default function Page() {
 
   return (
     <div className={styles.page}>
-      <BrandShaderHero />
-      
       <h1 className={styles.pageTitle}>COMPONENTS</h1>
 
       {/* Headline */}

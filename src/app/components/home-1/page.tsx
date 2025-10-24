@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import styles from './page.module.css'
-import BrandShaderHeroWithControls from '@/components/BrandShaderHeroWithControls/BrandShaderHeroWithControls'
 import Headline from '@/components/Headline/Headline'
 import TitleBodyQuote from '@/components/TitleBodyQuote/TitleBodyQuote'
 import HeadlineSub from '@/components/HeadlineSub/HeadlineSub'
@@ -813,9 +812,7 @@ export default function Page() {
 
   return (
     <div className={styles.page}>
-      <BrandShaderHeroWithControls />
-      
-      {/* New Headline at top */}
+      {/* Headline at top */}
       <div 
         className={styles.headlineContainer}
         onClick={handleHeadlineClick}
