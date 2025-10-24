@@ -49,3 +49,13 @@
   z-index: 2;
 }
 
+.shapeContainer {
+  width: 50%;
+  position: relative;
+  left: 66%;
+  transform: translateX(-50%) rotate(3deg);
+  margin-top: -8rem;
+  z-index: 2;
+  cursor: pointer;
+}
+

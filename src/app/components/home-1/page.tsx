@@ -6,6 +6,7 @@ import BrandShaderHero from '@/components/BrandShaderHero/BrandShaderHero'
 import TitleBodyQuote from '@/components/TitleBodyQuote/TitleBodyQuote'
 import Photo from '@/components/Photo/Photo'
 import PathContainer from '@/components/PathContainer/PathContainer'
+import Shape from '@/components/Shape/Shape'
 import { GalleryImage, pickRandomImage } from '@/lib/image-hat'
 import { client } from '@/sanity/lib/client'
 import { allGalleryImagesQuery } from '@/sanity/lib/galleries-queries'
@@ -47,6 +48,7 @@ const LSO_TBQ_KEY = 'home1-tbq'
 const LSO_PATH_KEY = 'home1-path'
 const LSO_TBQ2_KEY = 'home1-tbq2'
 const LSO_PHOTO2_KEY = 'home1-photo2'
+const LSO_SHAPE_KEY = 'home1-shape'
 
 // Brand colors for PathContainer background
 const PATH_BRAND_COLORS = [
@@ -99,6 +101,10 @@ export default function Page() {
   const [pathContainer, setPathContainer] = useState<PathContainerConfig | null>(null)
   const [pathContainerKey, setPathContainerKey] = useState(0)
 
+  // Shape state
+  const [shapeSeed, setShapeSeed] = useState<number | null>(null)
+  const [shapeKey, setShapeKey] = useState(0)
+
   // Load saved states from localStorage on mount
   useEffect(() => {
     const savedTbq = localStorage.getItem(LSO_TBQ_KEY)
@@ -136,6 +142,23 @@ export default function Page() {
       }
     } else {
       console.log('No saved PathContainer config found')
+    }
+    
+    // Load saved Shape seed
+    const savedShape = localStorage.getItem(LSO_SHAPE_KEY)
+    if (savedShape) {
+      try {
+        const parsed = JSON.parse(savedShape)
+        console.log('Loading saved Shape seed:', parsed)
+        setShapeSeed(parsed.seed)
+      } catch (e) {
+        console.error('Error parsing saved shape seed:', e)
+      }
+    } else {
+      // Generate initial shape seed
+      const initialSeed = Math.random()
+      setShapeSeed(initialSeed)
+      localStorage.setItem(LSO_SHAPE_KEY, JSON.stringify({ seed: initialSeed }))
     }
     
     setMounted(true)
@@ -327,6 +350,14 @@ export default function Page() {
     }))
   }, [tbq2SubBodyIdx, tbq2QuoteIdx])
 
+  const handleShapeClick = useCallback(() => {
+    const newSeed = Math.random()
+    setShapeSeed(newSeed)
+    setShapeKey(k => k + 1)
+    // Save to localStorage
+    localStorage.setItem(LSO_SHAPE_KEY, JSON.stringify({ seed: newSeed }))
+  }, [])
+
   return (
     <div className={styles.page}>
       <BrandShaderHero />
@@ -430,6 +461,29 @@ export default function Page() {
           />
         ) : (
           <p>Loading images...</p>
+        )}
+      </div>
+
+      <div 
+        className={styles.shapeContainer}
+        onClick={handleShapeClick}
+        role="button"
+        aria-label="Click to generate new shape"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            handleShapeClick()
+          }
+        }}
+      >
+        {shapeSeed !== null && (
+          <Shape 
+            key={shapeKey}
+            seed={shapeSeed}
+            width={600}
+            height={400}
+          />
         )}
       </div>
     </div>

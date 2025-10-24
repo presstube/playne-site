@@ -1,5 +1,6 @@
 "use client"
 import { useMemo, useState, useEffect } from 'react'
+import seedrandom from 'seedrandom'
 import styles from './Shape.module.css'
 import { generateShape } from './shapeGenerator'
 
@@ -11,10 +12,6 @@ const BRAND_COLORS = [
   '#FB6DCB', // pink
   '#A9ECD4', // blue
 ]
-
-function pickRandomBrandColor(): string {
-  return BRAND_COLORS[Math.floor(Math.random() * BRAND_COLORS.length)]
-}
 
 export interface ShapeProps {
   shapeType?: 'blob' | 'spike' | 'random'
@@ -48,17 +45,18 @@ export default function Shape({
   const shape = useMemo(() => {
     if (!mounted) return null
     
-    const actualType = shapeType === 'random' 
-      ? (Math.random() < 0.6 ? 'blob' : 'spike')
-      : shapeType
+    const actualSeed = seed !== undefined ? seed : Math.random()
+    const rng = seedrandom(actualSeed.toString())
     
-    const actualSeed = seed !== undefined ? seed : Math.floor(Math.random() * 100000)
+    const actualType = shapeType === 'random' 
+      ? (rng() < 0.6 ? 'blob' : 'spike')
+      : shapeType
       
     return generateShape({
       width: width || 800,
       height: height || 480,
       shapeType: actualType,
-      seed: actualSeed,
+      seed: Math.floor(actualSeed * 100000),
       lobes,
       rotation
     })
@@ -66,8 +64,13 @@ export default function Shape({
 
   const shapeColor = useMemo(() => {
     if (!mounted) return '#231f20'
-    return color || pickRandomBrandColor()
-  }, [mounted, color])
+    if (color) return color
+    
+    // Use seed to pick color consistently
+    const actualSeed = seed !== undefined ? seed : Math.random()
+    const rng = seedrandom((actualSeed + 0.5).toString()) // Offset seed for different random sequence
+    return BRAND_COLORS[Math.floor(rng() * BRAND_COLORS.length)]
+  }, [mounted, color, seed])
 
   const cx = (...args: Array<string | false | null | undefined>) => args.filter(Boolean).join(' ')
 
