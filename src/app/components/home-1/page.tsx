@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import styles from './page.module.css'
-import BrandShaderHero from '@/components/BrandShaderHero/BrandShaderHero'
+import BrandShaderHeroWithControls from '@/components/BrandShaderHeroWithControls/BrandShaderHeroWithControls'
 import TitleBodyQuote from '@/components/TitleBodyQuote/TitleBodyQuote'
+import HeadlineSub from '@/components/HeadlineSub/HeadlineSub'
 import Photo from '@/components/Photo/Photo'
 import PathContainer from '@/components/PathContainer/PathContainer'
 import Shape from '@/components/Shape/Shape'
@@ -49,6 +50,9 @@ const LSO_PATH_KEY = 'home1-path'
 const LSO_TBQ2_KEY = 'home1-tbq2'
 const LSO_PHOTO2_KEY = 'home1-photo2'
 const LSO_SHAPE_KEY = 'home1-shape'
+const LSO_HS_KEY = 'home1-hs'
+const LSO_PHOTO3_KEY = 'home1-photo3'
+const LSO_TBQ3_KEY = 'home1-tbq3'
 
 // Brand colors for PathContainer background
 const PATH_BRAND_COLORS = [
@@ -59,6 +63,81 @@ const PATH_BRAND_COLORS = [
   '#A9ECD4', // blue
   '#EAEADA', // offwhite
 ]
+
+// HeadlineSub demo data
+const HEADLINES = [
+  'Empower young minds',
+  'Learn by doing',
+  'Real skills real impact',
+  'Community creativity confidence',
+  'Education for the real world',
+]
+
+const SUBS = [
+  'Practical learning for life',
+  'Hands-on lessons that build confidence',
+  'Creativity at the center of education',
+  'Wellness, finance, nutrition, and body awareness',
+  'Programs designed to spark curiosity',
+]
+
+const BG_COLORS = [
+  'var(--brand-offwhite)',
+  'var(--brand-black)',
+  'var(--brand-yellow)',
+  'var(--brand-blue)',
+  'var(--brand-red)',
+  'transparent',
+]
+
+type Align = 'left' | 'center'
+
+// Default layout configuration
+const HOME1_DEFAULTS = {
+  "photo": {
+    "gallerySlug": "free-arts-day-2025",
+    "assetId": "image-e1677c69aa63bd619bb89abcce1aab39800563f5-2048x1365-jpg"
+  },
+  "tbq": {
+    "subBodyIdx": 0,
+    "quoteIdx": 1
+  },
+  "path": {
+    "width": 680,
+    "height": 392,
+    "bgColor": "#A9ECD4",
+    "pathCount": 3,
+    "seed": 0.4295308248051748
+  },
+  "tbq2": {
+    "subBodyIdx": 3,
+    "quoteIdx": 3,
+    "colorIdx": 3
+  },
+  "photo2": {
+    "gallerySlug": "shantell-martin-playne",
+    "assetId": "image-e533c7b585468baf66445ba2fdd95e7b8f323945-4128x2322-jpg"
+  },
+  "shape": {
+    "seed": 0.17480261842131872
+  },
+  "headlineSub": {
+    "hIdx": 4,
+    "sIdx": 4,
+    "align": "center",
+    "bg": "var(--brand-yellow)",
+    "fg": "var(--brand-black)"
+  },
+  "photo3": {
+    "gallerySlug": "free-arts-day-2025",
+    "assetId": "image-b81fa715fde217b8a15438f69c5cde5f6a6554b1-2048x1365-jpg"
+  },
+  "tbq3": {
+    "subBodyIdx": 4,
+    "quoteIdx": 0,
+    "colorIdx": 1
+  }
+}
 
 // Brand colors for TitleBodyQuote background
 const TBQ_BG_COLORS = [
@@ -96,6 +175,13 @@ export default function Page() {
   const [tbq2QuoteIdx, setTbq2QuoteIdx] = useState(0) // Start with first quote
   const [tbq2ColorIdx, setTbq2ColorIdx] = useState(0) // Start with black bg
 
+  // HeadlineSub state
+  const [hsHIdx, setHsHIdx] = useState(0)
+  const [hsSIdx, setHsSIdx] = useState(0)
+  const [hsAlign, setHsAlign] = useState<Align>('center')
+  const [hsFg, setHsFg] = useState<string>('var(--brand-black)')
+  const [hsBg, setHsBg] = useState<string>('var(--brand-offwhite)')
+
   // PathContainer state
   const [mounted, setMounted] = useState(false)
   const [pathContainer, setPathContainer] = useState<PathContainerConfig | null>(null)
@@ -105,29 +191,96 @@ export default function Page() {
   const [shapeSeed, setShapeSeed] = useState<number | null>(null)
   const [shapeKey, setShapeKey] = useState(0)
 
+  // Third photo state
+  const [currentImage3, setCurrentImage3] = useState<GalleryImage | null>(null)
+  const [isPhoto3Loading, setIsPhoto3Loading] = useState(false)
+
+  // Third TitleBodyQuote state
+  const [tbq3SubBodyIdx, setTbq3SubBodyIdx] = useState(2) // Start with "How It Works" (index 2)
+  const [tbq3QuoteIdx, setTbq3QuoteIdx] = useState(3) // Start with 4th quote
+  const [tbq3ColorIdx, setTbq3ColorIdx] = useState(2) // Start with yellow bg
+
   // Load saved states from localStorage on mount
   useEffect(() => {
     const savedTbq = localStorage.getItem(LSO_TBQ_KEY)
     if (savedTbq) {
       try {
         const parsed = JSON.parse(savedTbq)
-        setTbqSubBodyIdx(parsed.subBodyIdx ?? 1)
-        setTbqQuoteIdx(parsed.quoteIdx ?? 2)
+        setTbqSubBodyIdx(parsed.subBodyIdx ?? HOME1_DEFAULTS.tbq.subBodyIdx)
+        setTbqQuoteIdx(parsed.quoteIdx ?? HOME1_DEFAULTS.tbq.quoteIdx)
       } catch (e) {
         console.error('Error parsing saved TBQ state:', e)
       }
+    } else {
+      // Use defaults
+      setTbqSubBodyIdx(HOME1_DEFAULTS.tbq.subBodyIdx)
+      setTbqQuoteIdx(HOME1_DEFAULTS.tbq.quoteIdx)
     }
 
     const savedTbq2 = localStorage.getItem(LSO_TBQ2_KEY)
     if (savedTbq2) {
       try {
         const parsed = JSON.parse(savedTbq2)
-        setTbq2SubBodyIdx(parsed.subBodyIdx ?? 0)
-        setTbq2QuoteIdx(parsed.quoteIdx ?? 0)
-        setTbq2ColorIdx(parsed.colorIdx ?? 0)
+        setTbq2SubBodyIdx(parsed.subBodyIdx ?? HOME1_DEFAULTS.tbq2.subBodyIdx)
+        setTbq2QuoteIdx(parsed.quoteIdx ?? HOME1_DEFAULTS.tbq2.quoteIdx)
+        setTbq2ColorIdx(parsed.colorIdx ?? HOME1_DEFAULTS.tbq2.colorIdx)
       } catch (e) {
         console.error('Error parsing saved TBQ2 state:', e)
       }
+    } else {
+      // Use defaults
+      setTbq2SubBodyIdx(HOME1_DEFAULTS.tbq2.subBodyIdx)
+      setTbq2QuoteIdx(HOME1_DEFAULTS.tbq2.quoteIdx)
+      setTbq2ColorIdx(HOME1_DEFAULTS.tbq2.colorIdx)
+    }
+
+    const savedHs = localStorage.getItem(LSO_HS_KEY)
+    if (savedHs) {
+      try {
+        const parsed = JSON.parse(savedHs)
+        setHsHIdx(parsed.hIdx ?? HOME1_DEFAULTS.headlineSub.hIdx)
+        setHsSIdx(parsed.sIdx ?? HOME1_DEFAULTS.headlineSub.sIdx)
+        setHsAlign(parsed.align ?? HOME1_DEFAULTS.headlineSub.align as Align)
+        setHsFg(parsed.fg ?? HOME1_DEFAULTS.headlineSub.fg)
+        setHsBg(parsed.bg ?? HOME1_DEFAULTS.headlineSub.bg)
+      } catch (e) {
+        console.error('Error parsing saved HeadlineSub state:', e)
+      }
+    } else {
+      // Use defaults
+      setHsHIdx(HOME1_DEFAULTS.headlineSub.hIdx)
+      setHsSIdx(HOME1_DEFAULTS.headlineSub.sIdx)
+      setHsAlign(HOME1_DEFAULTS.headlineSub.align as Align)
+      setHsFg(HOME1_DEFAULTS.headlineSub.fg)
+      setHsBg(HOME1_DEFAULTS.headlineSub.bg)
+    }
+
+    // Load saved photo 3
+    const savedPhoto3 = localStorage.getItem(LSO_PHOTO3_KEY)
+    if (savedPhoto3) {
+      try {
+        const parsed = JSON.parse(savedPhoto3)
+        setCurrentImage3(parsed)
+      } catch (e) {
+        console.error('Error parsing saved photo 3:', e)
+      }
+    }
+
+    const savedTbq3 = localStorage.getItem(LSO_TBQ3_KEY)
+    if (savedTbq3) {
+      try {
+        const parsed = JSON.parse(savedTbq3)
+        setTbq3SubBodyIdx(parsed.subBodyIdx ?? HOME1_DEFAULTS.tbq3.subBodyIdx)
+        setTbq3QuoteIdx(parsed.quoteIdx ?? HOME1_DEFAULTS.tbq3.quoteIdx)
+        setTbq3ColorIdx(parsed.colorIdx ?? HOME1_DEFAULTS.tbq3.colorIdx)
+      } catch (e) {
+        console.error('Error parsing saved TBQ3 state:', e)
+      }
+    } else {
+      // Use defaults
+      setTbq3SubBodyIdx(HOME1_DEFAULTS.tbq3.subBodyIdx)
+      setTbq3QuoteIdx(HOME1_DEFAULTS.tbq3.quoteIdx)
+      setTbq3ColorIdx(HOME1_DEFAULTS.tbq3.colorIdx)
     }
 
     // Load saved PathContainer config
@@ -141,7 +294,9 @@ export default function Page() {
         console.error('Error parsing saved path config:', e)
       }
     } else {
-      console.log('No saved PathContainer config found')
+      // Use defaults
+      console.log('Using default PathContainer config')
+      setPathContainer(HOME1_DEFAULTS.path)
     }
     
     // Load saved Shape seed
@@ -150,15 +305,13 @@ export default function Page() {
       try {
         const parsed = JSON.parse(savedShape)
         console.log('Loading saved Shape seed:', parsed)
-        setShapeSeed(parsed.seed)
+        setShapeSeed(parsed.seed ?? HOME1_DEFAULTS.shape.seed)
       } catch (e) {
         console.error('Error parsing saved shape seed:', e)
       }
     } else {
-      // Generate initial shape seed
-      const initialSeed = Math.random()
-      setShapeSeed(initialSeed)
-      localStorage.setItem(LSO_SHAPE_KEY, JSON.stringify({ seed: initialSeed }))
+      // Use defaults
+      setShapeSeed(HOME1_DEFAULTS.shape.seed)
     }
     
     setMounted(true)
@@ -180,17 +333,30 @@ export default function Page() {
             setCurrentImage(parsed)
           } catch (e) {
             console.error('Error parsing saved photo:', e)
-            // Fallback to random
+            // Fallback to defaults
             if (images.length > 0) {
-              const initialImage = pickRandomImage(images)
-              console.log('Initial photo loaded:', initialImage)
-              setCurrentImage(initialImage)
+              const defaultImage = images.find(
+                img => img.gallerySlug === HOME1_DEFAULTS.photo.gallerySlug && 
+                       img.assetId === HOME1_DEFAULTS.photo.assetId
+              ) || pickRandomImage(images)
+              console.log('Using default/fallback photo:', defaultImage)
+              setCurrentImage(defaultImage)
             }
           }
-        } else if (images.length > 0) {
-          const initialImage = pickRandomImage(images)
-          console.log('Initial photo loaded:', initialImage)
-          setCurrentImage(initialImage)
+        } else {
+          // Use defaults
+          const defaultImage = images.find(
+            img => img.gallerySlug === HOME1_DEFAULTS.photo.gallerySlug && 
+                   img.assetId === HOME1_DEFAULTS.photo.assetId
+          )
+          if (defaultImage) {
+            console.log('Using default photo:', defaultImage)
+            setCurrentImage(defaultImage)
+          } else if (images.length > 0) {
+            console.log('Default photo not found, using random')
+            const fallbackImage = pickRandomImage(images)
+            setCurrentImage(fallbackImage)
+          }
         }
         
         // Check if we have a saved second photo
@@ -202,17 +368,65 @@ export default function Page() {
             setCurrentImage2(parsed)
           } catch (e) {
             console.error('Error parsing saved photo 2:', e)
-            // Fallback to random
+            // Fallback to defaults
             if (images.length > 0) {
-              const initialImage = pickRandomImage(images)
-              console.log('Initial photo 2 loaded:', initialImage)
-              setCurrentImage2(initialImage)
+              const defaultImage = images.find(
+                img => img.gallerySlug === HOME1_DEFAULTS.photo2.gallerySlug && 
+                       img.assetId === HOME1_DEFAULTS.photo2.assetId
+              ) || pickRandomImage(images)
+              console.log('Using default/fallback photo 2:', defaultImage)
+              setCurrentImage2(defaultImage)
             }
           }
-        } else if (images.length > 0) {
-          const initialImage = pickRandomImage(images)
-          console.log('Initial photo 2 loaded:', initialImage)
-          setCurrentImage2(initialImage)
+        } else {
+          // Use defaults
+          const defaultImage = images.find(
+            img => img.gallerySlug === HOME1_DEFAULTS.photo2.gallerySlug && 
+                   img.assetId === HOME1_DEFAULTS.photo2.assetId
+          )
+          if (defaultImage) {
+            console.log('Using default photo 2:', defaultImage)
+            setCurrentImage2(defaultImage)
+          } else if (images.length > 0) {
+            console.log('Default photo 2 not found, using random')
+            const fallbackImage = pickRandomImage(images)
+            setCurrentImage2(fallbackImage)
+          }
+        }
+
+        // Check if we have a saved third photo
+        const savedPhoto3 = localStorage.getItem(LSO_PHOTO3_KEY)
+        if (savedPhoto3) {
+          try {
+            const parsed = JSON.parse(savedPhoto3)
+            console.log('Loaded saved photo 3:', parsed)
+            setCurrentImage3(parsed)
+          } catch (e) {
+            console.error('Error parsing saved photo 3:', e)
+            // Fallback to defaults
+            if (images.length > 0) {
+              const defaultImage = images.find(
+                img => img.gallerySlug === HOME1_DEFAULTS.photo3.gallerySlug && 
+                       img.assetId === HOME1_DEFAULTS.photo3.assetId
+              ) || pickRandomImage(images)
+              console.log('Using default/fallback photo 3:', defaultImage)
+              setCurrentImage3(defaultImage)
+            }
+          }
+        } else {
+          // Use defaults
+          const defaultImage = images.find(
+            img => img.gallerySlug === HOME1_DEFAULTS.photo3.gallerySlug && 
+                   img.assetId === HOME1_DEFAULTS.photo3.assetId
+          )
+          if (defaultImage) {
+            console.log('Using default photo 3:', defaultImage)
+            setCurrentImage3(defaultImage)
+          } else if (images.length > 0) {
+            console.log('Default photo 3 not found, using random')
+            const fallbackImage = pickRandomImage(images)
+            setCurrentImage3(fallbackImage)
+          }
         }
       } catch (error) {
         console.error('Error fetching images:', error)
@@ -358,9 +572,116 @@ export default function Page() {
     localStorage.setItem(LSO_SHAPE_KEY, JSON.stringify({ seed: newSeed }))
   }, [])
 
+  const handleHsClick = useCallback(() => {
+    const newHIdx = (hsHIdx + 1) % HEADLINES.length
+    const newSIdx = (hsSIdx + 1) % SUBS.length
+    const newAlign: Align = Math.random() < 0.5 ? 'left' : 'center'
+    const newBg = BG_COLORS[Math.floor(Math.random() * BG_COLORS.length)]
+    const newFg = newBg === 'var(--brand-black)' ? 'var(--brand-offwhite)' : 'var(--brand-black)'
+    
+    setHsHIdx(newHIdx)
+    setHsSIdx(newSIdx)
+    setHsAlign(newAlign)
+    setHsBg(newBg)
+    setHsFg(newFg)
+    
+    // Save to localStorage
+    localStorage.setItem(LSO_HS_KEY, JSON.stringify({
+      hIdx: newHIdx,
+      sIdx: newSIdx,
+      align: newAlign,
+      bg: newBg,
+      fg: newFg
+    }))
+  }, [hsHIdx, hsSIdx])
+
+  const handlePhoto3Click = useCallback(() => {
+    if (allImages.length === 0) return
+    setIsPhoto3Loading(true)
+    const newImage = pickRandomImage(allImages)
+    setCurrentImage3(newImage)
+  }, [allImages])
+
+  const handlePhoto3Load = useCallback(() => {
+    setIsPhoto3Loading(false)
+    if (currentImage3) {
+      console.log('Photo 3 loaded:', currentImage3)
+      localStorage.setItem(LSO_PHOTO3_KEY, JSON.stringify(currentImage3))
+    }
+  }, [currentImage3])
+
+  const handleTbq3Click = useCallback(() => {
+    const newSubBodyIdx = (tbq3SubBodyIdx + 1) % SUBTITLE_BODY.length
+    const newQuoteIdx = (tbq3QuoteIdx + 1) % PULL_QUOTES.length
+    const newColorIdx = Math.floor(Math.random() * TBQ_BG_COLORS.length)
+    
+    setTbq3SubBodyIdx(newSubBodyIdx)
+    setTbq3QuoteIdx(newQuoteIdx)
+    setTbq3ColorIdx(newColorIdx)
+    
+    // Save to localStorage
+    localStorage.setItem(LSO_TBQ3_KEY, JSON.stringify({
+      subBodyIdx: newSubBodyIdx,
+      quoteIdx: newQuoteIdx,
+      colorIdx: newColorIdx
+    }))
+  }, [tbq3SubBodyIdx, tbq3QuoteIdx])
+
+  // Keyboard listener for logging LSO state
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'l' || e.key === 'L') {
+        // Gather all localStorage data
+        const rawData = {
+          photo: localStorage.getItem(LSO_PHOTO_KEY) ? JSON.parse(localStorage.getItem(LSO_PHOTO_KEY)!) : null,
+          tbq: localStorage.getItem(LSO_TBQ_KEY) ? JSON.parse(localStorage.getItem(LSO_TBQ_KEY)!) : null,
+          path: localStorage.getItem(LSO_PATH_KEY) ? JSON.parse(localStorage.getItem(LSO_PATH_KEY)!) : null,
+          tbq2: localStorage.getItem(LSO_TBQ2_KEY) ? JSON.parse(localStorage.getItem(LSO_TBQ2_KEY)!) : null,
+          photo2: localStorage.getItem(LSO_PHOTO2_KEY) ? JSON.parse(localStorage.getItem(LSO_PHOTO2_KEY)!) : null,
+          shape: localStorage.getItem(LSO_SHAPE_KEY) ? JSON.parse(localStorage.getItem(LSO_SHAPE_KEY)!) : null,
+          headlineSub: localStorage.getItem(LSO_HS_KEY) ? JSON.parse(localStorage.getItem(LSO_HS_KEY)!) : null,
+          photo3: localStorage.getItem(LSO_PHOTO3_KEY) ? JSON.parse(localStorage.getItem(LSO_PHOTO3_KEY)!) : null,
+          tbq3: localStorage.getItem(LSO_TBQ3_KEY) ? JSON.parse(localStorage.getItem(LSO_TBQ3_KEY)!) : null,
+        }
+
+        // Create minimal version with only essential data
+        const minimalData = {
+          photo: rawData.photo ? {
+            gallerySlug: rawData.photo.gallerySlug,
+            assetId: rawData.photo.assetId,
+          } : null,
+          tbq: rawData.tbq,
+          path: rawData.path,
+          tbq2: rawData.tbq2,
+          photo2: rawData.photo2 ? {
+            gallerySlug: rawData.photo2.gallerySlug,
+            assetId: rawData.photo2.assetId,
+          } : null,
+          shape: rawData.shape,
+          headlineSub: rawData.headlineSub,
+          photo3: rawData.photo3 ? {
+            gallerySlug: rawData.photo3.gallerySlug,
+            assetId: rawData.photo3.assetId,
+          } : null,
+          tbq3: rawData.tbq3,
+        }
+
+        console.log('=== HOME-1 LOCAL STORAGE STATE (MINIMAL) ===')
+        console.log(JSON.stringify(minimalData, null, 2))
+        console.log('\n=== COPY/PASTE FORMAT ===')
+        console.log('const HOME1_DEFAULTS = ' + JSON.stringify(minimalData, null, 2))
+        console.log('\n=== FULL DATA (if needed) ===')
+        console.log(JSON.stringify(rawData, null, 2))
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPress)
+    return () => window.removeEventListener('keydown', handleKeyPress)
+  }, [])
+
   return (
     <div className={styles.page}>
-      <BrandShaderHero />
+      <BrandShaderHeroWithControls />
       
       <div 
         className={styles.titleBodyQuoteContainer}
@@ -485,6 +806,64 @@ export default function Page() {
             height={400}
           />
         )}
+      </div>
+
+      <div 
+        className={styles.headlineSubContainer}
+        onClick={handleHsClick}
+        role="button"
+        aria-label="Click to cycle headline and sub"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            handleHsClick()
+          }
+        }}
+      >
+        <HeadlineSub
+          headline={HEADLINES[hsHIdx]}
+          sub={SUBS[hsSIdx]}
+          align={hsAlign}
+          fg={hsFg}
+          bg={hsBg}
+          borderColor={hsBg === 'var(--brand-offwhite)' ? 'rgba(35,31,32,0.12)' : undefined}
+        />
+      </div>
+
+      <div className={styles.photo3Container}>
+        {currentImage3 ? (
+          <Photo 
+            image={currentImage3} 
+            onClick={handlePhoto3Click}
+            loading={isPhoto3Loading}
+            onImageLoad={handlePhoto3Load}
+          />
+        ) : (
+          <p>Loading images...</p>
+        )}
+      </div>
+
+      <div 
+        className={styles.titleBodyQuote3Container}
+        onClick={handleTbq3Click}
+        role="button"
+        aria-label="Click to cycle content and color"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            handleTbq3Click()
+          }
+        }}
+      >
+        <TitleBodyQuote
+          subtitle={SUBTITLE_BODY[tbq3SubBodyIdx].subtitle}
+          body={SUBTITLE_BODY[tbq3SubBodyIdx].body}
+          quote={PULL_QUOTES[tbq3QuoteIdx]}
+          fg={TBQ_BG_COLORS[tbq3ColorIdx].fg}
+          bg={TBQ_BG_COLORS[tbq3ColorIdx].bg}
+        />
       </div>
     </div>
   )

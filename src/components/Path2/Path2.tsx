@@ -28,6 +28,9 @@ interface Path2Props {
   wildness?: number // 0-1, controls how dramatic the curve bodies are (default 0.9)
   onClick?: (e: React.MouseEvent) => void
   seed?: number // Seed for reproducible paths
+  asPathOnly?: boolean // If true, render only <path> without wrapping <svg>
+  containerWidth?: number // Required when asPathOnly is true
+  containerHeight?: number // Required when asPathOnly is true
 }
 
 export default function Path2({ 
@@ -38,7 +41,10 @@ export default function Path2({
   bias = 'auto',
   wildness = 0.9,
   onClick,
-  seed
+  seed,
+  asPathOnly = false,
+  containerWidth,
+  containerHeight
 }: Path2Props = {}) {
   console.log('Path2 rendering with props:', { colorProp, strokeWidth, lobes, amplitude, bias, wildness })
   const [pathData, setPathData] = useState<string>('')
@@ -50,21 +56,29 @@ export default function Path2({
     console.log('Path2 useEffect fired')
     const generatePath = () => {
       console.log('generatePath called, containerRef.current:', containerRef.current)
-      if (!containerRef.current) {
+      
+      let width: number
+      let height: number
+      
+      // If asPathOnly mode with explicit dimensions, use those
+      if (asPathOnly && containerWidth && containerHeight) {
+        width = containerWidth
+        height = containerHeight
+      } else if (!containerRef.current) {
         console.log('No container ref yet, returning')
         return
+      } else {
+        const rect = containerRef.current.getBoundingClientRect()
+        width = rect.width
+        height = rect.height
+
+        if (width === 0 || height === 0) {
+          console.log('Container has zero dimensions:', { width, height })
+          return
+        }
       }
 
-      const rect = containerRef.current.getBoundingClientRect()
-      const width = rect.width
-      const height = rect.height
-
-      if (width === 0 || height === 0) {
-        console.log('Container has zero dimensions:', { width, height })
-        return
-      }
-
-      console.log('Container bounds:', { width, height, x: rect.x, y: rect.y })
+      console.log('Container bounds:', { width, height })
 
       // Create seeded random generator if seed provided, otherwise use Math.random
       const rng = seed !== undefined ? seedrandom(seed.toString()) : Math.random
@@ -158,21 +172,43 @@ export default function Path2({
       generatePath()
     }, 100)
 
-    const handleResize = () => generatePath()
-    window.addEventListener('resize', handleResize)
+    // Only add resize listener if not in asPathOnly mode
+    const handleResize = asPathOnly ? undefined : () => generatePath()
+    if (handleResize) {
+      window.addEventListener('resize', handleResize)
+    }
     
     return () => {
       clearTimeout(timer)
-      window.removeEventListener('resize', handleResize)
+      if (handleResize) {
+        window.removeEventListener('resize', handleResize)
+      }
     }
-  }, [lobes, amplitude, bias, colorProp, strokeWidth, wildness, seed])
+  }, [lobes, amplitude, bias, colorProp, strokeWidth, wildness, seed, asPathOnly, containerWidth, containerHeight])
 
   if (!pathData || !color) {
     console.log('Path2 not rendering path yet:', { hasPathData: !!pathData, hasColor: !!color })
+    if (asPathOnly) return null
     return <svg ref={containerRef} className={styles.path2} xmlns="http://www.w3.org/2000/svg" />
   }
 
   console.log('Path2 rendering full path with color:', color)
+  
+  // If rendering as path only (for use inside another SVG), just return the path element
+  if (asPathOnly) {
+    return (
+      <path
+        d={pathData}
+        fill="none"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="butt"
+        onClick={onClick}
+        style={{ cursor: onClick ? 'pointer' : 'default' }}
+      />
+    )
+  }
+  
   return (
     <svg ref={containerRef} className={styles.path2} xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none' }}>
       <path

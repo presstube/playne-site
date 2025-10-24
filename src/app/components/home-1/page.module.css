@@ -28,7 +28,7 @@
   transform: translateX(-50%) rotate(-3deg);
   margin-top: -8rem;
   padding: 0 2rem;
-  z-index: 2;
+  z-index: 0;
 }
 
 .titleBodyQuote2Container {
@@ -54,6 +54,38 @@
   position: relative;
   left: 66%;
   transform: translateX(-50%) rotate(3deg);
+  margin-top: -8rem;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.headlineSubContainer {
+  width: 50%;
+  position: relative;
+  left: 66%;
+  transform: translateX(-50%) rotate(3deg);
+  margin-top: -8rem;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.photo3Container {
+  width: 100%;
+  max-width: none;
+  position: relative;
+  margin-top: -3rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.titleBodyQuote3Container {
+  width: 50%;
+  position: relative;
+  left: 33%;
+  transform: translateX(-50%) rotate(-3deg);
   margin-top: -8rem;
   z-index: 2;
   cursor: pointer;

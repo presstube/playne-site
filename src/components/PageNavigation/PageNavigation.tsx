@@ -123,50 +123,51 @@ export default function PageNavigation({ currentPath }: PageNavigationProps) {
   }, [pathname]) // Re-attach when pathname changes
 
   // Hammer.js swipe detection (client-side only)
-  useEffect(() => {
-    // Only run on client side
-    if (typeof window === 'undefined') return
+  // COMMENTED OUT - User requested to disable swipe navigation
+  // useEffect(() => {
+  //   // Only run on client side
+  //   if (typeof window === 'undefined') return
 
-    let hammer: any = null
+  //   let hammer: any = null
 
-    // Dynamic import to avoid SSR issues
-    import('hammerjs').then((HammerModule) => {
-      const Hammer = HammerModule.default
+  //   // Dynamic import to avoid SSR issues
+  //   import('hammerjs').then((HammerModule) => {
+  //     const Hammer = HammerModule.default
       
-      // Create Hammer instance on document body
-      hammer = new Hammer(document.body)
+  //     // Create Hammer instance on document body
+  //     hammer = new Hammer(document.body)
       
-      // Configure swipe recognition
-      hammer.get('swipe').set({
-        direction: Hammer.DIRECTION_HORIZONTAL,
-        threshold: 50,
-        velocity: 0.3
-      })
+  //     // Configure swipe recognition
+  //     hammer.get('swipe').set({
+  //       direction: Hammer.DIRECTION_HORIZONTAL,
+  //       threshold: 50,
+  //       velocity: 0.3
+  //     })
 
-      // Handle swipe events
-      const handleSwipe = (event: any) => {
-        if (event.direction === Hammer.DIRECTION_LEFT) {
-          // Swipe left - go to next page
-          navigateToNext()
-        } else if (event.direction === Hammer.DIRECTION_RIGHT) {
-          // Swipe right - go to previous page
-          navigateToPrevious()
-        }
-      }
+  //     // Handle swipe events
+  //     const handleSwipe = (event: any) => {
+  //       if (event.direction === Hammer.DIRECTION_LEFT) {
+  //         // Swipe left - go to next page
+  //         navigateToNext()
+  //       } else if (event.direction === Hammer.DIRECTION_RIGHT) {
+  //         // Swipe right - go to previous page
+  //         navigateToPrevious()
+  //       }
+  //     }
 
-      // Add swipe listener
-      hammer.on('swipe', handleSwipe)
-    }).catch((error) => {
-      console.warn('Failed to load Hammer.js:', error)
-    })
+  //     // Add swipe listener
+  //     hammer.on('swipe', handleSwipe)
+  //   }).catch((error) => {
+  //     console.warn('Failed to load Hammer.js:', error)
+  //   })
 
-    // Cleanup function
-    return () => {
-      if (hammer) {
-        hammer.destroy()
-      }
-    }
-  }, [pathname]) // Re-attach when pathname changes
+  //   // Cleanup function
+  //   return () => {
+  //     if (hammer) {
+  //       hammer.destroy()
+  //     }
+  //   }
+  // }, [pathname]) // Re-attach when pathname changes
 
   // This component renders nothing visible (no visual indicators)
   return <div className={styles.pageNavigation} aria-hidden="true" />

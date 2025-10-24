@@ -90,11 +90,16 @@ export default function PathContainer({
       <div
         className={cx(styles.container, className)}
         style={{
-          width: `${width}px`,
-          height: `${height}px`,
-          backgroundColor: bgColor
+          backgroundColor: bgColor,
+          aspectRatio: `${width} / ${height}`
         }}
-      />
+      >
+        <svg
+          viewBox={`0 0 ${width} ${height}`}
+          preserveAspectRatio="xMidYMid meet"
+          style={{ width: '100%', height: '100%' }}
+        />
+      </div>
     )
   }
 
@@ -102,23 +107,31 @@ export default function PathContainer({
     <div
       className={cx(styles.container, className)}
       style={{
-        width: `${width}px`,
-        height: `${height}px`,
-        backgroundColor: bgColor
+        backgroundColor: bgColor,
+        aspectRatio: `${width} / ${height}`
       }}
     >
-      {paths.map((pathConfig, idx) => (
-        <Path2
-          key={idx}
-          lobes={pathConfig.lobes}
-          amplitude={pathConfig.amplitude}
-          color={pathConfig.color}
-          strokeWidth={pathConfig.strokeWidth}
-          bias={pathConfig.bias}
-          wildness={pathConfig.wildness}
-          seed={pathConfig.seed}
-        />
-      ))}
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        preserveAspectRatio="xMidYMid meet"
+        style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
+      >
+        {paths.map((pathConfig, idx) => (
+          <Path2
+            key={idx}
+            lobes={pathConfig.lobes}
+            amplitude={pathConfig.amplitude}
+            color={pathConfig.color}
+            strokeWidth={pathConfig.strokeWidth}
+            bias={pathConfig.bias}
+            wildness={pathConfig.wildness}
+            seed={pathConfig.seed}
+            asPathOnly={true}
+            containerWidth={width}
+            containerHeight={height}
+          />
+        ))}
+      </svg>
     </div>
   )
 }
