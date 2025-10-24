@@ -1,6 +1,6 @@
 .wrapper {
   width: 100%;
-  padding: var(--space-10) var(--space-7);
+  padding: clamp(1.5rem, 3.5vw, 3.5rem) clamp(2.5rem, 2.5vw, 2.5rem);
   border-radius: 1rem;
 }
 
