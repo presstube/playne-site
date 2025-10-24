@@ -6,11 +6,12 @@
 
 .brandHeroContainer {
   width: 62.5%;
+  min-width: 560px;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
   z-index: 5;
-  margin-top: 25vh;
+  margin-top: 15vw;
   margin-bottom: 10vh;
 }
 
