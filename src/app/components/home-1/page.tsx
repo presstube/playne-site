@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import styles from './page.module.css'
+import BrandHero from '@/components/BrandHero/BrandHero'
 import Headline from '@/components/Headline/Headline'
 import TitleBodyQuote from '@/components/TitleBodyQuote/TitleBodyQuote'
 import HeadlineSub from '@/components/HeadlineSub/HeadlineSub'
@@ -812,6 +813,11 @@ export default function Page() {
 
   return (
     <div className={styles.page}>
+      {/* BrandHero at top */}
+      <div className={styles.brandHeroContainer}>
+        <BrandHero />
+      </div>
+
       {/* Headline at top */}
       <div 
         className={styles.headlineContainer}

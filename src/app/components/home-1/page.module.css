@@ -4,6 +4,16 @@
   padding-top: 2rem;
 }
 
+.brandHeroContainer {
+  width: 62.5%;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  margin-top: 25vh;
+  margin-bottom: 10vh;
+}
+
 .headlineContainer {
   width: 50%;
   position: relative;
