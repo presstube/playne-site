@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import styles from './page.module.css'
 import BrandShaderHeroWithControls from '@/components/BrandShaderHeroWithControls/BrandShaderHeroWithControls'
+import Headline from '@/components/Headline/Headline'
 import TitleBodyQuote from '@/components/TitleBodyQuote/TitleBodyQuote'
 import HeadlineSub from '@/components/HeadlineSub/HeadlineSub'
 import Photo from '@/components/Photo/Photo'
@@ -11,6 +12,16 @@ import Shape from '@/components/Shape/Shape'
 import { GalleryImage, pickRandomImage } from '@/lib/image-hat'
 import { client } from '@/sanity/lib/client'
 import { allGalleryImagesQuery } from '@/sanity/lib/galleries-queries'
+
+// Headline demo data
+const HEADLINE_COPY = [
+  'Empower young minds through practical learning',
+  'Community creativity confidence',
+  'Real skills real impact',
+  'Learn by doing',
+  'Building confidence through action and purpose',
+  'Education for the real world',
+]
 
 // TitleBodyQuote demo data
 const SUBTITLE_BODY = [
@@ -44,6 +55,8 @@ const PULL_QUOTES = [
   "A single line can open a conversation that changes the day.",
 ]
 
+const LSO_HEADLINE_KEY = 'home1-headline'
+const LSO_PHOTO0_KEY = 'home1-photo0'
 const LSO_PHOTO_KEY = 'home1-photo'
 const LSO_TBQ_KEY = 'home1-tbq'
 const LSO_PATH_KEY = 'home1-path'
@@ -94,6 +107,15 @@ type Align = 'left' | 'center'
 
 // Default layout configuration
 const HOME1_DEFAULTS = {
+  "headline": {
+    "copyIdx": 0,
+    "fg": "var(--brand-black)",
+    "bg": "var(--brand-yellow)"
+  },
+  "photo0": {
+    "gallerySlug": "shantell-martin-playne",
+    "assetId": "image-e533c7b585468baf66445ba2fdd95e7b8f323945-4128x2322-jpg"
+  },
   "photo": {
     "gallerySlug": "free-arts-day-2025",
     "assetId": "image-e1677c69aa63bd619bb89abcce1aab39800563f5-2048x1365-jpg"
@@ -158,6 +180,15 @@ interface PathContainerConfig {
 }
 
 export default function Page() {
+  // Headline state (top element)
+  const [headlineCopyIdx, setHeadlineCopyIdx] = useState(0)
+  const [headlineFg, setHeadlineFg] = useState('var(--brand-black)')
+  const [headlineBg, setHeadlineBg] = useState('var(--brand-yellow)')
+  
+  // Photo0 state (second element)
+  const [currentImage0, setCurrentImage0] = useState<GalleryImage | null>(null)
+  const [isPhoto0Loading, setIsPhoto0Loading] = useState(false)
+  
   const [currentImage, setCurrentImage] = useState<GalleryImage | null>(null)
   const [allImages, setAllImages] = useState<GalleryImage[]>([])
   const [isPhotoLoading, setIsPhotoLoading] = useState(false)
@@ -202,6 +233,24 @@ export default function Page() {
 
   // Load saved states from localStorage on mount
   useEffect(() => {
+    // Load saved Headline
+    const savedHeadline = localStorage.getItem(LSO_HEADLINE_KEY)
+    if (savedHeadline) {
+      try {
+        const parsed = JSON.parse(savedHeadline)
+        setHeadlineCopyIdx(parsed.copyIdx ?? HOME1_DEFAULTS.headline.copyIdx)
+        setHeadlineFg(parsed.fg ?? HOME1_DEFAULTS.headline.fg)
+        setHeadlineBg(parsed.bg ?? HOME1_DEFAULTS.headline.bg)
+      } catch (e) {
+        console.error('Error parsing saved headline state:', e)
+      }
+    } else {
+      // Use defaults
+      setHeadlineCopyIdx(HOME1_DEFAULTS.headline.copyIdx)
+      setHeadlineFg(HOME1_DEFAULTS.headline.fg)
+      setHeadlineBg(HOME1_DEFAULTS.headline.bg)
+    }
+
     const savedTbq = localStorage.getItem(LSO_TBQ_KEY)
     if (savedTbq) {
       try {
@@ -323,6 +372,41 @@ export default function Page() {
       try {
         const images = await client.fetch(allGalleryImagesQuery)
         setAllImages(images)
+        
+        // Check if we have a saved photo0 (new top photo)
+        const savedPhoto0 = localStorage.getItem(LSO_PHOTO0_KEY)
+        if (savedPhoto0) {
+          try {
+            const parsed = JSON.parse(savedPhoto0)
+            console.log('Loaded saved photo 0:', parsed)
+            setCurrentImage0(parsed)
+          } catch (e) {
+            console.error('Error parsing saved photo 0:', e)
+            // Fallback to defaults
+            if (images.length > 0) {
+              const defaultImage = images.find(
+                img => img.gallerySlug === HOME1_DEFAULTS.photo0.gallerySlug && 
+                       img.assetId === HOME1_DEFAULTS.photo0.assetId
+              ) || pickRandomImage(images)
+              console.log('Using default/fallback photo 0:', defaultImage)
+              setCurrentImage0(defaultImage)
+            }
+          }
+        } else {
+          // Use defaults
+          const defaultImage = images.find(
+            img => img.gallerySlug === HOME1_DEFAULTS.photo0.gallerySlug && 
+                   img.assetId === HOME1_DEFAULTS.photo0.assetId
+          )
+          if (defaultImage) {
+            console.log('Using default photo 0:', defaultImage)
+            setCurrentImage0(defaultImage)
+          } else if (images.length > 0) {
+            console.log('Default photo 0 not found, using random')
+            const fallbackImage = pickRandomImage(images)
+            setCurrentImage0(fallbackImage)
+          }
+        }
         
         // Check if we have a saved photo
         const savedPhoto = localStorage.getItem(LSO_PHOTO_KEY)
@@ -482,6 +566,47 @@ export default function Page() {
     }
   }, [mounted, pathContainer, generatePathContainer])
 
+  const handleHeadlineClick = useCallback(() => {
+    const newIdx = (headlineCopyIdx + 1) % HEADLINE_COPY.length
+    // Randomize colors
+    const nextBg = BG_COLORS[Math.floor(Math.random() * BG_COLORS.length)]
+    const nextFg = nextBg === 'var(--brand-black)' ? 'var(--brand-offwhite)' : 'var(--brand-black)'
+    
+    setHeadlineCopyIdx(newIdx)
+    setHeadlineBg(nextBg)
+    setHeadlineFg(nextFg)
+    
+    // Save to localStorage
+    localStorage.setItem(LSO_HEADLINE_KEY, JSON.stringify({ 
+      copyIdx: newIdx,
+      fg: nextFg,
+      bg: nextBg
+    }))
+  }, [headlineCopyIdx])
+
+  const handlePhoto0Click = useCallback(() => {
+    if (allImages.length > 0) {
+      setIsPhoto0Loading(true)
+      // Pick a different image (not the current one)
+      let newImage = pickRandomImage(allImages)
+      let attempts = 0
+      while (newImage?.assetId === currentImage0?.assetId && attempts < 10) {
+        newImage = pickRandomImage(allImages)
+        attempts++
+      }
+      console.log('New photo 0 loaded:', newImage)
+      setCurrentImage0(newImage)
+      // Save to localStorage
+      if (newImage) {
+        localStorage.setItem(LSO_PHOTO0_KEY, JSON.stringify(newImage))
+      }
+    }
+  }, [allImages, currentImage0])
+
+  const handlePhoto0Load = useCallback(() => {
+    setIsPhoto0Loading(false)
+  }, [])
+
   const handlePhotoClick = useCallback(() => {
     if (allImages.length > 0) {
       setIsPhotoLoading(true)
@@ -633,6 +758,8 @@ export default function Page() {
       if (e.key === 'l' || e.key === 'L') {
         // Gather all localStorage data
         const rawData = {
+          headline: localStorage.getItem(LSO_HEADLINE_KEY) ? JSON.parse(localStorage.getItem(LSO_HEADLINE_KEY)!) : null,
+          photo0: localStorage.getItem(LSO_PHOTO0_KEY) ? JSON.parse(localStorage.getItem(LSO_PHOTO0_KEY)!) : null,
           photo: localStorage.getItem(LSO_PHOTO_KEY) ? JSON.parse(localStorage.getItem(LSO_PHOTO_KEY)!) : null,
           tbq: localStorage.getItem(LSO_TBQ_KEY) ? JSON.parse(localStorage.getItem(LSO_TBQ_KEY)!) : null,
           path: localStorage.getItem(LSO_PATH_KEY) ? JSON.parse(localStorage.getItem(LSO_PATH_KEY)!) : null,
@@ -646,6 +773,11 @@ export default function Page() {
 
         // Create minimal version with only essential data
         const minimalData = {
+          headline: rawData.headline,
+          photo0: rawData.photo0 ? {
+            gallerySlug: rawData.photo0.gallerySlug,
+            assetId: rawData.photo0.assetId,
+          } : null,
           photo: rawData.photo ? {
             gallerySlug: rawData.photo.gallerySlug,
             assetId: rawData.photo.assetId,
@@ -682,6 +814,42 @@ export default function Page() {
   return (
     <div className={styles.page}>
       <BrandShaderHeroWithControls />
+      
+      {/* New Headline at top */}
+      <div 
+        className={styles.headlineContainer}
+        onClick={handleHeadlineClick}
+        role="button"
+        aria-label="Click to cycle headline"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            handleHeadlineClick()
+          }
+        }}
+      >
+        <Headline 
+          text={HEADLINE_COPY[headlineCopyIdx]} 
+          caseType="all-caps"
+          fg={headlineFg}
+          bg={headlineBg}
+        />
+      </div>
+
+      {/* New Photo0 below Headline */}
+      <div className={styles.photo0Container}>
+        {currentImage0 ? (
+          <Photo 
+            image={currentImage0} 
+            onClick={handlePhoto0Click}
+            loading={isPhoto0Loading}
+            onImageLoad={handlePhoto0Load}
+          />
+        ) : (
+          <p>Loading images...</p>
+        )}
+      </div>
       
       <div 
         className={styles.titleBodyQuoteContainer}

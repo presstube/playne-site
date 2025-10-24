@@ -4,11 +4,30 @@
   padding-top: 4rem;
 }
 
+.headlineContainer {
+  width: 50%;
+  position: relative;
+  left: 33%;
+  transform: translateX(-50%) rotate(-3deg);
+  z-index: 3;
+  cursor: pointer;
+}
+
+.photo0Container {
+  width: 50%;
+  position: relative;
+  left: 66%;
+  transform: translateX(-50%) rotate(3deg);
+  margin-top: -8rem;
+  z-index: 2;
+}
+
 .titleBodyQuoteContainer {
   width: 50%;
   position: relative;
   left: 33%;
   transform: translateX(-50%) rotate(-3deg);
+  margin-top: -8rem;
   z-index: 2;
 }
 
