@@ -9,6 +9,7 @@ import HeadlineSub from '@/components/HeadlineSub/HeadlineSub'
 import Photo from '@/components/Photo/Photo'
 import PathContainer from '@/components/PathContainer/PathContainer'
 import Shape from '@/components/Shape/Shape'
+import Footer from '@/components/Footer/Footer'
 import { GalleryImage, pickRandomImage } from '@/lib/image-hat'
 import { client } from '@/sanity/lib/client'
 import { allGalleryImagesQuery } from '@/sanity/lib/galleries-queries'
@@ -1084,6 +1085,8 @@ export default function Page() {
           bg={TBQ_BG_COLORS[tbq3ColorIdx].bg}
         />
       </div>
+
+      <Footer />
         </>
       )}
     </div>

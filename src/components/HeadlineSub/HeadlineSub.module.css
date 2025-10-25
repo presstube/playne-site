@@ -1,7 +1,7 @@
 .wrapper {
   width: 100%;
   padding: clamp(1.5rem, 3vw, 6rem) clamp(2.5rem, 6vw, 3rem);
-  border-radius: 1rem;
+  border-radius: var(--radius-lg);
 }
 
 .headline {

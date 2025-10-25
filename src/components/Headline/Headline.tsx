@@ -61,7 +61,6 @@ export default function Headline({
       style={{ 
         backgroundColor: bg,
         border: borderColor ? `1px solid ${borderColor}` : undefined,
-        borderRadius: '1rem',
       }}
     >
       <Tag

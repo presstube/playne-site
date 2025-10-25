@@ -35,7 +35,7 @@
 }
 
 .headlineContainer {
-  width: clamp(75%, 50% + 10vw, 50%);
+  width: clamp(300px, 65vw, 750px);
   position: relative;
   left: 33%;
   transform: translateX(-50%) rotate(-3deg);
@@ -53,7 +53,7 @@
 }
 
 .titleBodyQuoteContainer {
-  width: clamp(75%, 50% + 10vw, 50%);
+  width: clamp(300px, 60vw, 650px);
   position: relative;
   left: 33%;
   transform: translateX(-50%) rotate(-3deg);
@@ -81,7 +81,7 @@
 }
 
 .titleBodyQuote2Container {
-  width: clamp(75%, 50% + 10vw, 50%);
+  width: clamp(300px, 60vw, 650px);
   position: relative;
   left: 66%;
   transform: translateX(-50%) rotate(3deg);
@@ -101,7 +101,7 @@
 .shapeContainer {
   width: 50%;
   position: relative;
-  left: 66%;
+  left: 80%;
   transform: translateX(-50%) rotate(3deg);
   margin-top: clamp(-6rem, -12vw, -8rem);
   z-index: 2;
@@ -109,11 +109,11 @@
 }
 
 .headlineSubContainer {
-  width: clamp(75%, 50% + 10vw, 50%);
+  width: clamp(300px, 65vw, 750px);
   position: relative;
   left: 66%;
   transform: translateX(-50%) rotate(3deg);
-  margin-top: clamp(-1rem, -12vw, -8rem);
+  margin-top: clamp(-3rem, -12vw, -8rem);
   z-index: 1;
   cursor: pointer;
 }
@@ -131,7 +131,7 @@
 }
 
 .titleBodyQuote3Container {
-  width: clamp(75%, 50% + 10vw, 50%);
+  width: clamp(300px, 60vw, 650px);
   position: relative;
   left: 33%;
   transform: translateX(-50%) rotate(-3deg);

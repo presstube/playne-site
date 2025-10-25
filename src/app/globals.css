@@ -44,6 +44,11 @@
   --space-10: 8rem;     /* 128px */
   --space-11: 10rem;    /* 160px */
   --space-12: 12.5rem;  /* 200px */
+  
+  /* Border radius scale */
+  --radius-sm: 0.375rem;  /* 6px - small elements, form inputs */
+  --radius-md: 0.5rem;    /* 8px - cards, containers */
+  --radius-lg: 0.5rem;      /* 16px - hero elements, headlines */
 }
 
 /* Font Face Declarations */

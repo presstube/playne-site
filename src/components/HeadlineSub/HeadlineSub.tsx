@@ -52,7 +52,6 @@ export default function HeadlineSub({
       style={{ 
         backgroundColor: bg,
         border: borderColor ? `1px solid ${borderColor}` : undefined,
-        borderRadius: '1rem',
       }}
     >
       <Tag
