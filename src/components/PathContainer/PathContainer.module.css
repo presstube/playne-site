@@ -1,7 +1,6 @@
 .container {
   position: relative;
   overflow: visible;
-  border: 1px solid rgba(35, 31, 32, 0.1);
   border-radius: var(--radius-lg);
   margin: 0 auto;
   width: 100%;

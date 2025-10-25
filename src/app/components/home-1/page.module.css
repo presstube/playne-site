@@ -136,6 +136,7 @@
   left: 33%;
   transform: translateX(-50%) rotate(-3deg);
   margin-top: clamp(-1rem, -12vw, -8rem);
+  margin-bottom: -1rem;
   z-index: 2;
   cursor: pointer;
 }
