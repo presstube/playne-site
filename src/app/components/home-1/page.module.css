@@ -2,6 +2,25 @@
   min-height: 100vh;
   background-color: var(--brand-offwhite);
   padding-top: 2rem;
+  position: relative;
+}
+
+.resetNick {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 4rem 4rem 0;
+  border-color: transparent var(--brand-red) transparent transparent;
+  cursor: pointer;
+  z-index: 9999;
+  transition: border-width 0.2s ease;
+}
+
+.resetNick:hover {
+  border-width: 0 4.5rem 4.5rem 0;
 }
 
 .brandHeroContainer {
@@ -90,7 +109,7 @@
 }
 
 .headlineSubContainer {
-  width: 50%;
+  width: clamp(75%, 50% + 10vw, 50%);
   position: relative;
   left: 66%;
   transform: translateX(-50%) rotate(3deg);

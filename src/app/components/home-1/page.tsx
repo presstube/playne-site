@@ -114,7 +114,7 @@ const HOME1_DEFAULTS = {
   },
   "photo0": {
     "gallerySlug": "shantell-martin-playne",
-    "assetId": "image-e533c7b585468baf66445ba2fdd95e7b8f323945-4128x2322-jpg"
+    "assetId": "image-6dea8898205814996463a0f3fa203d9eec5e4cb2-1000x667-jpg"
   },
   "photo": {
     "gallerySlug": "free-arts-day-2025",
@@ -125,11 +125,11 @@ const HOME1_DEFAULTS = {
     "quoteIdx": 1
   },
   "path": {
-    "width": 680,
+    "width": 436,
     "height": 392,
-    "bgColor": "#A9ECD4",
+    "bgColor": "#231f20",
     "pathCount": 3,
-    "seed": 0.4295308248051748
+    "seed": 0.23194106757133026
   },
   "tbq2": {
     "subBodyIdx": 3,
@@ -752,69 +752,117 @@ export default function Page() {
     }))
   }, [tbq3SubBodyIdx, tbq3QuoteIdx])
 
-  // Keyboard listener for logging LSO state
+  // Clear localStorage and reset to defaults
+  const handleClearStorage = useCallback(() => {
+    if (window.confirm('Clear all saved state and reset to defaults?')) {
+      // Clear all home-1 localStorage keys
+      localStorage.removeItem(LSO_HEADLINE_KEY)
+      localStorage.removeItem(LSO_PHOTO0_KEY)
+      localStorage.removeItem(LSO_PHOTO_KEY)
+      localStorage.removeItem(LSO_TBQ_KEY)
+      localStorage.removeItem(LSO_PATH_KEY)
+      localStorage.removeItem(LSO_TBQ2_KEY)
+      localStorage.removeItem(LSO_PHOTO2_KEY)
+      localStorage.removeItem(LSO_SHAPE_KEY)
+      localStorage.removeItem(LSO_HS_KEY)
+      localStorage.removeItem(LSO_PHOTO3_KEY)
+      localStorage.removeItem(LSO_TBQ3_KEY)
+      
+      // Reload the page to reset to defaults
+      window.location.reload()
+    }
+  }, [])
+
+  // Keyboard listener for logging current state
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.key === 'l' || e.key === 'L') {
-        // Gather all localStorage data
-        const rawData = {
-          headline: localStorage.getItem(LSO_HEADLINE_KEY) ? JSON.parse(localStorage.getItem(LSO_HEADLINE_KEY)!) : null,
-          photo0: localStorage.getItem(LSO_PHOTO0_KEY) ? JSON.parse(localStorage.getItem(LSO_PHOTO0_KEY)!) : null,
-          photo: localStorage.getItem(LSO_PHOTO_KEY) ? JSON.parse(localStorage.getItem(LSO_PHOTO_KEY)!) : null,
-          tbq: localStorage.getItem(LSO_TBQ_KEY) ? JSON.parse(localStorage.getItem(LSO_TBQ_KEY)!) : null,
-          path: localStorage.getItem(LSO_PATH_KEY) ? JSON.parse(localStorage.getItem(LSO_PATH_KEY)!) : null,
-          tbq2: localStorage.getItem(LSO_TBQ2_KEY) ? JSON.parse(localStorage.getItem(LSO_TBQ2_KEY)!) : null,
-          photo2: localStorage.getItem(LSO_PHOTO2_KEY) ? JSON.parse(localStorage.getItem(LSO_PHOTO2_KEY)!) : null,
-          shape: localStorage.getItem(LSO_SHAPE_KEY) ? JSON.parse(localStorage.getItem(LSO_SHAPE_KEY)!) : null,
-          headlineSub: localStorage.getItem(LSO_HS_KEY) ? JSON.parse(localStorage.getItem(LSO_HS_KEY)!) : null,
-          photo3: localStorage.getItem(LSO_PHOTO3_KEY) ? JSON.parse(localStorage.getItem(LSO_PHOTO3_KEY)!) : null,
-          tbq3: localStorage.getItem(LSO_TBQ3_KEY) ? JSON.parse(localStorage.getItem(LSO_TBQ3_KEY)!) : null,
+        // Capture current runtime state (what's actually displayed)
+        const currentState = {
+          headline: {
+            copyIdx: headlineCopyIdx,
+            fg: headlineFg,
+            bg: headlineBg
+          },
+          photo0: currentImage0 ? {
+            gallerySlug: currentImage0.gallerySlug,
+            assetId: currentImage0.assetId,
+          } : null,
+          photo: currentImage ? {
+            gallerySlug: currentImage.gallerySlug,
+            assetId: currentImage.assetId,
+          } : null,
+          tbq: {
+            subBodyIdx: tbqSubBodyIdx,
+            quoteIdx: tbqQuoteIdx
+          },
+          path: pathContainer,
+          tbq2: {
+            subBodyIdx: tbq2SubBodyIdx,
+            quoteIdx: tbq2QuoteIdx,
+            colorIdx: tbq2ColorIdx
+          },
+          photo2: currentImage2 ? {
+            gallerySlug: currentImage2.gallerySlug,
+            assetId: currentImage2.assetId,
+          } : null,
+          shape: {
+            seed: shapeSeed
+          },
+          headlineSub: {
+            hIdx: hsHIdx,
+            sIdx: hsSIdx,
+            align: hsAlign,
+            bg: hsBg,
+            fg: hsFg
+          },
+          photo3: currentImage3 ? {
+            gallerySlug: currentImage3.gallerySlug,
+            assetId: currentImage3.assetId,
+          } : null,
+          tbq3: {
+            subBodyIdx: tbq3SubBodyIdx,
+            quoteIdx: tbq3QuoteIdx,
+            colorIdx: tbq3ColorIdx
+          }
         }
 
-        // Create minimal version with only essential data
-        const minimalData = {
-          headline: rawData.headline,
-          photo0: rawData.photo0 ? {
-            gallerySlug: rawData.photo0.gallerySlug,
-            assetId: rawData.photo0.assetId,
-          } : null,
-          photo: rawData.photo ? {
-            gallerySlug: rawData.photo.gallerySlug,
-            assetId: rawData.photo.assetId,
-          } : null,
-          tbq: rawData.tbq,
-          path: rawData.path,
-          tbq2: rawData.tbq2,
-          photo2: rawData.photo2 ? {
-            gallerySlug: rawData.photo2.gallerySlug,
-            assetId: rawData.photo2.assetId,
-          } : null,
-          shape: rawData.shape,
-          headlineSub: rawData.headlineSub,
-          photo3: rawData.photo3 ? {
-            gallerySlug: rawData.photo3.gallerySlug,
-            assetId: rawData.photo3.assetId,
-          } : null,
-          tbq3: rawData.tbq3,
-        }
-
-        console.log('=== HOME-1 LOCAL STORAGE STATE (MINIMAL) ===')
-        console.log(JSON.stringify(minimalData, null, 2))
-        console.log('\n=== COPY/PASTE FORMAT ===')
-        console.log('const HOME1_DEFAULTS = ' + JSON.stringify(minimalData, null, 2))
-        console.log('\n=== FULL DATA (if needed) ===')
-        console.log(JSON.stringify(rawData, null, 2))
+        console.log('const HOME1_DEFAULTS = ' + JSON.stringify(currentState, null, 2))
       }
     }
 
     window.addEventListener('keydown', handleKeyPress)
     return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [])
+  }, [headlineCopyIdx, headlineFg, headlineBg, currentImage0, currentImage, tbqSubBodyIdx, tbqQuoteIdx, pathContainer, tbq2SubBodyIdx, tbq2QuoteIdx, tbq2ColorIdx, currentImage2, shapeSeed, hsHIdx, hsSIdx, hsAlign, hsBg, hsFg, currentImage3, tbq3SubBodyIdx, tbq3QuoteIdx, tbq3ColorIdx])
 
   return (
-    <div className={styles.page}>
-      {/* BrandHero at top */}
-      <div className={styles.brandHeroContainer}>
+    <div className={styles.page} suppressHydrationWarning>
+      {/* Reset button - diagonal nick in top right */}
+      {mounted && (
+        <div 
+          className={styles.resetNick}
+          onClick={handleClearStorage}
+          role="button"
+          aria-label="Reset to defaults"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              handleClearStorage()
+            }
+          }}
+        />
+      )}
+
+      {/* Only render content after mounting to avoid hydration errors */}
+      {!mounted ? (
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <p>Loading...</p>
+        </div>
+      ) : (
+        <>
+          {/* BrandHero at top */}
+          <div className={styles.brandHeroContainer}>
         <BrandHero />
       </div>
 
@@ -1036,6 +1084,8 @@ export default function Page() {
           bg={TBQ_BG_COLORS[tbq3ColorIdx].bg}
         />
       </div>
+        </>
+      )}
     </div>
   )
 }

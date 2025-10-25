@@ -1,6 +1,6 @@
 .wrapper {
   width: 100%;
-  padding: var(--space-9) var(--space-7); /* reduced top/bottom spacing */
+  padding: clamp(1.5rem, 3vw, 6rem) clamp(2.5rem, 6vw, 3rem);
   border-radius: 1rem;
 }
 
