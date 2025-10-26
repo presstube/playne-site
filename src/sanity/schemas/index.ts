@@ -8,5 +8,6 @@ import { event } from './event'
 import { eventsPage } from './eventsPage'
 import { gallery } from './gallery'
 import { galleriesPage } from './galleriesPage'
+import { pageConfiguration } from './pageConfiguration'
 
-export const schemaTypes = [homePage, aboutPage, programsPage, getInvolvedPage, supportPage, contactPage, event, eventsPage, gallery, galleriesPage]
+export const schemaTypes = [homePage, aboutPage, programsPage, getInvolvedPage, supportPage, contactPage, event, eventsPage, gallery, galleriesPage, pageConfiguration]

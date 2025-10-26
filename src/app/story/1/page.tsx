@@ -182,6 +182,10 @@ interface PathContainerConfig {
 }
 
 export default function Page() {
+  // Save/Load state for Sanity integration
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle')
+  
   // Headline state (top element)
   const [headlineCopyIdx, setHeadlineCopyIdx] = useState(0)
   const [headlineFg, setHeadlineFg] = useState('var(--brand-black)')
@@ -367,6 +371,36 @@ export default function Page() {
     
     setMounted(true)
   }, [])
+
+  // Load configuration from Sanity on mount
+  useEffect(() => {
+    async function loadSanityConfig() {
+      try {
+        const response = await fetch('/api/page-config/story-1')
+        if (response.ok) {
+          const data = await response.json()
+          if (data.componentConfig) {
+            console.log('Loaded config from Sanity:', data.componentConfig)
+            // Only use Sanity values if no LSO override exists
+            Object.entries(data.componentConfig).forEach(([key, value]) => {
+              const lsoKey = `story1-${key}`
+              if (!localStorage.getItem(lsoKey)) {
+                // No local override, use Sanity value
+                localStorage.setItem(lsoKey, JSON.stringify(value))
+              }
+            })
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load Sanity config:', error)
+        // Fall back to hardcoded STORY1_DEFAULTS
+      }
+    }
+    
+    if (mounted) {
+      loadSanityConfig()
+    }
+  }, [mounted])
 
   // Fetch gallery images for Photo
   useEffect(() => {
@@ -754,8 +788,8 @@ export default function Page() {
     }))
   }, [tbq3SubBodyIdx, tbq3QuoteIdx])
 
-  // Clear localStorage and reset to defaults
-  const handleClearStorage = useCallback(() => {
+  // Clear localStorage and reset to defaults (from Sanity if available)
+  const handleClearStorage = useCallback(async () => {
     if (window.confirm('Clear all saved state and reset to defaults?')) {
       // Clear all story-1 localStorage keys
       localStorage.removeItem(LSO_HEADLINE_KEY)
@@ -770,8 +804,69 @@ export default function Page() {
       localStorage.removeItem(LSO_PHOTO3_KEY)
       localStorage.removeItem(LSO_TBQ3_KEY)
       
+      // Try to fetch fresh config from Sanity
+      try {
+        const response = await fetch('/api/page-config/story-1')
+        if (response.ok) {
+          const data = await response.json()
+          if (data.componentConfig) {
+            // Populate LSO with Sanity values
+            Object.entries(data.componentConfig).forEach(([key, value]) => {
+              localStorage.setItem(`story1-${key}`, JSON.stringify(value))
+            })
+          }
+        }
+      } catch (error) {
+        console.error('Failed to reset from Sanity:', error)
+        // Will fall back to hardcoded defaults on reload
+      }
+      
       // Reload the page to reset to defaults
       window.location.reload()
+    }
+  }, [])
+
+  // Save current LSO state to Sanity
+  const handleSaveToSanity = useCallback(async () => {
+    setIsSaving(true)
+    setSaveStatus('saving')
+    
+    // Gather current state from LSO
+    const currentConfig: Record<string, unknown> = {}
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith('story1-')) {
+        const componentKey = key.replace('story1-', '')
+        try {
+          currentConfig[componentKey] = JSON.parse(localStorage.getItem(key) || 'null')
+        } catch (e) {
+          console.error(`Failed to parse ${key}:`, e)
+        }
+      }
+    })
+    
+    try {
+      const response = await fetch('/api/page-config/story-1', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          componentConfig: currentConfig,
+          title: 'Story 1',
+          metaDescription: 'Visual story collage #1 for PLAYNE',
+        }),
+      })
+      
+      if (response.ok) {
+        setSaveStatus('success')
+        setTimeout(() => setSaveStatus('idle'), 2000)
+      } else {
+        throw new Error('Save failed')
+      }
+    } catch (error) {
+      console.error('Failed to save to Sanity:', error)
+      setSaveStatus('error')
+      setTimeout(() => setSaveStatus('idle'), 3000)
+    } finally {
+      setIsSaving(false)
     }
   }, [])
 
@@ -839,7 +934,7 @@ export default function Page() {
 
   return (
     <div className={styles.page} suppressHydrationWarning>
-      {/* Reset button - diagonal nick in top right */}
+      {/* Reset button - diagonal nick in top right (red) */}
       {mounted && (
         <div 
           className={styles.resetNick}
@@ -854,6 +949,27 @@ export default function Page() {
             }
           }}
         />
+      )}
+
+      {/* Save button - diagonal nick next to reset (green/blue) */}
+      {mounted && (
+        <div 
+          className={styles.saveNick}
+          onClick={handleSaveToSanity}
+          role="button"
+          aria-label="Save to Sanity"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              handleSaveToSanity()
+            }
+          }}
+        >
+          {saveStatus === 'saving' && <span className={styles.saveIcon}>⏳</span>}
+          {saveStatus === 'success' && <span className={styles.saveIcon}>✓</span>}
+          {saveStatus === 'error' && <span className={styles.saveIcon}>✗</span>}
+        </div>
       )}
 
       {/* Only render content after mounting to avoid hydration errors */}

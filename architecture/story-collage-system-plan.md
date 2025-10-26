@@ -19,14 +19,83 @@ A system for creating, curating, and managing visual story pages (collages) with
 - [x] Implemented site-wide password protection (middleware + basic auth)
 - [x] Updated plan documentation
 
-### 🔄 Next Phases
-- [ ] Phase 1: Site-wide Password Protection (COMPLETE, already done in Phase 0)
-- [ ] Phase 2: Sanity Schema for Page Configurations
-- [ ] Phase 3: API Routes for Save/Load
-- [ ] Phase 4: Update story/1 Page Logic with Green Triangle
-- [ ] Phase 5: Sanity Client Token Configuration
+### ✅ Phase 1: Site-wide Password Protection (COMPLETE)
+- [x] Created `middleware.ts` with basic auth
+- [x] Created `/api/auth` route
+- [x] Documented `SITE_PASSWORD` env var in README
+- [x] Works locally and on Vercel
 
-## Layout Architecture Decision
+### ✅ Phase 2: Sanity Schema for Page Configurations (COMPLETE)
+- [x] Created `pageConfiguration.ts` schema with all fields
+- [x] Registered schema in `schemas/index.ts`
+- [x] Schema includes: slug, title, metaDescription, socialImage, componentConfig JSON, lastSavedBy, lastSavedAt
+- [x] Preview shows title, slug, and last saved date
+
+### ✅ Phase 3: API Routes for Save/Load (COMPLETE)
+- [x] Created `/api/page-config/[slug]/route.ts`
+- [x] GET endpoint fetches config from Sanity, parses JSON
+- [x] POST endpoint saves/updates config, handles create vs update
+- [x] Error handling and validation
+- [x] Uses write client with `SANITY_API_TOKEN`
+
+### ✅ Phase 4: Update story/1 Page Logic (COMPLETE)
+- [x] Added `isSaving` and `saveStatus` state
+- [x] Created `loadSanityConfig()` effect - loads on mount, populates LSO
+- [x] Updated `handleClearStorage()` - resets from Sanity
+- [x] Created `handleSaveToSanity()` - gathers LSO, POSTs to API
+- [x] Added green triangle (blue) for save
+- [x] Visual feedback: ⏳ saving, ✓ success, ✗ error
+- [x] Positioned next to red reset triangle
+
+## How to Complete Phase 5: Sanity Token Setup
+
+### 1. Generate Sanity API Token
+
+Visit [sanity.io/manage](https://www.sanity.io/manage):
+1. Select your PLAYNE project
+2. Go to **API** → **Tokens**
+3. Click **Add API Token**
+4. Name: "Story Collage Write Token"
+5. Permissions: **Editor** (allows read + write)
+6. Click **Add Token**
+7. **Copy the token immediately** (you won't see it again)
+
+### 2. Add Token Locally
+
+Add to `/Users/jamespaterson/Dropbox/PLAYNE/playne-site/.env.local`:
+
+```bash
+SANITY_API_TOKEN=your_copied_token_here
+```
+
+### 3. Add Token to Vercel
+
+1. Go to your Vercel project dashboard
+2. Navigate to **Settings** → **Environment Variables**
+3. Add new variable:
+   - **Key**: `SANITY_API_TOKEN`
+   - **Value**: [paste your token]
+   - **Environments**: Production, Preview, Development
+4. Click **Save**
+
+### 4. Test the System
+
+1. Visit `http://localhost:3000/story/1`
+2. Click components to randomize them
+3. Press **L** key to see current config in console
+4. Click **blue triangle** (top right, next to red) to save
+5. Should see ✓ checkmark on success
+6. Clear LSO and reload - should load from Sanity
+7. Click **red triangle** to reset - should fetch from Sanity
+
+### 5. Verify in Sanity Studio
+
+1. Visit `http://localhost:3000/studio`
+2. Look for **Page Configuration** document type
+3. Should see a document with slug `story-1`
+4. Open it to see the saved JSON configuration
+
+---
 
 ### Current Implementation: Frameless Story Routes
 
