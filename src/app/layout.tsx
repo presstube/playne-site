@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import RootLayout from './RootLayout/RootLayout'
+import PasswordGate from '@/components/PasswordGate/PasswordGate'
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -24,7 +25,9 @@ export default function Layout({
         />
       </head>
       <body>
-        <RootLayout>{children}</RootLayout>
+        <PasswordGate>
+          <RootLayout>{children}</RootLayout>
+        </PasswordGate>
       </body>
     </html>
   );
