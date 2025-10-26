@@ -9,6 +9,100 @@ A system for creating, curating, and managing visual story pages (collages) with
 3. **Simple password protection** for the entire site during development
 4. **Visual controls** (colored triangles) for save/reset operations
 
+## Implementation Status
+
+### ✅ Phase 0: Foundation (COMPLETE)
+- [x] Created `/story/1` page (moved from `/story-1`)
+- [x] Updated all LSO keys to use `story1-` prefix
+- [x] Isolated from `home-1` experimental page
+- [x] Configured RootLayout to render story routes "frameless" (no site nav/footer)
+- [x] Implemented site-wide password protection (middleware + basic auth)
+- [x] Updated plan documentation
+
+### 🔄 Next Phases
+- [ ] Phase 1: Site-wide Password Protection (COMPLETE, already done in Phase 0)
+- [ ] Phase 2: Sanity Schema for Page Configurations
+- [ ] Phase 3: API Routes for Save/Load
+- [ ] Phase 4: Update story/1 Page Logic with Green Triangle
+- [ ] Phase 5: Sanity Client Token Configuration
+
+## Layout Architecture Decision
+
+### Current Implementation: Frameless Story Routes
+
+**What we did:**
+- Story routes (`/story/*`) render **without** the site's standard Topnav, PageNavigation, and footer
+- Updated `RootLayout.tsx` to detect `/story` routes: `pathname?.startsWith('/story')`
+- This follows the existing pattern for `/components` routes (experimental pages)
+
+**Why frameless:**
+1. **Story pages are immersive collages** - they should fill the viewport without chrome
+2. **Each story has its own Footer component** - baked into the collage itself as a design element
+3. **Consistent with experimental pages** - `/components` routes are also frameless
+4. **Clean canvas** - stories are self-contained visual experiences, not traditional site pages
+
+### Should We Keep It Frameless?
+
+**✅ RECOMMENDATION: Keep frameless, but add navigation affordance**
+
+**Reasoning:**
+- Story collages are **intentionally immersive** - the site nav would break the visual flow
+- The built-in Footer component provides branding and navigation (home, about, programs, etc.)
+- Stories are meant to be **destinations**, not part of the standard site hierarchy
+- Similar to Sanity Studio (`/studio`) or component demos (`/components`) - they're tools/experiences, not content pages
+
+**However, consider adding:**
+1. **A subtle "back to site" link** (top-left corner, small, unobtrusive)
+2. **Or keyboard shortcut** (e.g., "Esc" to return to main site)
+3. **Or keep fully frameless** - visitors arrive via direct links or home page
+
+**If we need to bring back the layout:**
+- It's a one-line change: remove `|| pathname?.startsWith('/story')` from `RootLayout.tsx`
+- But this would compromise the immersive collage experience
+- Better to add opt-in navigation within the story itself
+
+### Alternate Approach (Not Recommended)
+
+If stories needed to be part of the main site nav:
+- Keep them frameless
+- Add a dedicated "Stories" link in Topnav
+- Have a `/story` index page that lists all story collages
+- Each story (`/story/1`, `/story/2`) remains frameless
+
+**Verdict:** Keep frameless. The immersive experience is the point.
+
+## File Structure Changes
+
+```
+src/app/
+  ├── components/           # Experimental pages (frameless)
+  │   └── home-1/          # Original experiment (unchanged)
+  │       ├── page.tsx
+  │       └── page.module.css
+  │
+  ├── story/               # Story collage pages (frameless)
+  │   └── 1/               # Story #1 - PRIMARY IMPLEMENTATION
+  │       ├── page.tsx     # Component logic, LSO management
+  │       └── page.module.css
+  │
+  ├── RootLayout/
+  │   └── RootLayout.tsx   # Updated: frameless for /story routes
+  │
+  └── api/
+      └── auth/
+          └── route.ts     # Password protection endpoint
+
+middleware.ts              # Site-wide basic auth
+```
+
+## Access URLs
+
+- **Story 1**: `http://localhost:3000/story/1` (frameless, immersive)
+- **Original Experiment**: `http://localhost:3000/components/home-1` (frameless, unchanged)
+- **Main Site**: `http://localhost:3000` (with standard layout)
+
+---
+
 ## Goals
 
 - Enable content team to curate and publish specific "story" configurations
@@ -25,6 +119,17 @@ A system for creating, curating, and managing visual story pages (collages) with
 - Red triangle clears LSO and resets to hardcoded defaults
 - "L" key logs current component state to console
 - Components: BrandHero, Headline, HeadlineSub, Photo, PathContainer, Shape, TitleBodyQuote
+- **Status**: Experimental page, unchanged by this implementation
+
+**story/1 page** (`/story/1`) **[NEW - PRIMARY IMPLEMENTATION]**:
+- Copy of home-1 page, serving as the first "story collage" implementation
+- Uses `STORY1_DEFAULTS` object in page component
+- Per-component state stored in LSO with `story1-` prefix (separate from home-1)
+- Red triangle clears LSO and resets to defaults (will reset from Sanity in Phase 4)
+- "L" key logs current component state as `STORY1_DEFAULTS`
+- Same component set as home-1: BrandHero, Headline, HeadlineSub, Photo, PathContainer, Shape, TitleBodyQuote
+- **Renders frameless** (no site Topnav/PageNavigation/footer) - includes own Footer component
+- **Will be upgraded** to use Sanity save/load in Phase 4
 
 ## Proposed Architecture
 
@@ -327,9 +432,11 @@ export async function POST(
 }
 ```
 
-### Phase 4: Update home-1 Page Logic
+### Phase 4: Update story/1 Page Logic
 
-**Changes to:** `src/app/components/home-1/page.tsx`
+**Changes to:** `src/app/story/1/page.tsx`
+
+**Note**: The original `home-1` page remains untouched as an experimental page. All story collage system implementation happens on `/story/1`.
 
 **Add at top:**
 ```typescript
@@ -340,7 +447,7 @@ const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'er
 useEffect(() => {
   async function loadSanityConfig() {
     try {
-      const response = await fetch('/api/page-config/home-1')
+      const response = await fetch('/api/page-config/story-1')
       if (response.ok) {
         const data = await response.json()
         if (data.componentConfig) {
@@ -348,7 +455,7 @@ useEffect(() => {
           // Set as new defaults
           // Only use Sanity values if no LSO override exists
           Object.entries(data.componentConfig).forEach(([key, value]) => {
-            const lsoKey = `home1-${key}`
+            const lsoKey = `story1-${key}`
             if (!localStorage.getItem(lsoKey)) {
               // No local override, use Sanity value
               localStorage.setItem(lsoKey, JSON.stringify(value))
@@ -361,7 +468,7 @@ useEffect(() => {
       }
     } catch (error) {
       console.error('Failed to load Sanity config:', error)
-      // Fall back to hardcoded HOME1_DEFAULTS
+      // Fall back to hardcoded STORY1_DEFAULTS
     }
   }
   
@@ -371,23 +478,25 @@ useEffect(() => {
 }, []) // Only run once on mount
 ```
 
+**Note on slug naming:** The API uses slug `story-1` (Sanity-friendly) while the route is `/story/1` (URL-friendly). This separation allows flexibility in URL structure without affecting CMS organization.
+
 **Update red triangle handler (reset):**
 ```typescript
 const handleClearStorage = useCallback(async () => {
   // Clear all LSO
   Object.keys(localStorage)
-    .filter(k => k.startsWith('home1-'))
+    .filter(k => k.startsWith('story1-'))
     .forEach(k => localStorage.removeItem(k))
   
   // Fetch fresh from Sanity
   try {
-    const response = await fetch('/api/page-config/home-1')
+    const response = await fetch('/api/page-config/story-1')
     if (response.ok) {
       const data = await response.json()
       if (data.componentConfig) {
         // Populate LSO with Sanity values
         Object.entries(data.componentConfig).forEach(([key, value]) => {
-          localStorage.setItem(`home1-${key}`, JSON.stringify(value))
+          localStorage.setItem(`story1-${key}`, JSON.stringify(value))
         })
       }
     }
@@ -408,8 +517,8 @@ const handleSaveToSanity = useCallback(async () => {
   // Gather current state from LSO
   const currentConfig: Record<string, any> = {}
   Object.keys(localStorage).forEach(key => {
-    if (key.startsWith('home1-')) {
-      const componentKey = key.replace('home1-', '')
+    if (key.startsWith('story1-')) {
+      const componentKey = key.replace('story1-', '')
       try {
         currentConfig[componentKey] = JSON.parse(localStorage.getItem(key) || 'null')
       } catch (e) {
@@ -419,13 +528,13 @@ const handleSaveToSanity = useCallback(async () => {
   })
   
   try {
-    const response = await fetch('/api/page-config/home-1', {
+    const response = await fetch('/api/page-config/story-1', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         componentConfig: currentConfig,
-        title: 'Home Story Page',
-        metaDescription: 'Visual story collage for PLAYNE homepage',
+        title: 'Story 1',
+        metaDescription: 'Visual story collage #1 for PLAYNE',
       }),
     })
     

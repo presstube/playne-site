@@ -240,8 +240,14 @@ This project follows the patterns defined in `/architecture/pages-components-css
 Set these in your deployment platform:
 
 ```bash
+# Sanity CMS
 NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
 NEXT_PUBLIC_SANITY_DATASET=production
+SANITY_API_TOKEN=your-write-token-here
+
+# Optional: Site-wide password protection
+# If set, the entire site will require basic auth (username: playne)
+SITE_PASSWORD=your-password-here
 ```
 
 ### Vercel (Recommended)
