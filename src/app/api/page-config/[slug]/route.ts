@@ -75,7 +75,8 @@ export async function POST(
     
     // Check if document exists
     const existingDoc = await writeClient.fetch(
-      `*[_type == "pageConfiguration" && pageSlug.current == $slug][0]{ _id }`
+      `*[_type == "pageConfiguration" && pageSlug.current == $slug][0]{ _id }`,
+      { slug }
     )
     
     const docData = {

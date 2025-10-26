@@ -415,7 +415,21 @@ export default function Page() {
           try {
             const parsed = JSON.parse(savedPhoto0)
             console.log('Loaded saved photo 0:', parsed)
-            setCurrentImage0(parsed)
+            // Find full image data from fetched images
+            const fullImage = images.find(
+              (img: GalleryImage) => img.gallerySlug === parsed.gallerySlug && 
+                     img.assetId === parsed.assetId
+            )
+            if (fullImage) {
+              setCurrentImage0(fullImage)
+            } else {
+              console.log('Saved photo 0 not found in galleries, using default')
+              const defaultImage = images.find(
+                (img: GalleryImage) => img.gallerySlug === STORY1_DEFAULTS.photo0.gallerySlug && 
+                       img.assetId === STORY1_DEFAULTS.photo0.assetId
+              )
+              setCurrentImage0(defaultImage || images[0])
+            }
           } catch (e) {
             console.error('Error parsing saved photo 0:', e)
             // Fallback to defaults
@@ -450,7 +464,20 @@ export default function Page() {
           try {
             const parsed = JSON.parse(savedPhoto)
             console.log('Loaded saved photo:', parsed)
-            setCurrentImage(parsed)
+            // Find full image data from fetched images
+            const fullImage = images.find(
+              (img: GalleryImage) => img.gallerySlug === parsed.gallerySlug && 
+                     img.assetId === parsed.assetId
+            )
+            if (fullImage) {
+              setCurrentImage(fullImage)
+            } else {
+              const defaultImage = images.find(
+                (img: GalleryImage) => img.gallerySlug === STORY1_DEFAULTS.photo.gallerySlug && 
+                       img.assetId === STORY1_DEFAULTS.photo.assetId
+              )
+              setCurrentImage(defaultImage || images[0])
+            }
           } catch (e) {
             console.error('Error parsing saved photo:', e)
             // Fallback to defaults
@@ -485,7 +512,20 @@ export default function Page() {
           try {
             const parsed = JSON.parse(savedPhoto2)
             console.log('Loaded saved photo 2:', parsed)
-            setCurrentImage2(parsed)
+            // Find full image data from fetched images
+            const fullImage = images.find(
+              (img: GalleryImage) => img.gallerySlug === parsed.gallerySlug && 
+                     img.assetId === parsed.assetId
+            )
+            if (fullImage) {
+              setCurrentImage2(fullImage)
+            } else {
+              const defaultImage = images.find(
+                (img: GalleryImage) => img.gallerySlug === STORY1_DEFAULTS.photo2.gallerySlug && 
+                       img.assetId === STORY1_DEFAULTS.photo2.assetId
+              )
+              setCurrentImage2(defaultImage || images[0])
+            }
           } catch (e) {
             console.error('Error parsing saved photo 2:', e)
             // Fallback to defaults
@@ -520,7 +560,20 @@ export default function Page() {
           try {
             const parsed = JSON.parse(savedPhoto3)
             console.log('Loaded saved photo 3:', parsed)
-            setCurrentImage3(parsed)
+            // Find full image data from fetched images
+            const fullImage = images.find(
+              (img: GalleryImage) => img.gallerySlug === parsed.gallerySlug && 
+                     img.assetId === parsed.assetId
+            )
+            if (fullImage) {
+              setCurrentImage3(fullImage)
+            } else {
+              const defaultImage = images.find(
+                (img: GalleryImage) => img.gallerySlug === STORY1_DEFAULTS.photo3.gallerySlug && 
+                       img.assetId === STORY1_DEFAULTS.photo3.assetId
+              )
+              setCurrentImage3(defaultImage || images[0])
+            }
           } catch (e) {
             console.error('Error parsing saved photo 3:', e)
             // Fallback to defaults
