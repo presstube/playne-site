@@ -863,7 +863,7 @@ export default function Page() {
         if (response.ok) {
           const data = await response.json()
           if (data.componentConfig) {
-            // Populate LSO with Sanity values
+            // Populate LSO with Sanity values (photos will be resolved from allImages on next load)
             Object.entries(data.componentConfig).forEach(([key, value]) => {
               localStorage.setItem(`story1-${key}`, JSON.stringify(value))
             })
@@ -1061,7 +1061,7 @@ export default function Page() {
 
       {/* New Photo0 below Headline */}
       <div className={styles.photo0Container}>
-        {currentImage0 ? (
+        {currentImage0 && currentImage0.dimensions ? (
           <Photo 
             image={currentImage0} 
             onClick={handlePhoto0Click}
@@ -1095,7 +1095,7 @@ export default function Page() {
       </div>
 
       <div className={styles.photoContainer}>
-        {currentImage ? (
+        {currentImage && currentImage.dimensions ? (
           <Photo 
             image={currentImage} 
             onClick={handlePhotoClick}
@@ -1163,7 +1163,7 @@ export default function Page() {
       </div>
 
       <div className={styles.photo2Container}>
-        {currentImage2 ? (
+        {currentImage2 && currentImage2.dimensions ? (
           <Photo 
             image={currentImage2} 
             onClick={handlePhoto2Click}
@@ -1222,7 +1222,7 @@ export default function Page() {
       </div>
 
       <div className={styles.photo3Container}>
-        {currentImage3 ? (
+        {currentImage3 && currentImage3.dimensions ? (
           <Photo 
             image={currentImage3} 
             onClick={handlePhoto3Click}
