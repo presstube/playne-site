@@ -1,23 +1,82 @@
-.container {
+/* Workspace - full viewport canvas */
+.workspace {
   width: 100vw;
   height: 100vh;
   background-color: var(--brand-offwhite);
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  padding: 2rem;
+  padding-bottom: 120px; /* Space for toolbar */
   overflow: hidden;
-  user-select: none;
-  -webkit-user-select: none;
+  cursor: pointer;
 }
 
-.containerDrawMode {
+.workspace[data-drawing="true"] {
   cursor: crosshair;
 }
 
+/* Frame - responsive square with breathing room */
+.frame {
+  position: relative;
+  /* Responsive sizing: smaller of (width - padding) or (height - padding), capped at 700px */
+  width: min(
+    calc(100vw - 200px),  /* Leave 100px padding each side */
+    calc(100vh - 280px),  /* Leave space for toolbar + margins */
+    700px                  /* Cap at comfortable max size */
+  );
+  height: min(
+    calc(100vw - 200px),
+    calc(100vh - 280px),
+    700px
+  );
+  background-color: white;
+  border: 1px solid rgba(35, 31, 32, 0.15);
+  box-shadow: 0 4px 24px rgba(35, 31, 32, 0.12);
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;  /* Allow events to pass through to workspace */
+  z-index: 10;  /* Above workspace and overlays */
+}
+
+.frame * {
+  pointer-events: auto;  /* But allow children to receive events */
+}
+
+/* Dimming overlays - cover areas outside frame */
+.dimOverlay {
+  position: absolute;
+  background-color: rgba(234, 234, 218, 0.7);  /* 70% opaque offwhite */
+  pointer-events: none;
+  z-index: 5;  /* Between workspace and frame */
+}
+
+/* Remove the overlay div - using box-shadow instead */
+
+/* SVG for full-bleed paths - positioned absolutely in workspace */
+.pathSvgFullBleed {
+  position: absolute;
+  pointer-events: none;
+  z-index: 20;  /* Above frame */
+  overflow: visible;  /* Allow paths to render outside */
+}
+
+/* Frame content container */
+.frameContent {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Image - sized relative to frame */
 .image {
-  max-width: 50vw;
-  max-height: 50vh;
+  max-width: 100%;
+  max-height: 100%;
   width: auto;
   height: auto;
   object-fit: contain;
@@ -26,34 +85,36 @@
   pointer-events: none;
 }
 
-/* Path overlay */
-.pathOverlay {
-  position: fixed;
+/* SVG overlay - positioned within frame */
+.frameSvg {
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
-  z-index: 10;
+  z-index: 150;  /* Between dots (200) and image (1) */
+}
+
+/* Legacy classes - remove these after testing */
+.container {
+  display: none;
+}
+
+.containerDrawMode {
+  display: none;
+}
+
+.pathOverlay {
+  display: none;
 }
 
 .pathDot {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background-color: #FF0000;
-  border-radius: 50%;
-  transform: translate(-3px, -3px);
+  display: none;
 }
 
 .pathSvg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 10;
+  display: none;
 }
 
 /* Toolbar */

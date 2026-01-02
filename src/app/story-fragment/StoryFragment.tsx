@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { urlFor } from '@/sanity/lib/image'
 import { GalleryImage } from '@/lib/image-hat'
 import styles from './StoryFragment.module.css'
@@ -9,8 +9,15 @@ interface StoryFragmentProps {
   images: GalleryImage[]
 }
 
-type Point = { x: number; y: number }
+type Point = { x: number; y: number }  // Now represents normalized coords (0-1)
 type PathMode = 'idle' | 'ready' | 'drawing'
+
+interface FrameBounds {
+  left: number
+  top: number
+  width: number
+  height: number
+}
 
 interface PathControls {
   // Stage 1: Simplification
@@ -35,6 +42,55 @@ interface PathControls {
   showResampled: boolean
   showPath: boolean
 }
+
+// ============================================================================
+// COORDINATE TRANSFORMATION UTILITIES
+// ============================================================================
+
+/**
+ * Get frame bounds from DOM element
+ */
+function getFrameBounds(frameElement: HTMLElement): FrameBounds {
+  const rect = frameElement.getBoundingClientRect()
+  return {
+    left: rect.left,
+    top: rect.top,
+    width: rect.width,
+    height: rect.height
+  }
+}
+
+/**
+ * Convert viewport mouse coordinates to normalized frame coordinates (0-1)
+ * This makes paths resolution-independent for export
+ */
+function viewportToNormalized(
+  clientX: number,
+  clientY: number,
+  bounds: FrameBounds
+): Point {
+  const frameX = clientX - bounds.left
+  const frameY = clientY - bounds.top
+  
+  return {
+    x: frameX / bounds.width,   // Normalize to 0-1
+    y: frameY / bounds.height
+  }
+}
+
+/**
+ * Check if normalized point is within frame bounds (0-1 range)
+ */
+function isPointInFrame(point: Point): boolean {
+  return point.x >= 0 && 
+         point.x <= 1 && 
+         point.y >= 0 && 
+         point.y <= 1
+}
+
+// ============================================================================
+// PATH SMOOTHING ALGORITHMS
+// ============================================================================
 
 // Ramer-Douglas-Peucker algorithm for path simplification
 function simplifyPath(points: Point[], tolerance: number): Point[] {
@@ -259,11 +315,14 @@ export default function StoryFragment({ images }: StoryFragmentProps) {
   const [currentIndex, setCurrentIndex] = useState<number | null>(null)
   const [mounted, setMounted] = useState(false)
   
+  // Frame reference for coordinate transforms
+  const frameRef = useRef<HTMLDivElement>(null)
+  
   // Path drawing state
   const [pathMode, setPathMode] = useState<PathMode>('idle')
-  const [currentPath, setCurrentPath] = useState<Point[]>([])
+  const [currentPath, setCurrentPath] = useState<Point[]>([])  // Now stores normalized coords (0-1)
   const [pathControls, setPathControls] = useState<PathControls>({
-    // Stage 1
+    // Stage 1 - Back to pixel-based tolerance
     simplifyTolerance: 9,
     // Stage 2
     enableResampling: true,
@@ -290,19 +349,29 @@ export default function StoryFragment({ images }: StoryFragmentProps) {
 
   // Calculate smooth path from current points (multi-stage pipeline with multi-pass)
   const { simplifiedPath, resampledPath, smoothPath } = useMemo(() => {
-    if (currentPath.length < 2) {
+    if (currentPath.length < 2 || !frameRef.current) {
       return { simplifiedPath: null, resampledPath: null, smoothPath: null }
     }
     
-    // Stage 1: Simplify
-    const simplified = simplifyPath(currentPath, pathControls.simplifyTolerance)
+    // Get frame bounds to convert normalized coords to pixels for smoothing
+    const bounds = getFrameBounds(frameRef.current)
     
-    // Stage 2: Resample (optional)
+    // Convert normalized (0-1) to pixel coordinates for smoothing algorithms
+    const pixelPath = currentPath.map(p => ({
+      x: p.x * bounds.width,
+      y: p.y * bounds.height
+    }))
+    
+    // Stage 1: Simplify (in pixel space)
+    const simplified = simplifyPath(pixelPath, pathControls.simplifyTolerance)
+    console.log('Simplified:', pixelPath.length, '→', simplified.length, 'points')
+    
+    // Stage 2: Resample (in pixel space, optional)
     let processed = pathControls.enableResampling
       ? resamplePath(simplified, pathControls.sampleDistance)
       : simplified
     
-    // Stage 3: Multi-pass smoothing
+    // Stage 3: Multi-pass smoothing (in pixel space)
     let smooth = ''
     for (let pass = 0; pass < pathControls.smoothPasses; pass++) {
       smooth = hybridSmoothing(
@@ -313,17 +382,27 @@ export default function StoryFragment({ images }: StoryFragmentProps) {
         pathControls.cornerSharpness
       )
       
-      // For subsequent passes, extract points from the path and re-smooth
       if (pass < pathControls.smoothPasses - 1) {
-        // Sample points from the smooth path for next pass
         processed = resamplePath(processed, pathControls.sampleDistance)
       }
     }
     
+    // Convert pixel-based SVG path to normalized (0-1) coordinates
+    // Parse the path and convert all numbers
+    const normalizedPath = smooth.replace(/(\d+\.?\d*)/g, (match) => {
+      const pixelValue = parseFloat(match)
+      // Alternate between x and y - this is a simplification
+      // For proper implementation we'd parse the path commands
+      const normalizedValue = pixelValue / bounds.width  // Approximate
+      return normalizedValue.toString()
+    })
+    
+    console.log('Smoothed path ready')
+    
     return {
       simplifiedPath: simplified,
       resampledPath: processed,
-      smoothPath: smooth
+      smoothPath: normalizedPath
     }
   }, [currentPath, pathControls])
   useEffect(() => {
@@ -332,22 +411,10 @@ export default function StoryFragment({ images }: StoryFragmentProps) {
 
   // Handle PATH button click
   const handlePathButtonClick = useCallback(() => {
-    // Log current settings before clearing
-    if (currentPath.length > 0) {
-      console.log('=== PATH SETTINGS ===')
-      console.log('SIMPLIFY:', pathControls.simplifyTolerance)
-      console.log('RESAMPLE:', pathControls.enableResampling, '@ DIST:', pathControls.sampleDistance + 'px')
-      console.log('SMOOTH:', pathControls.smoothness)
-      console.log('TENSION:', pathControls.tension)
-      console.log('CORNER @:', pathControls.cornerThreshold + '°')
-      console.log('CORNER %:', pathControls.cornerSharpness)
-      console.log('PASSES:', pathControls.smoothPasses)
-      console.log('====================')
-    }
-    
+    console.log('NEW PATH - Ready to draw')
     setPathMode('ready')
     setCurrentPath([])
-  }, [currentPath.length, pathControls])
+  }, [])
 
   // Image control handlers
   const handleRandomImage = useCallback(() => {
@@ -405,34 +472,47 @@ export default function StoryFragment({ images }: StoryFragmentProps) {
 
   const currentImage = currentIndex !== null ? images[currentIndex] : null
 
-  // Mouse handlers for path drawing
+  // Mouse handlers for path drawing (using normalized coordinates)
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    if (pathMode === 'ready') {
+    if (pathMode === 'ready' && frameRef.current) {
+      const bounds = getFrameBounds(frameRef.current)
+      const normalizedPoint = viewportToNormalized(e.clientX, e.clientY, bounds)
+      
+      console.log('START PATH:', normalizedPoint)
+      
       setPathMode('drawing')
-      const point = { x: e.clientX, y: e.clientY }
-      setCurrentPath([point])
+      setCurrentPath([normalizedPoint])
     }
   }, [pathMode])
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (pathMode === 'drawing') {
-      const point = { x: e.clientX, y: e.clientY }
-      setCurrentPath(prev => [...prev, point])
+    if (pathMode === 'drawing' && frameRef.current) {
+      const bounds = getFrameBounds(frameRef.current)
+      const normalizedPoint = viewportToNormalized(e.clientX, e.clientY, bounds)
+      
+      setCurrentPath(prev => {
+        const newPath = [...prev, normalizedPoint]
+        if (newPath.length % 10 === 0) {
+          console.log('Points captured:', newPath.length)
+        }
+        return newPath
+      })
     }
   }, [pathMode])
 
   const handleMouseUp = useCallback(() => {
     if (pathMode === 'drawing') {
+      console.log('PATH COMPLETE - Total points:', currentPath.length)
       setPathMode('idle')
     }
-  }, [pathMode])
+  }, [pathMode, currentPath.length])
 
   const handleMouseLeave = useCallback(() => {
     if (pathMode === 'drawing') {
-      // If drawing and mouse leaves window, finalize the path
+      console.log('PATH COMPLETE (mouse left) - Total points:', currentPath.length)
       setPathMode('idle')
     }
-  }, [pathMode])
+  }, [pathMode, currentPath.length])
 
   // Add global mouseup and mouseleave listeners for path drawing
   useEffect(() => {
@@ -453,37 +533,102 @@ export default function StoryFragment({ images }: StoryFragmentProps) {
 
   return (
     <>
+      {/* Full viewport workspace - handles all mouse events */}
       <div 
-        className={containerClass}
+        className={styles.workspace}
+        data-drawing={pathMode !== 'idle'}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
       >
-        {mounted && currentImageUrl && currentImage && (
-          <img
-            src={currentImageUrl}
-            alt={currentImage.altText || 'Gallery image'}
-            className={styles.image}
-          />
-        )}
-      </div>
+        {/* Responsive square frame */}
+        <div 
+          ref={frameRef}
+          className={styles.frame}
+        >
+          {/* Frame content - image */}
+          <div className={styles.frameContent}>
+            {mounted && currentImageUrl && currentImage && (
+              <img
+                src={currentImageUrl}
+                alt={currentImage.altText || 'Gallery image'}
+                className={styles.image}
+              />
+            )}
+          </div>
+        </div>
 
-      {/* Path overlays - multiple layers */}
-      
-      {/* Final smooth path */}
-      {pathControls.showPath && smoothPath && (
-        <svg className={styles.pathSvg}>
-          <path
-            d={smoothPath}
-            stroke={pathStyle.color}
-            strokeWidth={pathStyle.width}
-            fill="none"
-            strokeLinecap="butt"
-            strokeLinejoin="miter"
-          />
-        </svg>
-      )}
+        {/* Dimming overlays - 4 divs covering areas outside frame */}
+        {frameRef.current && (() => {
+          const bounds = getFrameBounds(frameRef.current)
+          
+          return (
+            <>
+              {/* Top overlay */}
+              <div className={styles.dimOverlay} style={{
+                top: 0,
+                left: 0,
+                right: 0,
+                height: bounds.top
+              }} />
+              
+              {/* Bottom overlay */}
+              <div className={styles.dimOverlay} style={{
+                top: bounds.top + bounds.height,
+                left: 0,
+                right: 0,
+                bottom: 0
+              }} />
+              
+              {/* Left overlay */}
+              <div className={styles.dimOverlay} style={{
+                top: bounds.top,
+                left: 0,
+                width: bounds.left,
+                height: bounds.height
+              }} />
+              
+              {/* Right overlay */}
+              <div className={styles.dimOverlay} style={{
+                top: bounds.top,
+                left: bounds.left + bounds.width,
+                right: 0,
+                height: bounds.height
+              }} />
+            </>
+          )
+        })()}
+
+        {/* SVG path rendering - positioned relative to workspace for full bleed */}
+        {smoothPath && frameRef.current && (() => {
+          const bounds = getFrameBounds(frameRef.current)
+          const strokeWidth = pathStyle.width / bounds.width
+          
+          return (
+            <svg 
+              className={styles.pathSvgFullBleed}
+              style={{
+                left: bounds.left,
+                top: bounds.top,
+                width: bounds.width,
+                height: bounds.height
+              }}
+              viewBox="0 0 1 1" 
+              preserveAspectRatio="none"
+            >
+              <path
+                d={smoothPath}
+                stroke={pathStyle.color}
+                strokeWidth={strokeWidth}
+                fill="none"
+                strokeLinecap="butt"
+                strokeLinejoin="miter"
+              />
+            </svg>
+          )
+        })()}
+      </div>
 
       {/* Toolbar */}
       <div className={styles.toolbar}>

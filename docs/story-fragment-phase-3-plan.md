@@ -142,7 +142,13 @@
 
 **Problem**: Mouse events give viewport coordinates. We need frame-relative coordinates.
 
-**Solution**: Transform through frame bounds.
+**Solution**: Transform to **normalized coordinates (0-1 range)** for resolution independence.
+
+**Why Normalized?**
+- Store coordinates as 0-1 (e.g., center = 0.5, 0.5)
+- Scale to any export size without quality loss
+- Future-proof for high-res exports (1080×1080, 2048×2048)
+- Working size (800px) decoupled from export size
 
 ```typescript
 // Utility functions
@@ -163,22 +169,26 @@ function getFrameBounds(frameElement: HTMLElement): FrameBounds {
   }
 }
 
-function viewportToFrame(
+// Convert viewport mouse coords to normalized (0-1) frame coords
+function viewportToNormalized(
   clientX: number, 
   clientY: number, 
   bounds: FrameBounds
 ): Point {
+  const frameX = clientX - bounds.left
+  const frameY = clientY - bounds.top
+  
   return {
-    x: clientX - bounds.left,
-    y: clientY - bounds.top
+    x: frameX / bounds.width,   // Normalize to 0-1
+    y: frameY / bounds.height
   }
 }
 
-function isPointInFrame(point: Point, bounds: FrameBounds): boolean {
+function isPointInFrame(point: Point): boolean {
   return point.x >= 0 && 
-         point.x <= bounds.width && 
+         point.x <= 1 && 
          point.y >= 0 && 
-         point.y <= bounds.height
+         point.y <= 1
 }
 ```
 
@@ -188,11 +198,11 @@ const handleMouseDown = useCallback((e: React.MouseEvent) => {
   if (pathMode !== 'ready') return
   
   const bounds = getFrameBounds(frameRef.current!)
-  const framePoint = viewportToFrame(e.clientX, e.clientY, bounds)
+  const normalizedPoint = viewportToNormalized(e.clientX, e.clientY, bounds)
   
-  if (isPointInFrame(framePoint, bounds)) {
+  if (isPointInFrame(normalizedPoint)) {
     setPathMode('drawing')
-    setCurrentPath([framePoint])  // Store frame coords
+    setCurrentPath([normalizedPoint])  // Store 0-1 coords
   }
 }, [pathMode])
 ```
@@ -206,17 +216,18 @@ const handleMouseDown = useCallback((e: React.MouseEvent) => {
 ```tsx
 <svg 
   className={styles.frameSvg}
-  viewBox="0 0 800 800"  // Frame coordinate space
+  viewBox="0 0 1 1"  // Normalized coordinate space (0-1)
   preserveAspectRatio="xMidYMid meet"
 >
-  <path d={smoothPath} />  // Path in frame coords (0-800)
+  <path d={smoothPath} />  // Path in normalized coords (0-1)
 </svg>
 ```
 
-- `viewBox="0 0 800 800"` means SVG coordinate space is 0-800
-- Points stored in frame coords (0-800) render directly
-- No scaling math needed - SVG handles it automatically
-- Paths clip to 800×800 automatically
+- `viewBox="0 0 1 1"` means SVG coordinate space is 0-1
+- Points stored in normalized coords (0-1) render directly
+- SVG scales them to fit the 800×800 frame automatically
+- For export, just change viewBox dimensions to export resolution
+- Paths clip to frame boundaries automatically
 
 ---
 
@@ -228,9 +239,9 @@ const handleMouseDown = useCallback((e: React.MouseEvent) => {
 const frameRef = useRef<HTMLDivElement>(null)
 
 // Frame dimensions (constant for square)
-const FRAME_SIZE = 800
+const FRAME_SIZE = 800  // CSS pixels for working display
 
-// Current path now stores frame-relative coords (0-800)
+// Current path now stores normalized coords (0-1)
 const [currentPath, setCurrentPath] = useState<Point[]>([])
 ```
 
@@ -254,16 +265,16 @@ const handleMouseMove = useCallback((e: React.MouseEvent) => {
 }, [pathMode])
 ```
 
-**New (frame coords)**:
+**New (normalized coords)**:
 ```typescript
 const handleMouseMove = useCallback((e: React.MouseEvent) => {
   if (pathMode === 'drawing' && frameRef.current) {
     const bounds = getFrameBounds(frameRef.current)
-    const framePoint = viewportToFrame(e.clientX, e.clientY, bounds)
+    const normalizedPoint = viewportToNormalized(e.clientX, e.clientY, bounds)
     
-    // Only add points inside frame
-    if (isPointInFrame(framePoint, bounds)) {
-      setCurrentPath(prev => [...prev, framePoint])
+    // Only add points inside frame (0-1 range)
+    if (isPointInFrame(normalizedPoint)) {
+      setCurrentPath(prev => [...prev, normalizedPoint])
     }
   }
 }, [pathMode])
@@ -339,15 +350,17 @@ Images now size to fill the 800×800 frame while preserving aspect ratio.
 
 **Before (Viewport-based)**:
 - Image floats in center of screen
-- Paths exist anywhere in viewport
+- Paths exist anywhere in viewport (viewport pixel coords)
 - Resizing viewport changes everything
 - No clear boundary for "output area"
+- Locked to viewport dimensions
 
-**After (Frame-based)**:
+**After (Frame-based with Normalized Coords)**:
 - Image contained in 800×800 frame
-- Paths only exist within frame
+- Paths only exist within frame (normalized 0-1 coords)
 - Resizing viewport doesn't affect frame content
 - Clear visual boundary shows what will export
+- Resolution-independent - can export at any size
 
 ---
 
@@ -378,6 +391,8 @@ Images now size to fill the 800×800 frame while preserving aspect ratio.
 - ✅ Paths can be drawn anywhere in frame
 - ✅ Paths cannot be drawn outside frame
 - ✅ Paths stay correctly positioned when viewport resizes
+- ✅ Paths stored in normalized coordinates (0-1 range)
+- ✅ SVG uses normalized viewBox (0 0 1 1)
 - ✅ All existing features still work (navigation, styling, smoothing)
 - ✅ Cursor changes to crosshair only inside frame during ready mode
 
@@ -399,9 +414,15 @@ Once square frame is working:
 
 - Keep it simple: Fixed 800px for now, no responsive sizing
 - Frame is always 800×800 in this phase (square only)
-- Paths stored in frame coords (0-800 range)
+- **Paths stored in normalized coords (0-1 range)** - resolution independent!
 - No need to handle aspect ratio switching yet
 - Focus on getting coordinate system right first
+- Normalized coords mean export at any resolution works automatically
+
+**Export Strategy:**
+- Work at 800×800 (comfortable drawing size)
+- Store at 0-1 (resolution independent)
+- Export at 1200×1200 or 2048×2048 (just scale the coordinates)
 
 This establishes the foundation. Once working, all other aspect ratios follow the same pattern.
 
