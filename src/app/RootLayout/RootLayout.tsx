@@ -16,10 +16,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
   
   return (
     <div className={styles.rootLayout}>
-      <div className={isFrameless ? styles.hidden : ''}>
-        <PageNavigation currentPath={pathname} />
-        <Topnav />
-      </div>
+      {!isFrameless && (
+        <div>
+          <PageNavigation currentPath={pathname} />
+          <Topnav />
+        </div>
+      )}
       <main className={`${styles.main} ${isFrameless ? styles.mainFrameless : ''}`}>
         <div className={`${styles.container} ${isFrameless ? styles.containerFrameless : ''}`}>
           {children}

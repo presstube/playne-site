@@ -1,0 +1,19 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--brand-offwhite);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.image {
+  max-width: 50vw;
+  max-height: 50vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
