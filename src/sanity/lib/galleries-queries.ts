@@ -14,12 +14,14 @@ export const allGalleriesQuery = `
     featured,
     "imageCount": count(images),
     "coverImage": images[0] {
-      asset->{
-        _id,
-        url,
-        metadata {
-          dimensions,
-          lqip
+      asset {
+        asset-> {
+          _id,
+          url,
+          metadata {
+            dimensions,
+            lqip
+          }
         }
       },
       altText,
@@ -42,12 +44,14 @@ export const galleryBySlugQuery = `
     featured,
     images[] {
       _key,
-      asset->{
-        _id,
-        url,
-        metadata {
-          dimensions,
-          lqip
+      asset {
+        asset-> {
+          _id,
+          url,
+          metadata {
+            dimensions,
+            lqip
+          }
         }
       },
       caption,
@@ -84,12 +88,14 @@ export const featuredGalleriesQuery = `
     featured,
     "imageCount": count(images),
     "coverImage": images[0] {
-      asset->{
-        _id,
-        url,
-        metadata {
-          dimensions,
-          lqip
+      asset {
+        asset-> {
+          _id,
+          url,
+          metadata {
+            dimensions,
+            lqip
+          }
         }
       },
       altText,
@@ -111,12 +117,14 @@ export const galleriesByTagQuery = `
     tags,
     "imageCount": count(images),
     "coverImage": images[0] {
-      asset->{
-        _id,
-        url,
-        metadata {
-          dimensions,
-          lqip
+      asset {
+        asset-> {
+          _id,
+          url,
+          metadata {
+            dimensions,
+            lqip
+          }
         }
       },
       altText,
@@ -129,11 +137,12 @@ export const galleriesByTagQuery = `
 export const allGalleryImagesQuery = `
   *[_type == "gallery"] {
     "images": images[] {
-      "imageAsset": asset,
+      "imageAsset": asset.asset,
       "assetId": asset.asset->_id,
       "url": asset.asset->url,
       "metadata": asset.asset->metadata,
       "dimensions": asset.asset->metadata.dimensions,
+      "aspectRatio": asset.asset->metadata.dimensions.aspectRatio,
       "lqip": asset.asset->metadata.lqip,
       caption,
       altText,
