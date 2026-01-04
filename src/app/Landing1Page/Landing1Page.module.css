@@ -1,4 +1,31 @@
 .page {
-  /* Blank canvas - add your styles here */
+  min-height: 100vh;
+  background-color: var(--brand-offwhite);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-8) var(--space-4);
+}
+
+.heroSection {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-8);
+}
+
+.headlineSection {
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: var(--space-8);
+}
+
+.photoSection {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
