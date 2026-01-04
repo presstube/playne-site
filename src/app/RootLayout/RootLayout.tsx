@@ -12,7 +12,7 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   const pathname = usePathname()
-  const isFrameless = pathname?.startsWith('/components') || pathname?.startsWith('/story')
+  const isFrameless = pathname?.startsWith('/components') || pathname?.startsWith('/story') || pathname?.startsWith('/landing')
   
   return (
     <div className={styles.rootLayout}>
