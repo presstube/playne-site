@@ -84,17 +84,17 @@ export default function Landing1Page() {
         if (images.length > 0) {
           // Find saved images or use defaults
           const firstImg = savedFirstId 
-            ? images.find(img => img.assetId === savedFirstId) || images.find(img => img.assetId === DEFAULT_FIRST_IMAGE_ID) || pickRandomImage(images)
-            : images.find(img => img.assetId === DEFAULT_FIRST_IMAGE_ID) || pickRandomImage(images)
+            ? images.find((img: GalleryImage) => img.assetId === savedFirstId) || images.find((img: GalleryImage) => img.assetId === DEFAULT_FIRST_IMAGE_ID) || pickRandomImage(images)
+            : images.find((img: GalleryImage) => img.assetId === DEFAULT_FIRST_IMAGE_ID) || pickRandomImage(images)
           const secondImg = savedSecondId
-            ? images.find(img => img.assetId === savedSecondId) || images.find(img => img.assetId === DEFAULT_SECOND_IMAGE_ID) || pickRandomImage(images)
-            : images.find(img => img.assetId === DEFAULT_SECOND_IMAGE_ID) || pickRandomImage(images)
+            ? images.find((img: GalleryImage) => img.assetId === savedSecondId) || images.find((img: GalleryImage) => img.assetId === DEFAULT_SECOND_IMAGE_ID) || pickRandomImage(images)
+            : images.find((img: GalleryImage) => img.assetId === DEFAULT_SECOND_IMAGE_ID) || pickRandomImage(images)
           const thirdImg = savedThirdId
-            ? images.find(img => img.assetId === savedThirdId) || (DEFAULT_THIRD_IMAGE_ID ? images.find(img => img.assetId === DEFAULT_THIRD_IMAGE_ID) : null) || pickRandomImage(images)
-            : (DEFAULT_THIRD_IMAGE_ID ? images.find(img => img.assetId === DEFAULT_THIRD_IMAGE_ID) : null) || pickRandomImage(images)
+            ? images.find((img: GalleryImage) => img.assetId === savedThirdId) || (DEFAULT_THIRD_IMAGE_ID ? images.find((img: GalleryImage) => img.assetId === DEFAULT_THIRD_IMAGE_ID) : null) || pickRandomImage(images)
+            : (DEFAULT_THIRD_IMAGE_ID ? images.find((img: GalleryImage) => img.assetId === DEFAULT_THIRD_IMAGE_ID) : null) || pickRandomImage(images)
           const fourthImg = savedFourthId
-            ? images.find(img => img.assetId === savedFourthId) || images.find(img => img.assetId === DEFAULT_FOURTH_IMAGE_ID) || pickRandomImage(images)
-            : images.find(img => img.assetId === DEFAULT_FOURTH_IMAGE_ID) || pickRandomImage(images)
+            ? images.find((img: GalleryImage) => img.assetId === savedFourthId) || images.find((img: GalleryImage) => img.assetId === DEFAULT_FOURTH_IMAGE_ID) || pickRandomImage(images)
+            : images.find((img: GalleryImage) => img.assetId === DEFAULT_FOURTH_IMAGE_ID) || pickRandomImage(images)
           
           setFirstImage(firstImg)
           setSecondImage(secondImg)
