@@ -28,9 +28,9 @@ export default function TitleBodyQuote({
     
     // Handle CSS variables
     if (color.startsWith('var(')) {
-      // Map known brand colors to their rgba values
+      // Map known brand colors to their rgba values (90% opacity except offwhite which is 100%)
       if (color === 'var(--brand-black)') return 'rgba(35, 31, 32, 0.9)'
-      if (color === 'var(--brand-offwhite)') return 'rgba(234, 226, 218, 0.9)'
+      if (color === 'var(--brand-offwhite)') return 'rgba(234, 234, 218, 1)' // 100% opacity - #EAEADA
       if (color === 'var(--brand-yellow)') return 'rgba(255, 222, 23, 0.9)'
       return color // fallback
     }

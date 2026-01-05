@@ -16,12 +16,14 @@ import { allGalleryImagesQuery } from '@/sanity/lib/galleries-queries'
 const STORAGE_KEY_FIRST = 'landing1-first-image-id'
 const STORAGE_KEY_SECOND = 'landing1-second-image-id'
 const STORAGE_KEY_THIRD = 'landing1-third-image-id'
+const STORAGE_KEY_FOURTH = 'landing1-fourth-image-id'
 
 // All localStorage keys used by Landing/1
 const ALL_LANDING_STORAGE_KEYS = [
   STORAGE_KEY_FIRST,
   STORAGE_KEY_SECOND,
   STORAGE_KEY_THIRD,
+  STORAGE_KEY_FOURTH,
   'landing1-bg-path-raw',
   'landing1-path-color-index',
   'landing1-theme',
@@ -31,6 +33,7 @@ const ALL_LANDING_STORAGE_KEYS = [
 const DEFAULT_FIRST_IMAGE_ID = 'image-8b8bc31949a279893dd20ea9057da59d00cbfe5c-2048x1365-jpg'
 const DEFAULT_SECOND_IMAGE_ID = 'image-f804373c1d301de9db9df3a72493c1556003120b-4240x2384-jpg'
 const DEFAULT_THIRD_IMAGE_ID = 'image-a18f4bd36df2aec4a0a2b80d6ea3d5e9bcae8050-5250x3500-jpg'
+const DEFAULT_FOURTH_IMAGE_ID = 'image-1a3757910370425fdce03a9b2c25623acac10456-2531x1615-jpg'
 
 export default function Landing1Page() {
   const { theme } = useLandingTheme()
@@ -38,6 +41,7 @@ export default function Landing1Page() {
   const [firstImage, setFirstImage] = useState<GalleryImage | null>(null)
   const [secondImage, setSecondImage] = useState<GalleryImage | null>(null)
   const [thirdImage, setThirdImage] = useState<GalleryImage | null>(null)
+  const [fourthImage, setFourthImage] = useState<GalleryImage | null>(null)
 
   // Expose clear function to window for easy access
   useEffect(() => {
@@ -47,7 +51,7 @@ export default function Landing1Page() {
           localStorage.removeItem(key)
         })
         console.log('✅ Cleared all Landing/1 localStorage:')
-        console.log('   - Images (first, second, third)')
+        console.log('   - Images (first, second, third, fourth)')
         console.log('   - Path raw points')
         console.log('   - Path color')
         console.log('   - Theme (background)')
@@ -74,6 +78,7 @@ export default function Landing1Page() {
         const savedFirstId = localStorage.getItem(STORAGE_KEY_FIRST)
         const savedSecondId = localStorage.getItem(STORAGE_KEY_SECOND)
         const savedThirdId = localStorage.getItem(STORAGE_KEY_THIRD)
+        const savedFourthId = localStorage.getItem(STORAGE_KEY_FOURTH)
         
         if (images.length > 0) {
           // Find saved images or use defaults
@@ -86,16 +91,21 @@ export default function Landing1Page() {
           const thirdImg = savedThirdId
             ? images.find(img => img.assetId === savedThirdId) || (DEFAULT_THIRD_IMAGE_ID ? images.find(img => img.assetId === DEFAULT_THIRD_IMAGE_ID) : null) || pickRandomImage(images)
             : (DEFAULT_THIRD_IMAGE_ID ? images.find(img => img.assetId === DEFAULT_THIRD_IMAGE_ID) : null) || pickRandomImage(images)
+          const fourthImg = savedFourthId
+            ? images.find(img => img.assetId === savedFourthId) || images.find(img => img.assetId === DEFAULT_FOURTH_IMAGE_ID) || pickRandomImage(images)
+            : images.find(img => img.assetId === DEFAULT_FOURTH_IMAGE_ID) || pickRandomImage(images)
           
           setFirstImage(firstImg)
           setSecondImage(secondImg)
           setThirdImage(thirdImg)
+          setFourthImage(fourthImg)
           
           // Log current image IDs on load for easy hard-coding
           console.log('=== Landing/1 Current Images ===')
           console.log('First Image ID:', firstImg?.assetId || 'none')
           console.log('Second Image ID:', secondImg?.assetId || 'none')
           console.log('Third Image ID:', thirdImg?.assetId || 'none')
+          console.log('Fourth Image ID:', fourthImg?.assetId || 'none')
           console.log('================================')
         }
       } catch (error) {
@@ -134,6 +144,17 @@ export default function Landing1Page() {
       if (newImage?.assetId) {
         localStorage.setItem(STORAGE_KEY_THIRD, newImage.assetId)
         console.log('Third Image - Sanity ID:', newImage.assetId)
+      }
+    }
+  }, [allImages])
+
+  const handleFourthPhotoClick = useCallback(() => {
+    if (allImages.length > 0) {
+      const newImage = pickRandomImage(allImages)
+      setFourthImage(newImage)
+      if (newImage?.assetId) {
+        localStorage.setItem(STORAGE_KEY_FOURTH, newImage.assetId)
+        console.log('Fourth Image - Sanity ID:', newImage.assetId)
       }
     }
   }, [allImages])
@@ -223,7 +244,41 @@ export default function Landing1Page() {
           />
         </PhotoTextOverlay>
       )}
+
+      {/* Fourth Section: Get in Touch */}
+      <div className={styles.contactSection}>
+        <Headline
+          text="Let's create something together"
+          caseType="all-caps"
+          align="center"
+          fg={THEME_COLORS[theme].text}
+          bg="transparent"
+        />
+      </div>
+
+      {fourthImage && (
+        <PhotoTextOverlay textPosition="bottom-left" rotation={2} overlapDesktopMax="40%" overlapDesktopMin="10%">
+          <div onClick={handleFourthPhotoClick} style={{ cursor: 'pointer', display: 'block', width: '100%' }}>
+            <Photo image={fourthImage} />
+          </div>
+          <TitleBodyQuote
+            subtitle="Ready to bring PLAYNE to your school or community?"
+            body="We'd love to hear from you. Whether you're an educator looking to spark creativity in your classroom, a community leader wanting to empower young people, or someone who believes kids deserve better tools to navigate life—let's talk. Every great collaboration starts with a conversation. What could we create together?"
+            quote="The best time to plant a tree was 20 years ago. The second best time is now."
+            fg="var(--brand-black)"
+            bg="var(--brand-offwhite)"
+          />
+        </PhotoTextOverlay>
+      )}
+
+      {/* Email Link */}
+      <div className={styles.emailSection}>
+        <a href="mailto:hello@playne.org" className={styles.emailLink}>
+          EMAIL US
+        </a>
+      </div>
     </div>
   )
 }
+
 

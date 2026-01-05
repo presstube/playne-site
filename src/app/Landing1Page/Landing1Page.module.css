@@ -10,6 +10,11 @@
   z-index: 1; /* Sit above the path background */
 }
 
+/* Remove border radius from all images on this page */
+.page :global(img) {
+  border-radius: 0 !important;
+}
+
 .heroSection {
   width: 100%;
   max-width: 1200px;
@@ -84,6 +89,52 @@
   margin-bottom: var(--space-6);
   /* Add padding back for non-full-bleed sections */
   padding: 0 var(--space-4);
+}
+
+/* Fourth Section: Contact */
+.contactSection {
+  width: 100%;
+  max-width: 900px;
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-6);
+  /* Add padding back for non-full-bleed sections */
+  padding: 0 var(--space-4);
+}
+
+/* Email Link Section */
+.emailSection {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-8);
+  padding: 0 var(--space-4);
+}
+
+.emailLink {
+  font-family: 'Krana Fat B', sans-serif;
+  font-size: 3rem;
+  letter-spacing: 0.05em;
+  color: var(--brand-red);
+  text-decoration: none;
+  padding: var(--space-4) var(--space-6);
+  border: 4px solid var(--brand-red);
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.emailLink:hover {
+  background-color: var(--brand-red);
+  color: var(--brand-offwhite);
+  transform: rotate(-2deg);
+}
+
+@media (max-width: 768px) {
+  .emailLink {
+    font-size: 2rem;
+    padding: var(--space-3) var(--space-4);
+  }
 }
 
 .pillarsSplitSection {
