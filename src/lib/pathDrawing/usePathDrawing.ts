@@ -91,15 +91,33 @@ export const usePathDrawing = () => {
     }
   }, [regeneratePath])
 
-  // Watch for body height changes and regenerate path
+  // Watch for body height changes and regenerate path (desktop only)
   useEffect(() => {
     if (normalizedPoints.length === 0) return undefined
 
+    // Check if we're on mobile - if so, skip the observer
+    const isMobile = window.matchMedia('(max-width: 768px)').matches
+    if (isMobile) {
+      // On mobile, just set initial height and return
+      const initialHeight = getPageHeight()
+      setPageHeight(initialHeight)
+      return undefined
+    }
+
+    // Desktop: watch for height changes
+    let lastHeight = getPageHeight()
+    
     const observer = new ResizeObserver(() => {
-      // Body height changed (content loaded/changed), regenerate path
+      // Only regenerate if height actually changed (not just scrolling on mobile)
       const newHeight = getPageHeight()
-      setPageHeight(newHeight)
-      regeneratePath(normalizedPoints)
+      const heightDifference = Math.abs(newHeight - lastHeight)
+      
+      // Only trigger if height changed by more than 50px
+      if (heightDifference > 50) {
+        lastHeight = newHeight
+        setPageHeight(newHeight)
+        regeneratePath(normalizedPoints)
+      }
     })
     
     observer.observe(document.body)
@@ -107,8 +125,12 @@ export const usePathDrawing = () => {
     return () => observer.disconnect()
   }, [normalizedPoints, regeneratePath, getPageHeight])
 
-  // Handle resize with debounce
+  // Handle resize with debounce (desktop only)
   useEffect(() => {
+    // Skip on mobile - path stays fixed after initial draw
+    const isMobile = window.matchMedia('(max-width: 768px)').matches
+    if (isMobile) return undefined
+
     const handleResize = () => {
       setIsVisible(false) // Hide during resize
       

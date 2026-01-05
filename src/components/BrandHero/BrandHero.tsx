@@ -10,7 +10,7 @@ const BRAND_COLORS = [
   '#FCDC4A', // yellow
   '#FB6DCB', // pink
   '#A9ECD4', // blue
-  // omitting off-white
+  '#EAEADA', // beige (PLAYNE offwhite)
 ]
 
 interface BrandHeroProps {
@@ -18,20 +18,32 @@ interface BrandHeroProps {
 }
 
 export default function BrandHero({ theme }: BrandHeroProps = {}) {
-  const [currentColorIndex, setCurrentColorIndex] = useState(0) // start with black
+  const [currentColorIndex, setCurrentColorIndex] = useState(1) // start with red (not black)
 
   const handleClick = () => {
-    let newIndex
-    do {
-      newIndex = Math.floor(Math.random() * BRAND_COLORS.length)
-    } while (newIndex === currentColorIndex && BRAND_COLORS.length > 1)
-    setCurrentColorIndex(newIndex)
+    if (!theme) {
+      // No theme context, just cycle avoiding current color
+      let newIndex
+      do {
+        newIndex = Math.floor(Math.random() * BRAND_COLORS.length)
+      } while (newIndex === currentColorIndex && BRAND_COLORS.length > 1)
+      setCurrentColorIndex(newIndex)
+    } else {
+      // Theme context provided, avoid both current color AND background color
+      const bgColor = THEME_COLORS[theme].bg
+      let newIndex
+      do {
+        newIndex = Math.floor(Math.random() * BRAND_COLORS.length)
+      } while (
+        (newIndex === currentColorIndex || BRAND_COLORS[newIndex] === bgColor) && 
+        BRAND_COLORS.length > 1
+      )
+      setCurrentColorIndex(newIndex)
+    }
   }
 
-  // If theme is provided, use inverted color; otherwise use the cycling color
-  const logoColor = theme 
-    ? THEME_COLORS[theme].text 
-    : BRAND_COLORS[currentColorIndex]
+  // Always use the cycling color (which now respects the background)
+  const logoColor = BRAND_COLORS[currentColorIndex]
 
   return (
     <div className={styles.brandHero} onClick={handleClick} style={{ cursor: 'pointer' }}>

@@ -56,10 +56,10 @@ export function useLandingTheme() {
 export const THEME_COLORS = {
   dark: {
     bg: '#231f20', // black
-    text: '#F5F1E8', // beige
+    text: '#EAEADA', // beige (PLAYNE offwhite)
   },
   light: {
-    bg: '#F5F1E8', // beige
+    bg: '#EAEADA', // beige (PLAYNE offwhite)
     text: '#231f20', // black
   },
 }
