@@ -9,11 +9,11 @@ export const metadata: Metadata = {
   authors: [{ name: "PLAYNE" }],
   creator: "PLAYNE",
   publisher: "PLAYNE",
-  metadataBase: new URL('https://playne-site.vercel.app'),
+  metadataBase: new URL('https://playne.art'),
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://playne-site.vercel.app',
+    url: 'https://playne.art',
     siteName: 'PLAYNE',
     title: 'PLAYNE - Empowering Young Minds Through Practical Life Education',
     description: 'Founded by artist Shantell Martin, PLAYNE brings creativity into classrooms and community spaces to teach real-life skills. Helping young people understand their bodies, emotions, money, and voice.',
