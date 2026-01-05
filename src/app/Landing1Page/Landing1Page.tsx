@@ -13,15 +13,18 @@ import { allGalleryImagesQuery } from '@/sanity/lib/galleries-queries'
 
 const STORAGE_KEY_FIRST = 'landing1-first-image-id'
 const STORAGE_KEY_SECOND = 'landing1-second-image-id'
+const STORAGE_KEY_THIRD = 'landing1-third-image-id'
 
 // Default image IDs
 const DEFAULT_FIRST_IMAGE_ID = 'image-8b8bc31949a279893dd20ea9057da59d00cbfe5c-2048x1365-jpg'
 const DEFAULT_SECOND_IMAGE_ID = 'image-f804373c1d301de9db9df3a72493c1556003120b-4240x2384-jpg'
+const DEFAULT_THIRD_IMAGE_ID = 'image-a18f4bd36df2aec4a0a2b80d6ea3d5e9bcae8050-5250x3500-jpg'
 
 export default function Landing1Page() {
   const [allImages, setAllImages] = useState<GalleryImage[]>([])
   const [firstImage, setFirstImage] = useState<GalleryImage | null>(null)
   const [secondImage, setSecondImage] = useState<GalleryImage | null>(null)
+  const [thirdImage, setThirdImage] = useState<GalleryImage | null>(null)
 
   // Fetch all images on mount
   useEffect(() => {
@@ -33,6 +36,7 @@ export default function Landing1Page() {
         // Try to restore saved images from localStorage
         const savedFirstId = localStorage.getItem(STORAGE_KEY_FIRST)
         const savedSecondId = localStorage.getItem(STORAGE_KEY_SECOND)
+        const savedThirdId = localStorage.getItem(STORAGE_KEY_THIRD)
         
         if (images.length > 0) {
           // Find saved images or use defaults
@@ -42,14 +46,19 @@ export default function Landing1Page() {
           const secondImg = savedSecondId
             ? images.find(img => img.assetId === savedSecondId) || images.find(img => img.assetId === DEFAULT_SECOND_IMAGE_ID) || pickRandomImage(images)
             : images.find(img => img.assetId === DEFAULT_SECOND_IMAGE_ID) || pickRandomImage(images)
+          const thirdImg = savedThirdId
+            ? images.find(img => img.assetId === savedThirdId) || (DEFAULT_THIRD_IMAGE_ID ? images.find(img => img.assetId === DEFAULT_THIRD_IMAGE_ID) : null) || pickRandomImage(images)
+            : (DEFAULT_THIRD_IMAGE_ID ? images.find(img => img.assetId === DEFAULT_THIRD_IMAGE_ID) : null) || pickRandomImage(images)
           
           setFirstImage(firstImg)
           setSecondImage(secondImg)
+          setThirdImage(thirdImg)
           
           // Log current image IDs on load for easy hard-coding
           console.log('=== Landing/1 Current Images ===')
           console.log('First Image ID:', firstImg?.assetId || 'none')
           console.log('Second Image ID:', secondImg?.assetId || 'none')
+          console.log('Third Image ID:', thirdImg?.assetId || 'none')
           console.log('================================')
         }
       } catch (error) {
@@ -77,6 +86,17 @@ export default function Landing1Page() {
       if (newImage?.assetId) {
         localStorage.setItem(STORAGE_KEY_SECOND, newImage.assetId)
         console.log('Second Image - Sanity ID:', newImage.assetId)
+      }
+    }
+  }, [allImages])
+
+  const handleThirdPhotoClick = useCallback(() => {
+    if (allImages.length > 0) {
+      const newImage = pickRandomImage(allImages)
+      setThirdImage(newImage)
+      if (newImage?.assetId) {
+        localStorage.setItem(STORAGE_KEY_THIRD, newImage.assetId)
+        console.log('Third Image - Sanity ID:', newImage.assetId)
       }
     }
   }, [allImages])
@@ -135,6 +155,32 @@ export default function Landing1Page() {
             quote="What if every child learned to paint their own future with confidence?"
             fg="var(--brand-black)"
             bg="var(--brand-yellow)"
+          />
+        </PhotoTextOverlay>
+      )}
+
+      {/* Third Section: Meet Shantell */}
+      <div className={styles.shantellSection}>
+        <Headline
+          text="Meet the founder"
+          caseType="all-caps"
+          align="center"
+          fg="var(--brand-black)"
+          bg="transparent"
+        />
+      </div>
+
+      {thirdImage && (
+        <PhotoTextOverlay textPosition="bottom-right" rotation={-2} overlap="18%">
+          <div onClick={handleThirdPhotoClick} style={{ cursor: 'pointer', display: 'block', width: '100%' }}>
+            <Photo image={thirdImage} />
+          </div>
+          <TitleBodyQuote
+            subtitle="The Magic of Shantell Martin"
+            body="Visual artist, philosopher, teacher—Shantell Martin is a creative force who's exhibited at MoMA, collaborated with Kendrick Lamar, and designed for Nike. But her superpower isn't just making incredible art. It's her ability to unlock creativity in everyone she meets. Growing up, Shantell learned through doing, drawing, questioning—never memorizing answers but discovering them. That's the spark she brings to PLAYNE: the belief that education should feel like exploration, and that every young person deserves to learn about themselves with the same curiosity and freedom an artist brings to a blank canvas."
+            quote="Education isn't about filling empty vessels. It's about igniting curious minds."
+            fg="var(--brand-offwhite)"
+            bg="var(--brand-black)"
           />
         </PhotoTextOverlay>
       )}

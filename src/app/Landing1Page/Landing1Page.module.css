@@ -73,6 +73,16 @@
   padding: 0 var(--space-4);
 }
 
+/* Third Section: Meet Shantell */
+.shantellSection {
+  width: 100%;
+  max-width: 900px;
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-6);
+  /* Add padding back for non-full-bleed sections */
+  padding: 0 var(--space-4);
+}
+
 .pillarsSplitSection {
   width: 100%;
   max-width: 1400px;
