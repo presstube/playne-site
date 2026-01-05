@@ -121,7 +121,6 @@ export default function Landing1Page() {
       const newImage = pickRandomImage(allImages)
       setFirstImage(newImage)
       if (newImage?.assetId) {
-        localStorage.setItem(STORAGE_KEY_FIRST, newImage.assetId)
         console.log('First Image - Sanity ID:', newImage.assetId)
       }
     }
@@ -132,7 +131,6 @@ export default function Landing1Page() {
       const newImage = pickRandomImage(allImages)
       setSecondImage(newImage)
       if (newImage?.assetId) {
-        localStorage.setItem(STORAGE_KEY_SECOND, newImage.assetId)
         console.log('Second Image - Sanity ID:', newImage.assetId)
       }
     }
@@ -143,7 +141,6 @@ export default function Landing1Page() {
       const newImage = pickRandomImage(allImages)
       setThirdImage(newImage)
       if (newImage?.assetId) {
-        localStorage.setItem(STORAGE_KEY_THIRD, newImage.assetId)
         console.log('Third Image - Sanity ID:', newImage.assetId)
       }
     }
@@ -154,7 +151,6 @@ export default function Landing1Page() {
       const newImage = pickRandomImage(allImages)
       setFourthImage(newImage)
       if (newImage?.assetId) {
-        localStorage.setItem(STORAGE_KEY_FOURTH, newImage.assetId)
         console.log('Fourth Image - Sanity ID:', newImage.assetId)
       }
     }
@@ -181,8 +177,13 @@ export default function Landing1Page() {
       {/* First Section: Photo with overlaid text */}
       {firstImage && (
         <PhotoTextOverlay textPosition="bottom-right" rotation={-2} overlap="18%">
-          <div onClick={handleFirstPhotoClick} style={{ cursor: 'pointer', display: 'block', width: '100%' }}>
+          <div onClick={handleFirstPhotoClick} style={{ cursor: 'pointer', display: 'block', width: '100%', position: 'relative' }}>
             <Photo image={firstImage} />
+            {firstImage.photographer && (
+              <div className={`${styles.photographer} ${styles.photographerLeft}`}>
+                Photo: {firstImage.photographer}
+              </div>
+            )}
           </div>
           <TitleBodyQuote
             subtitle="What if school taught you about YOU?"
@@ -207,8 +208,13 @@ export default function Landing1Page() {
 
       {secondImage && (
         <PhotoTextOverlay textPosition="bottom-left" rotation={2} overlap="18%">
-          <div onClick={handleSecondPhotoClick} style={{ cursor: 'pointer', display: 'block', width: '100%' }}>
+          <div onClick={handleSecondPhotoClick} style={{ cursor: 'pointer', display: 'block', width: '100%', position: 'relative' }}>
             <Photo image={secondImage} />
+            {secondImage.photographer && (
+              <div className={`${styles.photographer} ${styles.photographerRight}`}>
+                Photo: {secondImage.photographer}
+              </div>
+            )}
           </div>
           <TitleBodyQuote
             subtitle="The Four Pillars of PLAYNE"
@@ -233,8 +239,13 @@ export default function Landing1Page() {
 
       {thirdImage && (
         <PhotoTextOverlay textPosition="bottom-right" rotation={-2} overlap="18%">
-          <div onClick={handleThirdPhotoClick} style={{ cursor: 'pointer', display: 'block', width: '100%' }}>
+          <div onClick={handleThirdPhotoClick} style={{ cursor: 'pointer', display: 'block', width: '100%', position: 'relative' }}>
             <Photo image={thirdImage} />
+            {thirdImage.photographer && (
+              <div className={`${styles.photographer} ${styles.photographerLeft}`}>
+                Photo: {thirdImage.photographer}
+              </div>
+            )}
           </div>
           <TitleBodyQuote
             subtitle="The Magic of Shantell Martin"
@@ -259,8 +270,13 @@ export default function Landing1Page() {
 
       {fourthImage && (
         <PhotoTextOverlay textPosition="bottom-left" rotation={2} overlap="55%">
-          <div onClick={handleFourthPhotoClick} style={{ cursor: 'pointer', display: 'block', width: '100%' }}>
+          <div onClick={handleFourthPhotoClick} style={{ cursor: 'pointer', display: 'block', width: '100%', position: 'relative' }}>
             <Photo image={fourthImage} />
+            {fourthImage.photographer && (
+              <div className={`${styles.photographer} ${styles.photographerRight}`}>
+                Photo: {fourthImage.photographer}
+              </div>
+            )}
           </div>
           <TitleBodyQuote
             subtitle="Ready to bring PLAYNE to your school or community?"
