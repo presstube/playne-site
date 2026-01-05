@@ -29,6 +29,7 @@ export const usePathDrawing = () => {
 
   // Normalize points to 0-1 space (using viewport dimensions during drawing)
   const normalizePoints = useCallback((points: [number, number][]): [number, number][] => {
+    if (typeof window === 'undefined') return points
     const vw = window.innerWidth
     const vh = window.innerHeight // Use viewport height for normalization during drawing
     return points.map(([x, y]) => [x / vw, y / vh])
@@ -36,6 +37,7 @@ export const usePathDrawing = () => {
 
   // Denormalize points back to viewport space with overhang
   const denormalizePoints = useCallback((points: [number, number][]): [number, number][] => {
+    if (typeof window === 'undefined') return points
     if (points.length === 0) return points
     
     // Find min and max Y to stretch to full height
@@ -75,6 +77,8 @@ export const usePathDrawing = () => {
 
   // Load saved path from localStorage on mount
   useEffect(() => {
+    if (typeof window === 'undefined') return
+    
     const saved = localStorage.getItem(STORAGE_KEY)
     if (saved) {
       try {
@@ -93,6 +97,7 @@ export const usePathDrawing = () => {
 
   // Watch for body height changes and regenerate path (desktop only)
   useEffect(() => {
+    if (typeof window === 'undefined') return undefined
     if (normalizedPoints.length === 0) return undefined
 
     // Check if we're on mobile - if so, skip the observer
@@ -136,7 +141,10 @@ export const usePathDrawing = () => {
   }, [normalizedPoints, regeneratePath, getPageHeight])
 
   // Handle resize with debounce (desktop only)
+  // Window resize listener (width changes only) with debounce (desktop only)
   useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+    
     // Skip on mobile - path stays fixed after initial draw
     const isMobile = window.matchMedia('(max-width: 768px)').matches
     if (isMobile) return undefined
@@ -167,6 +175,8 @@ export const usePathDrawing = () => {
 
   // CMD-P / CTRL-P handler
   useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+    
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'p') {
         e.preventDefault()
@@ -209,7 +219,11 @@ export const usePathDrawing = () => {
     // Normalize and save points
     const normalized = normalizePoints(rawPoints)
     setNormalizedPoints(normalized)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized))
+    
+    // Save to localStorage (client-side only)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized))
+    }
     
     // Process and render
     regeneratePath(normalized)
@@ -218,6 +232,7 @@ export const usePathDrawing = () => {
 
   // Calculate responsive stroke width
   const getStrokeWidth = useCallback(() => {
+    if (typeof window === 'undefined') return 80 // Default for SSR
     const vw = window.innerWidth
     if (vw < 768) return 40      // Mobile
     if (vw < 1200) return 60     // Tablet

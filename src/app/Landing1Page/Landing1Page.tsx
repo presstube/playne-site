@@ -75,11 +75,11 @@ export default function Landing1Page() {
         const images = await client.fetch(allGalleryImagesQuery)
         setAllImages(images)
         
-        // Try to restore saved images from localStorage
-        const savedFirstId = localStorage.getItem(STORAGE_KEY_FIRST)
-        const savedSecondId = localStorage.getItem(STORAGE_KEY_SECOND)
-        const savedThirdId = localStorage.getItem(STORAGE_KEY_THIRD)
-        const savedFourthId = localStorage.getItem(STORAGE_KEY_FOURTH)
+        // Try to restore saved images from localStorage (client-side only)
+        const savedFirstId = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY_FIRST) : null
+        const savedSecondId = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY_SECOND) : null
+        const savedThirdId = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY_THIRD) : null
+        const savedFourthId = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY_FOURTH) : null
         
         if (images.length > 0) {
           // Find saved images or use defaults

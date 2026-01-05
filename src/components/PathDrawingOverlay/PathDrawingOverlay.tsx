@@ -31,11 +31,13 @@ export default function PathDrawingOverlay() {
 
   // Load saved path color on mount
   useEffect(() => {
-    const saved = localStorage.getItem(COLOR_STORAGE_KEY)
-    if (saved) {
-      const index = parseInt(saved, 10)
-      if (!isNaN(index) && index >= 0 && index < BRAND_COLORS.length) {
-        setColorIndex(index)
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(COLOR_STORAGE_KEY)
+      if (saved) {
+        const index = parseInt(saved, 10)
+        if (!isNaN(index) && index >= 0 && index < BRAND_COLORS.length) {
+          setColorIndex(index)
+        }
       }
     }
   }, [])
@@ -44,7 +46,9 @@ export default function PathDrawingOverlay() {
     e.stopPropagation() // Prevent background click from also firing
     const newIndex = (colorIndex + 1) % BRAND_COLORS.length
     setColorIndex(newIndex)
-    localStorage.setItem(COLOR_STORAGE_KEY, newIndex.toString())
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(COLOR_STORAGE_KEY, newIndex.toString())
+    }
   }
 
   return (
