@@ -11,6 +11,13 @@ import { GalleryImage, pickRandomImage } from '@/lib/image-hat'
 import { client } from '@/sanity/lib/client'
 import { allGalleryImagesQuery } from '@/sanity/lib/galleries-queries'
 
+const STORAGE_KEY_FIRST = 'landing1-first-image-id'
+const STORAGE_KEY_SECOND = 'landing1-second-image-id'
+
+// Default image IDs
+const DEFAULT_FIRST_IMAGE_ID = 'image-8b8bc31949a279893dd20ea9057da59d00cbfe5c-2048x1365-jpg'
+const DEFAULT_SECOND_IMAGE_ID = 'image-f804373c1d301de9db9df3a72493c1556003120b-4240x2384-jpg'
+
 export default function Landing1Page() {
   const [allImages, setAllImages] = useState<GalleryImage[]>([])
   const [firstImage, setFirstImage] = useState<GalleryImage | null>(null)
@@ -23,10 +30,27 @@ export default function Landing1Page() {
         const images = await client.fetch(allGalleryImagesQuery)
         setAllImages(images)
         
-        // Set initial images
+        // Try to restore saved images from localStorage
+        const savedFirstId = localStorage.getItem(STORAGE_KEY_FIRST)
+        const savedSecondId = localStorage.getItem(STORAGE_KEY_SECOND)
+        
         if (images.length > 0) {
-          setFirstImage(pickRandomImage(images))
-          setSecondImage(pickRandomImage(images))
+          // Find saved images or use defaults
+          const firstImg = savedFirstId 
+            ? images.find(img => img.assetId === savedFirstId) || images.find(img => img.assetId === DEFAULT_FIRST_IMAGE_ID) || pickRandomImage(images)
+            : images.find(img => img.assetId === DEFAULT_FIRST_IMAGE_ID) || pickRandomImage(images)
+          const secondImg = savedSecondId
+            ? images.find(img => img.assetId === savedSecondId) || images.find(img => img.assetId === DEFAULT_SECOND_IMAGE_ID) || pickRandomImage(images)
+            : images.find(img => img.assetId === DEFAULT_SECOND_IMAGE_ID) || pickRandomImage(images)
+          
+          setFirstImage(firstImg)
+          setSecondImage(secondImg)
+          
+          // Log current image IDs on load for easy hard-coding
+          console.log('=== Landing/1 Current Images ===')
+          console.log('First Image ID:', firstImg?.assetId || 'none')
+          console.log('Second Image ID:', secondImg?.assetId || 'none')
+          console.log('================================')
         }
       } catch (error) {
         console.error('Error fetching images:', error)
@@ -40,6 +64,7 @@ export default function Landing1Page() {
       const newImage = pickRandomImage(allImages)
       setFirstImage(newImage)
       if (newImage?.assetId) {
+        localStorage.setItem(STORAGE_KEY_FIRST, newImage.assetId)
         console.log('First Image - Sanity ID:', newImage.assetId)
       }
     }
@@ -50,6 +75,7 @@ export default function Landing1Page() {
       const newImage = pickRandomImage(allImages)
       setSecondImage(newImage)
       if (newImage?.assetId) {
+        localStorage.setItem(STORAGE_KEY_SECOND, newImage.assetId)
         console.log('Second Image - Sanity ID:', newImage.assetId)
       }
     }
@@ -63,8 +89,8 @@ export default function Landing1Page() {
       
       <div className={styles.headlineSection}>
         <Headline
-          text="Teaching the things we wish we learned in school"
-          caseType="title-case"
+          text="What we wish we learned in school"
+          caseType="all-caps"
           align="center"
           fg="var(--brand-black)"
           bg="transparent"
@@ -91,7 +117,7 @@ export default function Landing1Page() {
       <div className={styles.pillarsSection}>
         <Headline
           text="Four Pathways to Discovering You"
-          caseType="title-case"
+          caseType="all-caps"
           align="center"
           fg="var(--brand-black)"
           bg="transparent"
