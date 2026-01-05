@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import styles from './BrandHero.module.css'
 import { PLAYNE_LOGO_PATH } from '../shared/playne-logo-path'
+import { THEME_COLORS } from '@/contexts/LandingThemeContext'
 
 const BRAND_COLORS = [
   '#231f20', // black
@@ -12,7 +13,11 @@ const BRAND_COLORS = [
   // omitting off-white
 ]
 
-export default function BrandHero() {
+interface BrandHeroProps {
+  theme?: 'dark' | 'light'
+}
+
+export default function BrandHero({ theme }: BrandHeroProps = {}) {
   const [currentColorIndex, setCurrentColorIndex] = useState(0) // start with black
 
   const handleClick = () => {
@@ -23,10 +28,15 @@ export default function BrandHero() {
     setCurrentColorIndex(newIndex)
   }
 
+  // If theme is provided, use inverted color; otherwise use the cycling color
+  const logoColor = theme 
+    ? THEME_COLORS[theme].text 
+    : BRAND_COLORS[currentColorIndex]
+
   return (
     <div className={styles.brandHero} onClick={handleClick} style={{ cursor: 'pointer' }}>
       <svg className={styles.logo} viewBox="0 0 4000 1393.81" xmlns="http://www.w3.org/2000/svg">
-        <path fill={BRAND_COLORS[currentColorIndex]} d={PLAYNE_LOGO_PATH} />
+        <path fill={logoColor} d={PLAYNE_LOGO_PATH} />
       </svg>
     </div>
   )

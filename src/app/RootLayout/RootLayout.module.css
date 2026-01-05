@@ -1,6 +1,6 @@
 .rootLayout {
   min-height: 100vh;
-  background-color: var(--color-background-secondary);
+  background-color: transparent; /* Let body background show through */
 }
 
 .main {

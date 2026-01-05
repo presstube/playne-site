@@ -1,11 +1,13 @@
 .page {
   min-height: 100vh;
-  background-color: var(--brand-offwhite);
+  background-color: transparent; /* Allow path to show through */
   display: flex;
   flex-direction: column;
   align-items: center;
   /* Remove side padding to allow full-bleed sections */
   padding: var(--space-8) 0;
+  position: relative; /* Create stacking context */
+  z-index: 1; /* Sit above the path background */
 }
 
 .heroSection {

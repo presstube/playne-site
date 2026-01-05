@@ -7,6 +7,8 @@ import Headline from '@/components/Headline/Headline'
 import Photo from '@/components/Photo/Photo'
 import TitleBodyQuote from '@/components/TitleBodyQuote/TitleBodyQuote'
 import PhotoTextOverlay from '@/components/PhotoTextOverlay/PhotoTextOverlay'
+import PathDrawingOverlay from '@/components/PathDrawingOverlay/PathDrawingOverlay'
+import { useLandingTheme, THEME_COLORS } from '@/contexts/LandingThemeContext'
 import { GalleryImage, pickRandomImage } from '@/lib/image-hat'
 import { client } from '@/sanity/lib/client'
 import { allGalleryImagesQuery } from '@/sanity/lib/galleries-queries'
@@ -15,16 +17,51 @@ const STORAGE_KEY_FIRST = 'landing1-first-image-id'
 const STORAGE_KEY_SECOND = 'landing1-second-image-id'
 const STORAGE_KEY_THIRD = 'landing1-third-image-id'
 
+// All localStorage keys used by Landing/1
+const ALL_LANDING_STORAGE_KEYS = [
+  STORAGE_KEY_FIRST,
+  STORAGE_KEY_SECOND,
+  STORAGE_KEY_THIRD,
+  'landing1-bg-path-raw',
+  'landing1-path-color-index',
+  'landing1-theme',
+]
+
 // Default image IDs
 const DEFAULT_FIRST_IMAGE_ID = 'image-8b8bc31949a279893dd20ea9057da59d00cbfe5c-2048x1365-jpg'
 const DEFAULT_SECOND_IMAGE_ID = 'image-f804373c1d301de9db9df3a72493c1556003120b-4240x2384-jpg'
 const DEFAULT_THIRD_IMAGE_ID = 'image-a18f4bd36df2aec4a0a2b80d6ea3d5e9bcae8050-5250x3500-jpg'
 
 export default function Landing1Page() {
+  const { theme } = useLandingTheme()
   const [allImages, setAllImages] = useState<GalleryImage[]>([])
   const [firstImage, setFirstImage] = useState<GalleryImage | null>(null)
   const [secondImage, setSecondImage] = useState<GalleryImage | null>(null)
   const [thirdImage, setThirdImage] = useState<GalleryImage | null>(null)
+
+  // Expose clear function to window for easy access
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as any).clearLandingLSO = () => {
+        ALL_LANDING_STORAGE_KEYS.forEach(key => {
+          localStorage.removeItem(key)
+        })
+        console.log('✅ Cleared all Landing/1 localStorage:')
+        console.log('   - Images (first, second, third)')
+        console.log('   - Path raw points')
+        console.log('   - Path color')
+        console.log('   - Theme (background)')
+        console.log('Reload the page to see defaults.')
+      }
+      console.log('💡 Use window.clearLandingLSO() to reset all Landing/1 settings')
+    }
+    
+    return () => {
+      if (typeof window !== 'undefined') {
+        delete (window as any).clearLandingLSO
+      }
+    }
+  }, [])
 
   // Fetch all images on mount
   useEffect(() => {
@@ -103,8 +140,10 @@ export default function Landing1Page() {
 
   return (
     <div className={styles.page}>
+      <PathDrawingOverlay />
+      
       <div className={styles.heroSection}>
-        <BrandHero />
+        <BrandHero theme={theme} />
       </div>
       
       <div className={styles.headlineSection}>
@@ -112,7 +151,7 @@ export default function Landing1Page() {
           text="What we wish we learned in school"
           caseType="all-caps"
           align="center"
-          fg="var(--brand-black)"
+          fg={THEME_COLORS[theme].text}
           bg="transparent"
         />
       </div>
@@ -139,7 +178,7 @@ export default function Landing1Page() {
           text="Four Pathways to Discovering You"
           caseType="all-caps"
           align="center"
-          fg="var(--brand-black)"
+          fg={THEME_COLORS[theme].text}
           bg="transparent"
         />
       </div>
@@ -165,7 +204,7 @@ export default function Landing1Page() {
           text="Meet the founder"
           caseType="all-caps"
           align="center"
-          fg="var(--brand-black)"
+          fg={THEME_COLORS[theme].text}
           bg="transparent"
         />
       </div>
@@ -179,8 +218,8 @@ export default function Landing1Page() {
             subtitle="The Magic of Shantell Martin"
             body="Visual artist, philosopher, teacher—Shantell Martin is a creative force who's exhibited at MoMA, collaborated with Kendrick Lamar, and designed for Nike. But her superpower isn't just making incredible art. It's her ability to unlock creativity in everyone she meets. Growing up, Shantell learned through doing, drawing, questioning—never memorizing answers but discovering them. That's the spark she brings to PLAYNE: the belief that education should feel like exploration, and that every young person deserves to learn about themselves with the same curiosity and freedom an artist brings to a blank canvas."
             quote="Education isn't about filling empty vessels. It's about igniting curious minds."
-            fg="var(--brand-offwhite)"
-            bg="var(--brand-black)"
+            fg="var(--brand-black)"
+            bg="var(--brand-blue)"
           />
         </PhotoTextOverlay>
       )}
