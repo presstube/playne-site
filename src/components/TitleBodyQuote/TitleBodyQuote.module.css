@@ -36,6 +36,20 @@
   margin: 0;
 }
 
+.body strong {
+  font-weight: 600;
+}
+
+.body em {
+  font-style: italic;
+}
+
+.body strong em,
+.body em strong {
+  font-weight: 600;
+  font-style: italic;
+}
+
 .quote {
   font-family: var(--font-family-sans);
   font-weight: 600;

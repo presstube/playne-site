@@ -39,7 +39,7 @@ export default function TitleBodyQuote({
       style={customStyle}
     >
       <h4 className={styles.subtitle}>{subtitle}</h4>
-      <p className={styles.body}>{body}</p>
+      <p className={styles.body} dangerouslySetInnerHTML={{ __html: body }} />
       <blockquote className={styles.quote}>{quote}</blockquote>
     </div>
   )

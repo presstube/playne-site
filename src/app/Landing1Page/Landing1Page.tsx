@@ -80,8 +80,8 @@ export default function Landing1Page() {
         <div className={styles.leftColumn}>
           <TitleBodyQuote
             subtitle="What if school taught you about YOU?"
-            body="Founded by renowned artist Shantell Martin, PLAYNE brings creativity into classrooms and community spaces to teach real-life skills. We help young people understand their bodies, emotions, money, and voice—the things that matter most but often get skipped in traditional education. Our lessons are hands-on, multisensory, and built around one simple idea: students should explore who they are before being told who to be."
-            quote="We give young people the space to discover themselves, not just pass tests."
+            body="Founded by renowned artist Shantell Martin, PLAYNE brings creativity into classrooms and community spaces to teach real-life skills. We help young people understand their bodies, emotions, money, and voice—the things that matter most but often get skipped in traditional education. Our lessons are hands-on, multisensory, and built around one simple idea: students should explore who and what they are before being told who to be."
+            quote="When students explore who they are, they unlock what they can become."
             fg="var(--brand-offwhite)"
             bg="var(--brand-black)"
           />
@@ -128,7 +128,7 @@ export default function Landing1Page() {
           */}
           <TitleBodyQuote
             subtitle="The Four Pillars of PLAYNE"
-            body="Think of them as the primary colors in your life's composition. Anatomy & Body Awareness. Wellness & Self-Care. Nutrition & Healthy Living. Financial Literacy. When you learn these fundamentals young, you gain the perspective to see your whole life as a work of art—understanding balance, contrast, harmony, and flow. Just like an artist mixes colors to create something new, these pillars blend together to help you create the life you want."
+            body="Think of them as the primary colors in your life's composition. <strong><em>Anatomy & Body Awareness.</em></strong> <strong><em>Wellness & Self-Care.</em></strong> <strong><em>Nutrition & Healthy Living.</em></strong> <strong><em>Financial Literacy.</em></strong> When you learn these fundamentals young, you gain the perspective to see your whole life as a work of art—understanding balance, contrast, harmony, and flow. Just like an artist mixes colors to create something new, these pillars blend together to help you create the life you want."
             quote="What if every child learned to paint their own future with confidence?"
             fg="var(--brand-black)"
             bg="var(--brand-yellow)"
