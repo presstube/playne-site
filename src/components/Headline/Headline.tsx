@@ -17,13 +17,18 @@ export interface HeadlineProps {
 }
 
 function toTitleCase(input: string): string {
-  // Basic title case: capitalize first letter of each word, lower the rest
-  return input
-    .trim()
-    .toLowerCase()
-    .split(/\s+/)
-    .map((w) => (w ? w[0].toUpperCase() + w.slice(1) : w))
-    .join(' ')
+  // Split by newlines first to preserve them
+  const lines = input.split('\n')
+  
+  return lines.map(line => {
+    // Basic title case: capitalize first letter of each word, lower the rest
+    return line
+      .trim()
+      .toLowerCase()
+      .split(/\s+/)
+      .map((w) => (w ? w[0].toUpperCase() + w.slice(1) : w))
+      .join(' ')
+  }).join('\n')
 }
 
 function limitWords(input: string, maxWords: number): string {

@@ -12,20 +12,110 @@
   max-width: 1200px;
   display: flex;
   justify-content: center;
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-6);
 }
 
 .headlineSection {
   width: 100%;
   max-width: 900px;
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-6);
 }
 
-.photoSection {
+.splitSection {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-8);
+  align-items: center;
+}
+
+.leftColumn {
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 0; /* Prevent grid blowout */
+}
+
+.rightColumn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0; /* Prevent grid blowout */
+  width: 100%; /* Ensure column respects grid */
+}
+
+.photoWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.photoWrapper :global(img) {
+  max-width: 100% !important;
+  height: auto !important;
+  width: auto !important;
+}
+
+/* Second Section: Four Pillars */
+.pillarsSection {
+  width: 100%;
+  max-width: 900px;
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-6);
+}
+
+.pillarsSplitSection {
+  width: 100%;
+  max-width: 1400px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  align-items: center;
+}
+
+.pillarsLeftColumn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+}
+
+.pillarsRightColumn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+}
+
+/* Mobile: Stack with photo on top */
+@media (max-width: 768px) {
+  .splitSection {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .leftColumn {
+    order: 2;
+  }
+
+  .rightColumn {
+    order: 1;
+  }
+
+  /* Pillars section mobile stacking */
+  .pillarsSplitSection {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .pillarsLeftColumn {
+    order: 1; /* Photo on top */
+  }
+
+  .pillarsRightColumn {
+    order: 2; /* Text below */
+  }
 }
 
