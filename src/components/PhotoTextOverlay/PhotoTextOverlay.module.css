@@ -3,7 +3,7 @@
   width: 100vw;
   margin-left: 0;
   margin-right: 0;
-  margin-bottom: var(--space-12);
+  margin-bottom: var(--space-8);
   /* Allow text to break out when rotated */
   /* overflow: hidden; - REMOVED */
 }
