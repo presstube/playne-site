@@ -186,7 +186,7 @@ export default function Landing1Page() {
           </div>
           <TitleBodyQuote
             subtitle="What if school taught you about YOU?"
-            body="Founded by renowned artist Shantell Martin, PLAYNE brings creativity into classrooms and community spaces to teach real-life skills. We help young people understand their bodies, emotions, money, and voice—the things that matter most but often get skipped in traditional education. Our lessons are hands-on, multisensory, and built around one simple idea: students should explore who and what they are before being told who to be."
+            body="Founded by renowned artist Shantell Martin, PLAYNE brings creativity into classrooms and community spaces to teach real-life skills. We help young people understand their bodies, emotions, money, and voice, the things that matter most but often get skipped in traditional education. Our lessons are hands-on, multi-sensory, and built around one simple idea: students should explore who and what they are before being told who to be."
             quote="When students explore who they are, they unlock what they can become."
             fg="var(--brand-offwhite)"
             bg="var(--brand-black)"
@@ -212,7 +212,7 @@ export default function Landing1Page() {
           </div>
           <TitleBodyQuote
             subtitle="The Four Pillars of PLAYNE"
-            body="Think of them as the primary colors in your life's composition. <strong><em>Anatomy & Body Awareness.</em></strong> <strong><em>Wellness & Self-Care.</em></strong> <strong><em>Nutrition & Healthy Living.</em></strong> <strong><em>Financial Literacy.</em></strong> When you learn these fundamentals young, you gain the perspective to see your whole life as a work of art—understanding balance, contrast, harmony, and flow. Just like an artist mixes colors to create something new, these pillars blend together to help you create the life you want."
+            body="Think of them as the primary colors in your life's composition. <strong><em>Anatomy & Body Awareness.</em></strong> <strong><em>Wellness & Self-Care.</em></strong> <strong><em>Nutrition & Healthy Living.</em></strong> <strong><em>Financial Literacy.</em></strong> When you learn these fundamentals young, you gain the perspective to see your whole life as a work of art, understanding balance, contrast, harmony, and flow. Just like an artist mixes colors to create something new, these pillars blend together to help you create the life you want."
             quote="What if every child learned to paint their own future with confidence?"
             fg="var(--brand-black)"
             bg="var(--brand-yellow)"
@@ -238,7 +238,7 @@ export default function Landing1Page() {
           </div>
           <TitleBodyQuote
             subtitle="The Magic of Shantell Martin"
-            body="Visual artist, philosopher, teacher—Shantell Martin is a creative force who's exhibited at MoMA, collaborated with Kendrick Lamar, and designed for Nike. But her superpower isn't just making incredible art. It's her ability to unlock creativity in everyone she meets. Growing up, Shantell learned through doing, drawing, questioning—never memorizing answers but discovering them. That's the spark she brings to PLAYNE: the belief that education should feel like exploration, and that every young person deserves to learn about themselves with the same curiosity and freedom an artist brings to a blank canvas."
+            body="Visual artist, philosopher, teacher, Shantell Martin is a creative force who's performed at MoMA, collaborated with Kendrick Lamar, and collaborated with brands like Tiffany & Co and The North Face. But her superpower isn't just making incredible art. It's her ability to unlock creativity in everyone she meets. Growing up, Shantell learned through doing, drawing, questioning, never memorizing answers but discovering them. That's the spark she brings to PLAYNE: the belief that education should feel like exploration, and that every young person deserves to learn about themselves with the same curiosity and freedom an artist brings to a blank canvas."
             quote="Education isn't about filling empty vessels. It's about igniting curious minds."
             fg="var(--brand-black)"
             bg="var(--brand-blue)"
