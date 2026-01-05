@@ -261,9 +261,9 @@ const distance = (p1: [number, number], p2: [number, number]) => {
  * Calculate squared distance from point to line segment
  */
 const getSquareSegmentDistance = (p: [number, number], p1: [number, number], p2: [number, number]) => {
-  let [x, y] = p;
+  const [x, y] = p;
   let [x1, y1] = p1;
-  let [x2, y2] = p2;
+  const [x2, y2] = p2;
   
   let dx = x2 - x1;
   let dy = y2 - y1;
