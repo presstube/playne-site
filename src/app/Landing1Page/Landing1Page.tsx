@@ -1,12 +1,13 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import styles from './Landing1Page.module.css'
 import BrandHero from '@/components/BrandHero/BrandHero'
 import Headline from '@/components/Headline/Headline'
 import Photo from '@/components/Photo/Photo'
 import TitleBodyQuote from '@/components/TitleBodyQuote/TitleBodyQuote'
-import { GalleryImage, pickRandomImage } from '@/lib/image-hat'
+import PhotoTextOverlay from '@/components/PhotoTextOverlay/PhotoTextOverlay'
+import { GalleryImage } from '@/lib/image-hat'
 import { client } from '@/sanity/lib/client'
 import { allGalleryImagesQuery } from '@/sanity/lib/galleries-queries'
 
@@ -76,23 +77,17 @@ export default function Landing1Page() {
         />
       </div>
 
-      <div className={styles.splitSection}>
-        <div className={styles.leftColumn}>
-          <TitleBodyQuote
-            subtitle="What if school taught you about YOU?"
-            body="Founded by renowned artist Shantell Martin, PLAYNE brings creativity into classrooms and community spaces to teach real-life skills. We help young people understand their bodies, emotions, money, and voice—the things that matter most but often get skipped in traditional education. Our lessons are hands-on, multisensory, and built around one simple idea: students should explore who and what they are before being told who to be."
-            quote="When students explore who they are, they unlock what they can become."
-            fg="var(--brand-offwhite)"
-            bg="var(--brand-black)"
-          />
-        </div>
-
-        <div className={styles.rightColumn}>
-          <div className={styles.photoWrapper}>
-            <Photo image={hardCodedImage} />
-          </div>
-        </div>
-      </div>
+      {/* First Section: Photo with overlaid text */}
+      <PhotoTextOverlay textPosition="bottom-right" rotation={-2} overlap="18%">
+        <Photo image={hardCodedImage} />
+        <TitleBodyQuote
+          subtitle="What if school taught you about YOU?"
+          body="Founded by renowned artist Shantell Martin, PLAYNE brings creativity into classrooms and community spaces to teach real-life skills. We help young people understand their bodies, emotions, money, and voice—the things that matter most but often get skipped in traditional education. Our lessons are hands-on, multisensory, and built around one simple idea: students should explore who and what they are before being told who to be."
+          quote="When students explore who they are, they unlock what they can become."
+          fg="var(--brand-offwhite)"
+          bg="var(--brand-black)"
+        />
+      </PhotoTextOverlay>
 
       {/* Second Section: Four Pillars */}
       <div className={styles.pillarsSection}>
@@ -105,18 +100,9 @@ export default function Landing1Page() {
         />
       </div>
 
-      <div className={styles.pillarsSplitSection}>
-        <div className={styles.pillarsLeftColumn}>
-          {pillarImage ? (
-            <div className={styles.photoWrapper}>
-              <Photo image={pillarImage} />
-            </div>
-          ) : (
-            <p>Loading image...</p>
-          )}
-        </div>
-
-        <div className={styles.pillarsRightColumn}>
+      {pillarImage && (
+        <PhotoTextOverlay textPosition="bottom-left" rotation={2} overlap="18%">
+          <Photo image={pillarImage} />
           {/* Original version:
           <TitleBodyQuote
             subtitle="The Four Pillars of PLAYNE"
@@ -133,8 +119,8 @@ export default function Landing1Page() {
             fg="var(--brand-black)"
             bg="var(--brand-yellow)"
           />
-        </div>
-      </div>
+        </PhotoTextOverlay>
+      )}
     </div>
   )
 }

@@ -1,0 +1,66 @@
+.container {
+  position: relative;
+  width: 100vw;
+  /* Break out of parent padding to go full-width */
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  margin-bottom: var(--space-12); /* Extra space below for overlap */
+}
+
+.photoWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.textWrapper {
+  position: absolute;
+  max-width: min(600px, 90vw);
+  z-index: 10;
+  /* Sticker effect shadow */
+  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.2));
+}
+
+/* Text positioning variants */
+.textLeft {
+  left: 5%;
+}
+
+.textRight {
+  right: 5%;
+}
+
+.textCenter {
+  left: 50%;
+  transform-origin: center;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .textWrapper {
+    /* Reduce rotation on mobile */
+    transform: rotate(-1deg) !important;
+    max-width: 85vw;
+  }
+
+  .textLeft {
+    left: 7.5%;
+  }
+
+  .textRight {
+    right: 7.5%;
+  }
+
+  .container {
+    margin-bottom: var(--space-8);
+  }
+}
+
+@media (max-width: 480px) {
+  .textWrapper {
+    /* No rotation on very small screens */
+    transform: rotate(0deg) !important;
+  }
+}
+
