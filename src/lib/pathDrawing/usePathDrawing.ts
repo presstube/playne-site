@@ -98,10 +98,20 @@ export const usePathDrawing = () => {
     // Check if we're on mobile - if so, skip the observer
     const isMobile = window.matchMedia('(max-width: 768px)').matches
     if (isMobile) {
-      // On mobile, just set initial height and return
+      // On mobile, calculate height after images load
       const initialHeight = getPageHeight()
       setPageHeight(initialHeight)
-      return undefined
+      
+      // Recalculate after a delay to catch post-image-load height
+      const mobileTimeout = setTimeout(() => {
+        const finalHeight = getPageHeight()
+        if (finalHeight !== initialHeight) {
+          setPageHeight(finalHeight)
+          regeneratePath(normalizedPoints)
+        }
+      }, 2000) // 2 second delay to allow images to load
+      
+      return () => clearTimeout(mobileTimeout)
     }
 
     // Desktop: watch for height changes
