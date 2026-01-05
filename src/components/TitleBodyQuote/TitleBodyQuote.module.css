@@ -59,4 +59,12 @@
   font-style: normal;
 }
 
+/* CTA section */
+.cta {
+  margin-top: clamp(1rem, 3vw, 2rem);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 

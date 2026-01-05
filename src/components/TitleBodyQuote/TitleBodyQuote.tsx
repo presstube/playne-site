@@ -1,4 +1,5 @@
 "use client"
+import { ReactNode } from 'react'
 import styles from './TitleBodyQuote.module.css'
 
 export interface TitleBodyQuoteProps {
@@ -9,6 +10,7 @@ export interface TitleBodyQuoteProps {
   className?: string
   fg?: string
   bg?: string
+  cta?: ReactNode // Optional CTA element (button, link, etc.)
 }
 
 export default function TitleBodyQuote({
@@ -19,6 +21,7 @@ export default function TitleBodyQuote({
   className,
   fg,
   bg,
+  cta,
 }: TitleBodyQuoteProps) {
   const cx = (...args: Array<string | false | null | undefined>) => args.filter(Boolean).join(' ')
 
@@ -67,6 +70,7 @@ export default function TitleBodyQuote({
       <h4 className={styles.subtitle}>{subtitle}</h4>
       <p className={styles.body} dangerouslySetInnerHTML={{ __html: body }} />
       <blockquote className={styles.quote}>{quote}</blockquote>
+      {cta && <div className={styles.cta}>{cta}</div>}
     </div>
   )
 }

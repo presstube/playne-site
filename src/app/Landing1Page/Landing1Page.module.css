@@ -5,7 +5,7 @@
   flex-direction: column;
   align-items: center;
   /* Remove side padding to allow full-bleed sections */
-  padding: var(--space-8) 0;
+  padding: var(--space-8) 0 30rem 0;
   position: relative; /* Create stacking context */
   z-index: 1; /* Sit above the path background */
 }
@@ -20,7 +20,7 @@
   max-width: 1200px;
   display: flex;
   justify-content: center;
-  margin-top: var(--space-6);
+  margin-top: var(--space-8);
   margin-bottom: var(--space-6);
   /* Add padding back for non-full-bleed sections */
   padding: 0 var(--space-4);
@@ -101,6 +101,46 @@
   padding: 0 var(--space-4);
 }
 
+/* Remove border from bottom contact TitleBodyQuote */
+.noBorder {
+  border: none !important;
+}
+
+/* Bottom Section with small brand logo */
+.bottomSection {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 100;
+}
+
+.bottomSection a {
+  display: block;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.bottomSection a:hover {
+  transform: scale(1.05);
+  opacity: 0.8;
+}
+
+.smallBrandLogo {
+  width: 125px;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .bottomSection {
+    bottom: 12px;
+    right: 12px;
+  }
+  
+  .smallBrandLogo {
+    width: 80px;
+  }
+}
+
 /* Email Link Section */
 .emailSection {
   width: 100%;
@@ -127,7 +167,6 @@
 .emailLink:hover {
   background-color: var(--brand-red);
   color: var(--brand-offwhite);
-  transform: rotate(-2deg);
 }
 
 @media (max-width: 768px) {

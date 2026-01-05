@@ -12,6 +12,7 @@ import { useLandingTheme, THEME_COLORS } from '@/contexts/LandingThemeContext'
 import { GalleryImage, pickRandomImage } from '@/lib/image-hat'
 import { client } from '@/sanity/lib/client'
 import { allGalleryImagesQuery } from '@/sanity/lib/galleries-queries'
+import { PLAYNE_LOGO_PATH } from '@/components/shared/playne-logo-path'
 
 const STORAGE_KEY_FIRST = 'landing1-first-image-id'
 const STORAGE_KEY_SECOND = 'landing1-second-image-id'
@@ -257,7 +258,7 @@ export default function Landing1Page() {
       </div>
 
       {fourthImage && (
-        <PhotoTextOverlay textPosition="bottom-left" rotation={2} overlapDesktopMax="40%" overlapDesktopMin="10%">
+        <PhotoTextOverlay textPosition="bottom-left" rotation={2} overlap="55%">
           <div onClick={handleFourthPhotoClick} style={{ cursor: 'pointer', display: 'block', width: '100%' }}>
             <Photo image={fourthImage} />
           </div>
@@ -267,14 +268,22 @@ export default function Landing1Page() {
             quote="The best time to plant a tree was 20 years ago. The second best time is now."
             fg="var(--brand-black)"
             bg="var(--brand-offwhite)"
+            className={styles.noBorder}
+            cta={
+              <a href="mailto:playne@shantellmartin.com" className={styles.emailLink}>
+                EMAIL US
+              </a>
+            }
           />
         </PhotoTextOverlay>
       )}
 
-      {/* Email Link */}
-      <div className={styles.emailSection}>
-        <a href="mailto:hello@playne.org" className={styles.emailLink}>
-          EMAIL US
+      {/* Bottom spacing and small brand logo */}
+      <div className={styles.bottomSection}>
+        <a href="mailto:playne@shantellmartin.com" aria-label="Email PLAYNE">
+          <svg viewBox="0 0 4000 1393.81" xmlns="http://www.w3.org/2000/svg" className={styles.smallBrandLogo}>
+            <path fill="var(--brand-red)" d={PLAYNE_LOGO_PATH} />
+          </svg>
         </a>
       </div>
     </div>
