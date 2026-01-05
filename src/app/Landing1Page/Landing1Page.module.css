@@ -4,7 +4,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--space-8) var(--space-4);
+  /* Remove side padding to allow full-bleed sections */
+  padding: var(--space-8) 0;
 }
 
 .heroSection {
@@ -13,12 +14,16 @@
   display: flex;
   justify-content: center;
   margin-bottom: var(--space-6);
+  /* Add padding back for non-full-bleed sections */
+  padding: 0 var(--space-4);
 }
 
 .headlineSection {
   width: 100%;
   max-width: 900px;
   margin-bottom: var(--space-6);
+  /* Add padding back for non-full-bleed sections */
+  padding: 0 var(--space-4);
 }
 
 .splitSection {
@@ -64,6 +69,8 @@
   max-width: 900px;
   margin-top: var(--space-8);
   margin-bottom: var(--space-6);
+  /* Add padding back for non-full-bleed sections */
+  padding: 0 var(--space-4);
 }
 
 .pillarsSplitSection {

@@ -7,7 +7,8 @@ interface PhotoTextOverlayProps {
   children: [ReactNode, ReactNode] // [photo, text]
   textPosition?: 'bottom-left' | 'bottom-right' | 'bottom-center'
   rotation?: number // degrees
-  overlap?: string // percentage or px
+  overlap?: string // percentage or px (desktop)
+  mobileOverlap?: string // percentage or px (mobile)
   className?: string
 }
 
@@ -16,6 +17,7 @@ export default function PhotoTextOverlay({
   textPosition = 'bottom-right',
   rotation = -2,
   overlap = '15%',
+  mobileOverlap = '10%',
   className,
 }: PhotoTextOverlayProps) {
   const [photo, text] = children
@@ -36,6 +38,7 @@ export default function PhotoTextOverlay({
         style={{
           transform: `rotate(${rotation}deg)`,
           bottom: `calc(-1 * ${overlap})`,
+          ['--mobile-overlap' as any]: mobileOverlap,
         }}
       >
         {text}

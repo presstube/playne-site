@@ -1,65 +1,59 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import styles from './Landing1Page.module.css'
 import BrandHero from '@/components/BrandHero/BrandHero'
 import Headline from '@/components/Headline/Headline'
 import Photo from '@/components/Photo/Photo'
 import TitleBodyQuote from '@/components/TitleBodyQuote/TitleBodyQuote'
 import PhotoTextOverlay from '@/components/PhotoTextOverlay/PhotoTextOverlay'
-import { GalleryImage } from '@/lib/image-hat'
+import { GalleryImage, pickRandomImage } from '@/lib/image-hat'
 import { client } from '@/sanity/lib/client'
 import { allGalleryImagesQuery } from '@/sanity/lib/galleries-queries'
 
-// Hard-coded image data
-const hardCodedImage: GalleryImage = {
-  altText: "Shantell Martin × PLAYNE collaboration (Image 4)",
-  assetId: "image-6dea8898205814996463a0f3fa203d9eec5e4cb2-1000x667-jpg",
-  caption: "Shantell Martin × PLAYNE collaboration (Image 4)",
-  dimensions: {
-    aspectRatio: 1.4992503748125936,
-    height: 667,
-    width: 1000
-  },
-  gallerySlug: "shantell-martin-playne",
-  galleryTitle: "Shantell Martin × PLAYNE",
-  imageAsset: {
-    _ref: "image-6dea8898205814996463a0f3fa203d9eec5e4cb2-1000x667-jpg",
-    _type: "reference"
-  },
-  lqip: "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAcEBQb/xAAhEAACAgICAgMBAAAAAAAAAAACAwEEABEFQQYTBxIhM//EABUBAQEAAAAAAAAAAAAAAAAAAAEC/8QAGxEAAgEFAAAAAAAAAAAAAAAAAAECERITMXH/2gAMAwEAAhEDEQA/ANr5TzqagoGswDQ9orFk9b7icvOPsqqIQh9kTMogBJhxtk4kD5Kz5pUq1rxwhevbpMRH7EZO+PORYji+RO2MXIQwvQLZ/kUdxOFUulqLehtu8ioIexE2Bg1F9CjfeGIe0c2LLXN3JsKSKd94ZN6HGf/Z",
-  metadata: {
-    dimensions: {
-      aspectRatio: 1.4992503748125936,
-      height: 667,
-      width: 1000
-    },
-    lqip: "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAcEBQb/xAAhEAACAgICAgMBAAAAAAAAAAACAwEEABEFQQYTBxIhM//EABUBAQEAAAAAAAAAAAAAAAAAAAEC/8QAGxEAAgEFAAAAAAAAAAAAAAAAAAECERITMXH/2gAMAwEAAhEDEQA/ANr5TzqagoGswDQ9orFk9b7icvOPsqqIQh9kTMogBJhxtk4kD5Kz5pUq1rxwhevbpMRH7EZO+PORYji+RO2MXIQwvQLZ/kUdxOFUulqLehtu8ioIexE2Bg1F9CjfeGIe0c2LLXN3JsKSKd94ZN6HGf/Z"
-  },
-  photographer: "Shantell Martin",
-  url: "https://cdn.sanity.io/images/dg1810se/production/6dea8898205814996463a0f3fa203d9eec5e4cb2-1000x667.jpg"
-}
-
 export default function Landing1Page() {
-  const [pillarImage, setPillarImage] = useState<GalleryImage | null>(null)
+  const [allImages, setAllImages] = useState<GalleryImage[]>([])
+  const [firstImage, setFirstImage] = useState<GalleryImage | null>(null)
+  const [secondImage, setSecondImage] = useState<GalleryImage | null>(null)
 
-  // Fetch the specific pillar image
+  // Fetch all images on mount
   useEffect(() => {
-    async function fetchPillarImage() {
+    async function fetchImages() {
       try {
-        const allImages = await client.fetch(allGalleryImagesQuery)
-        const specificImage = allImages.find(
-          (img: GalleryImage) => img.assetId === 'image-f804373c1d301de9db9df3a72493c1556003120b-4240x2384-jpg'
-        )
-        if (specificImage) {
-          setPillarImage(specificImage)
+        const images = await client.fetch(allGalleryImagesQuery)
+        setAllImages(images)
+        
+        // Set initial images
+        if (images.length > 0) {
+          setFirstImage(pickRandomImage(images))
+          setSecondImage(pickRandomImage(images))
         }
       } catch (error) {
-        console.error('Error fetching pillar image:', error)
+        console.error('Error fetching images:', error)
       }
     }
-    fetchPillarImage()
+    fetchImages()
   }, [])
+
+  const handleFirstPhotoClick = useCallback(() => {
+    if (allImages.length > 0) {
+      const newImage = pickRandomImage(allImages)
+      setFirstImage(newImage)
+      if (newImage?.assetId) {
+        console.log('First Image - Sanity ID:', newImage.assetId)
+      }
+    }
+  }, [allImages])
+
+  const handleSecondPhotoClick = useCallback(() => {
+    if (allImages.length > 0) {
+      const newImage = pickRandomImage(allImages)
+      setSecondImage(newImage)
+      if (newImage?.assetId) {
+        console.log('Second Image - Sanity ID:', newImage.assetId)
+      }
+    }
+  }, [allImages])
 
   return (
     <div className={styles.page}>
@@ -78,16 +72,20 @@ export default function Landing1Page() {
       </div>
 
       {/* First Section: Photo with overlaid text */}
-      <PhotoTextOverlay textPosition="bottom-right" rotation={-2} overlap="18%">
-        <Photo image={hardCodedImage} />
-        <TitleBodyQuote
-          subtitle="What if school taught you about YOU?"
-          body="Founded by renowned artist Shantell Martin, PLAYNE brings creativity into classrooms and community spaces to teach real-life skills. We help young people understand their bodies, emotions, money, and voice—the things that matter most but often get skipped in traditional education. Our lessons are hands-on, multisensory, and built around one simple idea: students should explore who and what they are before being told who to be."
-          quote="When students explore who they are, they unlock what they can become."
-          fg="var(--brand-offwhite)"
-          bg="var(--brand-black)"
-        />
-      </PhotoTextOverlay>
+      {firstImage && (
+        <PhotoTextOverlay textPosition="bottom-right" rotation={-2} overlap="18%">
+          <div onClick={handleFirstPhotoClick} style={{ cursor: 'pointer', display: 'block', width: '100%' }}>
+            <Photo image={firstImage} />
+          </div>
+          <TitleBodyQuote
+            subtitle="What if school taught you about YOU?"
+            body="Founded by renowned artist Shantell Martin, PLAYNE brings creativity into classrooms and community spaces to teach real-life skills. We help young people understand their bodies, emotions, money, and voice—the things that matter most but often get skipped in traditional education. Our lessons are hands-on, multisensory, and built around one simple idea: students should explore who and what they are before being told who to be."
+            quote="When students explore who they are, they unlock what they can become."
+            fg="var(--brand-offwhite)"
+            bg="var(--brand-black)"
+          />
+        </PhotoTextOverlay>
+      )}
 
       {/* Second Section: Four Pillars */}
       <div className={styles.pillarsSection}>
@@ -100,18 +98,11 @@ export default function Landing1Page() {
         />
       </div>
 
-      {pillarImage && (
+      {secondImage && (
         <PhotoTextOverlay textPosition="bottom-left" rotation={2} overlap="18%">
-          <Photo image={pillarImage} />
-          {/* Original version:
-          <TitleBodyQuote
-            subtitle="The Four Pillars of PLAYNE"
-            body="Anatomy & Body Awareness. Wellness & Self-Care. Nutrition & Healthy Living. Financial Literacy. These aren't separate subjects—they're four interconnected pathways to understanding yourself and building the life you want. When students learn how their body works, they also learn how to care for it. When they understand what fuels them, they can make smarter choices. PLAYNE connects the dots between body, mind, and everyday life."
-            quote="Confidence grows when you understand yourself—inside and out."
-            fg="var(--brand-black)"
-            bg="var(--brand-yellow)"
-          />
-          */}
+          <div onClick={handleSecondPhotoClick} style={{ cursor: 'pointer', display: 'block', width: '100%' }}>
+            <Photo image={secondImage} />
+          </div>
           <TitleBodyQuote
             subtitle="The Four Pillars of PLAYNE"
             body="Think of them as the primary colors in your life's composition. <strong><em>Anatomy & Body Awareness.</em></strong> <strong><em>Wellness & Self-Care.</em></strong> <strong><em>Nutrition & Healthy Living.</em></strong> <strong><em>Financial Literacy.</em></strong> When you learn these fundamentals young, you gain the perspective to see your whole life as a work of art—understanding balance, contrast, harmony, and flow. Just like an artist mixes colors to create something new, these pillars blend together to help you create the life you want."

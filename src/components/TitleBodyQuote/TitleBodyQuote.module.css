@@ -9,13 +9,13 @@
 
 /* Theme variants */
 .themeLight {
-  background-color: var(--brand-offwhite);
+  background-color: rgba(234, 226, 218, 0.9); /* var(--brand-offwhite) at 90% opacity */
   color: var(--brand-black);
   border: 1px solid rgba(35, 31, 32, 0.2);
 }
 
 .themeDark {
-  background-color: var(--brand-black);
+  background-color: rgba(35, 31, 32, 0.9); /* var(--brand-black) at 90% opacity */
   color: var(--brand-offwhite);
 }
 

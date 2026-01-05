@@ -1,17 +1,33 @@
 .container {
   position: relative;
   width: 100vw;
-  /* Break out of parent padding to go full-width */
-  margin-left: calc(-50vw + 50%);
-  margin-right: calc(-50vw + 50%);
-  margin-bottom: var(--space-12); /* Extra space below for overlap */
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: var(--space-12);
+  /* Allow text to break out when rotated */
+  /* overflow: hidden; - REMOVED */
+}
+
+/* Add extra space on desktop for text rotation overflow */
+@media (min-width: 769px) {
+  .container {
+    padding-bottom: 3rem;
+  }
 }
 
 .photoWrapper {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: auto;
+  display: block;
+}
+
+/* Override Photo component's sizing for full-bleed */
+.photoWrapper :global(img) {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  object-fit: cover;
+  display: block;
 }
 
 .textWrapper {
@@ -36,31 +52,37 @@
   transform-origin: center;
 }
 
-/* Mobile adjustments */
+/* Mobile: Switch to stacked flow layout */
 @media (max-width: 768px) {
-  .textWrapper {
-    /* Reduce rotation on mobile */
-    transform: rotate(-1deg) !important;
-    max-width: 85vw;
-  }
-
-  .textLeft {
-    left: 7.5%;
-  }
-
-  .textRight {
-    right: 7.5%;
-  }
-
   .container {
-    margin-bottom: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--space-4);
+  }
+
+  .photoWrapper {
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .textWrapper {
+    /* Switch from absolute to relative positioning */
+    position: relative;
+    max-width: 90vw;
+    margin: calc(-1 * var(--mobile-overlap, 10%)) auto 0;
+    left: auto !important;
+    right: auto !important;
+    transform: rotate(0deg) !important; /* Remove rotation */
+    /* Keep shadow for sticker effect */
+  }
+
+  .textLeft,
+  .textRight,
+  .textCenter {
+    /* Reset positioning on mobile */
+    left: auto;
+    right: auto;
   }
 }
 
-@media (max-width: 480px) {
-  .textWrapper {
-    /* No rotation on very small screens */
-    transform: rotate(0deg) !important;
-  }
-}
 
