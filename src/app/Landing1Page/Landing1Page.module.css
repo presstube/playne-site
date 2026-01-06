@@ -131,8 +131,8 @@
 /* Bottom Section with small brand logo */
 .bottomSection {
   position: fixed;
-  bottom: 16px;
-  right: 16px;
+  bottom: var(--space-4);
+  right: var(--space-4);
   z-index: 100;
 }
 
@@ -155,7 +155,6 @@
 @media (max-width: 768px) {
   .bottomSection {
     bottom: 12px;
-    right: 12px;
   }
   
   .smallBrandLogo {
@@ -175,15 +174,17 @@
 }
 
 .emailLink {
-  font-family: 'Krana Fat B', sans-serif;
-  font-size: 3rem;
+  font-family: 'Krana Fat Trial', sans-serif;
+  font-size: calc(var(--font-size-base) * 4);
   letter-spacing: 0.05em;
   color: var(--brand-red);
   text-decoration: none;
-  padding: var(--space-4) var(--space-6);
+  padding: var(--space-4) 1em var(--space-3) 1em;
   border: 4px solid var(--brand-red);
+  margin-bottom: var(--space-3);
   transition: all 0.3s ease;
   display: inline-block;
+  text-transform: uppercase;
 }
 
 .emailLink:hover {
@@ -193,8 +194,8 @@
 
 @media (max-width: 768px) {
   .emailLink {
-    font-size: 2rem;
-    padding: var(--space-3) var(--space-4);
+    font-size: calc(var(--font-size-base) * 3);
+    padding: var(--space-4) 1em var(--space-2) 1em;
   }
 }
 

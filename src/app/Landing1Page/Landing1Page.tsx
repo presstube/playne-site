@@ -37,7 +37,7 @@ const DEFAULT_THIRD_IMAGE_ID = 'image-a18f4bd36df2aec4a0a2b80d6ea3d5e9bcae8050-5
 const DEFAULT_FOURTH_IMAGE_ID = 'image-1a3757910370425fdce03a9b2c25623acac10456-2531x1615-jpg'
 
 export default function Landing1Page() {
-  const { theme } = useLandingTheme()
+  const { theme, toggleTheme } = useLandingTheme()
   const [allImages, setAllImages] = useState<GalleryImage[]>([])
   const [firstImage, setFirstImage] = useState<GalleryImage | null>(null)
   const [secondImage, setSecondImage] = useState<GalleryImage | null>(null)
@@ -161,7 +161,7 @@ export default function Landing1Page() {
       <PathDrawingOverlay />
       
       <div className={styles.heroSection}>
-        <BrandHero theme={theme} />
+        <BrandHero theme={theme} onClick={toggleTheme} />
       </div>
       
       <div className={styles.headlineSection}>

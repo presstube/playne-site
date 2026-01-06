@@ -19,10 +19,12 @@ export const metadata: Metadata = {
     description: 'Founded by artist Shantell Martin, PLAYNE brings creativity into classrooms and community spaces to teach real-life skills. Helping young people understand their bodies, emotions, money, and voice.',
     images: [
       {
-        url: '/social-card.jpg',
+        url: 'https://playne.art/social-card.jpg',
+        secureUrl: 'https://playne.art/social-card.jpg',
         width: 1200,
         height: 630,
         alt: 'PLAYNE - Empowering Young Minds',
+        type: 'image/jpeg',
       }
     ],
   },
