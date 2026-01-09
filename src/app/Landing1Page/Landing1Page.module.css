@@ -12,7 +12,7 @@
 
 @media (max-width: 768px) {
   .page {
-    padding-bottom: 15rem; /* Half the desktop spacing on mobile */
+    padding-bottom: 7.5rem; /* Quarter of desktop spacing on mobile */
   }
 }
 
