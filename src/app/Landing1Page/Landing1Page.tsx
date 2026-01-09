@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { Camera } from 'lucide-react'
 import styles from './Landing1Page.module.css'
 import BrandHero from '@/components/BrandHero/BrandHero'
 import Headline from '@/components/Headline/Headline'
@@ -181,7 +182,7 @@ export default function Landing1Page() {
             <Photo image={firstImage} />
             {firstImage.photographer && (
               <div className={`${styles.photographer} ${styles.photographerLeft}`}>
-                Photo: {firstImage.photographer}
+                <Camera size={12} strokeWidth={2} /> {firstImage.photographer}
               </div>
             )}
           </div>
@@ -212,7 +213,7 @@ export default function Landing1Page() {
             <Photo image={secondImage} />
             {secondImage.photographer && (
               <div className={`${styles.photographer} ${styles.photographerRight}`}>
-                Photo: {secondImage.photographer}
+                <Camera size={12} strokeWidth={2} /> {secondImage.photographer}
               </div>
             )}
           </div>
@@ -243,7 +244,7 @@ export default function Landing1Page() {
             <Photo image={thirdImage} />
             {thirdImage.photographer && (
               <div className={`${styles.photographer} ${styles.photographerLeft}`}>
-                Photo: {thirdImage.photographer}
+                <Camera size={12} strokeWidth={2} /> {thirdImage.photographer}
               </div>
             )}
           </div>
@@ -274,7 +275,7 @@ export default function Landing1Page() {
             <Photo image={fourthImage} />
             {fourthImage.photographer && (
               <div className={`${styles.photographer} ${styles.photographerRight}`}>
-                Photo: {fourthImage.photographer}
+                <Camera size={12} strokeWidth={2} /> {fourthImage.photographer}
               </div>
             )}
           </div>

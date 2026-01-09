@@ -17,24 +17,27 @@
 
 .photographer {
   position: absolute;
-  top: 16px;
+  top: 0;
   font-family: var(--font-parkinsans);
-  font-size: 0.75rem;
+  font-size: 0.5rem; /* 50% of 0.75rem */
   color: rgba(255, 255, 255, 0.8);
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.2);
   padding: 4px 8px;
-  border-radius: 4px;
-  backdrop-filter: blur(4px);
+  border-radius: 0;
+  backdrop-filter: blur(20px);
   pointer-events: none;
   z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .photographerLeft {
-  left: 16px;
+  left: 0;
 }
 
 .photographerRight {
-  right: 16px;
+  right: 0;
 }
 
 .heroSection {
